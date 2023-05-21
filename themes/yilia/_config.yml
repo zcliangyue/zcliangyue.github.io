@@ -6,18 +6,18 @@ menu:
 
 # SubNav
 subnav:
-  github: "https://github.com/zcliangyue"
+  github: https://github.com/zcliangyue
   weibo: "#"
-  rss: "#"
+  # rss: "#"
   zhihu: "#"
-  #qq: "#"
-  #weixin: "#"
+  qq: http://wpa.qq.com/msgrd?v=3&uin=2075969484&site=qq&menu=yes
+  weixin: "#"
   #jianshu: "#"
   #douban: "#"
   #segmentfault: "#"
   #bilibili: "#"
   #acfun: "#"
-  #mail: "2075969484@qq.com"
+  mail: http://2075969484@qq.com
   #facebook: "#"
   #google: "#"
   #twitter: "#"
@@ -33,11 +33,11 @@ root: /
 # Content
 
 # 文章太长，截断按钮文字
-excerpt_link: more
+excerpt_link: false
 # 文章卡片右下角常驻链接，不需要请设置为false
 show_all_link: '展开全文'
 # 数学公式
-mathjax: false
+mathjax: true
 # 是否在新窗口打开链接
 open_in_new: false
 
@@ -45,17 +45,17 @@ open_in_new: false
 # 打赏type设定：0-关闭打赏； 1-文章对应的md文件里有reward:true属性，才有打赏； 2-所有文章均有打赏
 reward_type: 2
 # 打赏wording
-reward_wording: '有时候我们都需要一罐可乐'
+reward_wording: '有时我们都需要一罐可乐'
 # 支付宝二维码图片地址，跟你设置头像的方式一样。比如：/assets/img/alipay.jpg
 alipay: 
 # 微信二维码图片地址
-weixin: 
+weixin: /img/money2.jpg
 
 # 目录
 # 目录设定：0-不显示目录； 1-文章对应的md文件里有toc:true属性，才有目录； 2-所有文章均显示目录
 toc: 1
 # 根据自己的习惯来设置，如果你的目录标题习惯有标号，置为true即可隐藏hexo重复的序号；否则置为false
-toc_hide_index: true
+toc_hide_index: false
 # 目录为空时的提示
 toc_empty_wording: '这么短就不需要目录了吧'
 
@@ -65,7 +65,7 @@ top: true
 # Miscellaneous
 baidu_analytics: ''
 google_analytics: ''
-favicon: /favicon.png
+favicon: /img/head.jpg
 
 #你的头像url
 avatar:
@@ -102,8 +102,8 @@ style:
   # 头像上面的背景颜色
   header: '#4d4d4d'
   # 右滑板块背景
-  slider: 'linear-gradient(200deg,#a0cfe4,#e8c37e)'
-
+  #slider: 'linear-gradient(200deg,#a0cfe4,#e8c37e)'
+  slider: ‘linear-gradient(200deg,#ccc,#000)’
 # slider的设置
 slider:
   # 是否默认展开tags板块
@@ -120,8 +120,8 @@ smart_menu:
   aboutme: '关于我'
 
 friends:
-  友情链接1: http://localhost:4000/
-  友情链接2: http://localhost:4000/
+  武大官网: https://www.whu.edu.cn/
+  武大测绘官网: http://main.sgg.whu.edu.cn/
   友情链接3: http://localhost:4000/
   友情链接4: http://localhost:4000/
   友情链接5: http://localhost:4000/
