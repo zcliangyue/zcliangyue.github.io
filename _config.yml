@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: ZCL的个人博客
+title: ZCL'BLOG
 subtitle: ''
 description: ''
 keywords:
@@ -13,7 +13,7 @@ timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: http://zcliangyue.github.io
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -104,7 +104,7 @@ theme: yilia
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repository: https://github.com/zcliangyue/zcliangyue.github.io.git
+  repository: git@github.com:zcliangyue/zcliangyue.github.io.git
   branch: master
 
 jsonContent:
