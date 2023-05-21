@@ -65,10 +65,10 @@ top: true
 # Miscellaneous
 baidu_analytics: ''
 google_analytics: ''
-favicon: /img/head.jpg
+favicon: /img/titleimg.jpg
 
 #你的头像url
-avatar:
+avatar: /img/head.jpg
 
 #是否开启分享
 share_jia: true
@@ -103,7 +103,7 @@ style:
   header: '#4d4d4d'
   # 右滑板块背景
   #slider: 'linear-gradient(200deg,#a0cfe4,#e8c37e)'
-  slider: ‘linear-gradient(200deg,#ccc,#000)’
+  slider: 'linear-gradient(200deg,#ccc,#000)'
 # slider的设置
 slider:
   # 是否默认展开tags板块
