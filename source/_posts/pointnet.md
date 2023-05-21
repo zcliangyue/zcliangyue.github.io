@@ -5,7 +5,7 @@ tags:
 - 点云 
 - 上采样 
 - 神经网络
-typora-root-url: ./pointnet
+typora-root-url: ./..
 ---
 
 参考文献：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation
@@ -61,7 +61,7 @@ $$
 
 ### 本地和全局信息聚合
 
-![architecture](architecture.png)
+![architecture](/_posts/pointnet/architecture.jpg)
 
 对于分割任务，需要结合本地信息和局部信息。论文采用了简单高效的办法：将学习得到的全局特征和局部特征直接连接在一起，如上图所示。然后再重新提取每个点的特征，从而使得每个点的特征同时包含局部和全局信息。再利用新的组合特征训练几个 MLP ，即可实现每个点的类别判断，也就是分割；若要对单体点云进行识别分类，则直接利用全局特征训练。
 
@@ -77,4 +77,4 @@ $$
 
 # 五、总结
 
-为了直接针对点集进行处理，pointnet 的主要思想就是通过池化来解决无序性，同时通过 MLP 来扩大和缩放特征尺寸。同时为了引入旋转不变性，将点云坐标（或特征）对齐，使用了 T-net 来预测旋转矩阵。
+为了直接针对点集进行处理，pointnet 的主要思想就是通过池化来解决无序性，通过 MLP 来扩大和缩放特征尺寸。同时为了引入旋转不变性，将点云坐标（或特征）对齐，使用了 T-net 来预测旋转矩阵。
