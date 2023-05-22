@@ -3,13 +3,14 @@
 menu:
   主页: /
   随笔: /tags/随笔/
+  点云: /tags/点云/
 
 # SubNav
 subnav:
   github: https://github.com/zcliangyue
-  weibo: "#"
+  # weibo: "#"
   # rss: "#"
-  zhihu: "#"
+  # zhihu: "#"
   qq: http://wpa.qq.com/msgrd?v=3&uin=2075969484&site=qq&menu=yes
   weixin: "#"
   #jianshu: "#"
