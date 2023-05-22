@@ -6,25 +6,15 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://zcliangyue.github.io">
-  <title>pointnet 阅读笔记 | ZCL&#39;BLOG</title>
+  <title>Tag: 论文阅读笔记 | ZCL&#39;BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="参考文献：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation 一、摘要点云是一类重要的几何数据结构。由于其格式不规则，大多数研究人员将此类数据转换为规则的 3D 体素网格或图像集合。然而，这会使数据不必要地庞大并导致问题。在本文中，我们设计了一种直接作用于点云的新型神经网络，它很好地遵从了输入点的">
-<meta property="og:type" content="article">
-<meta property="og:title" content="pointnet 阅读笔记">
-<meta property="og:url" content="http://zcliangyue.github.io/2023/05/21/pointnet/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="ZCL&#39;BLOG">
+<meta property="og:url" content="http://zcliangyue.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="ZCL&#39;BLOG">
-<meta property="og:description" content="参考文献：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation 一、摘要点云是一类重要的几何数据结构。由于其格式不规则，大多数研究人员将此类数据转换为规则的 3D 体素网格或图像集合。然而，这会使数据不必要地庞大并导致问题。在本文中，我们设计了一种直接作用于点云的新型神经网络，它很好地遵从了输入点的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zcliangyue.github.io/2023/05/21/pointnet/architecture.jpg">
-<meta property="article:published_time" content="2023-05-21T14:35:37.000Z">
-<meta property="article:modified_time" content="2023-05-22T05:15:27.106Z">
 <meta property="article:author" content="张从朗">
-<meta property="article:tag" content="点云">
-<meta property="article:tag" content="上采样">
-<meta property="article:tag" content="神经网络">
-<meta property="article:tag" content="论文阅读笔记">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://zcliangyue.github.io/2023/05/21/pointnet/architecture.jpg">
   
     <link rel="alternative" href="/atom.xml" title="ZCL&#39;BLOG" type="application/atom+xml">
   
@@ -168,95 +158,36 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-pointnet" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      pointnet 阅读笔记
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2023" class="archive-year">2023</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2023/05/21/pointnet/" class="archive-article-date">
+  	<time datetime="2023-05-21T14:35:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-21</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2023/05/21/pointnet/">pointnet 阅读笔记</a>
     </h1>
   
 
-        
-        <a href="/2023/05/21/pointnet/" class="archive-article-date">
-  	<time datetime="2023-05-21T14:35:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>参考文献：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation</p>
-<h1 id="一、摘要"><a href="#一、摘要" class="headerlink" title="一、摘要"></a>一、摘要</h1><p>点云是一类重要的几何数据结构。由于其格式不规则，大多数研究人员将此类数据转换为规则的 3D 体素网格或图像集合。然而，这会使数据不必要地庞大并导致问题。在本文中，我们设计了一种直接作用于点云的新型神经网络，它很好地遵从了输入点的排列不变性。我们的网络名为 PointNet，为从对象分类、部分分割到场景语义解析的应用程序提供统一的架构。PointNet 虽然简单，但非常高效和有效。从经验上看，它表现出与现有技术相当甚至更好的强大性能。我们从理论上分析了网络学到了什么以及为什么网络在输入扰动和损坏方面是稳健的。</p>
-<span id="more"></span>
-<h1 id="二、相关工作"><a href="#二、相关工作" class="headerlink" title="二、相关工作"></a>二、相关工作</h1><p>3D 深度学习方面，在此论文之前有很多形式出现：</p>
-<ul>
-<li>Volumetric CNNs：最早将 3D 卷积神经网络应用于体素化点云，但由于数据稀疏性和 3D 卷积的计算成本，受到分辨率的限制；</li>
-<li>Multiview CNNs：多视图 CNN 将 3D 点云或形状渲染成 2D 图像，然后应用 2D CNN 对其进行分类。然而将这种方法扩展到场景理解过其它 3D 任务并非易事；</li>
-<li>Spectral CNNs：这种卷积网络在网格点云的频率域上进行，但仅适用于具有规则结构的网格，难以应用于更加复杂和不规则的形状；</li>
-<li>Feature-based DNNs：通过提取传统形状特征将 3D 数据转换为向量，再利用全连接网络对形状分类，但受到特征本身表达能力的限制；</li>
-</ul>
-<p>这些方法都不能够直接处理无序点集，而是在尝试将点云转换为序列形式，以便用熟悉的卷积网络来操作，但同时面临计算复杂度等问题。</p>
-<h1 id="三、问题陈述"><a href="#三、问题陈述" class="headerlink" title="三、问题陈述"></a>三、问题陈述</h1><p>定义点云为一组 3D 点 $\{ P_i|i=1,\dots,n \}$ ，其中 $P_i$ 是包含 $(x,y,z)$ 和额外特征通道（如颜色、法线等）的向量，在论文中仅适用 $(x,y,z)$ 坐标。对于分类问题，输入点云可能是单体，也可能是从场景中预先分割得到。PointNet++ 为 $k$ 个候选类别输出 $k$ 个分数；对于分割问题，任务可能是从单体中分割出不同的结构，也可能是从三维场景中分割出不同的物体。若共有 $n$ 个点，$m$ 个类，则输出 $n\times m$ 个分数，表示每个点属于每个类的概率，从而进行分割。</p>
-<h1 id="四、具体方法"><a href="#四、具体方法" class="headerlink" title="四、具体方法"></a>四、具体方法</h1><h2 id="mathbb-R-n-空间中点集的性质"><a href="#mathbb-R-n-空间中点集的性质" class="headerlink" title="$\mathbb{R} ^n$ 空间中点集的性质"></a>$\mathbb{R} ^n$ 空间中点集的性质</h2><p>我们的输入是来自欧几里德空间的点的子集。它具有三个主要属性： </p>
-<ul>
-<li><strong>无序性</strong>。与图像中的像素阵列或体积网格中的体素阵列不同，点云是一组没有特定顺序的点。换句话说，一个使用 N 个 3D 点集的网络需要对 N ! 种输入点排列具有不变性；</li>
-<li><strong>点之间的关联性</strong>。这些点来自具有距离度量的空间。这意味着点不是孤立的，相邻的点形成一个有意义的子集。因此，该模型需要能够从附近的点捕获局部结构，以及局部结构之间的组合相互作用；</li>
-<li><strong>变换下的不变性</strong>。作为一个几何对象，点集的学习表示应该对某些变换是不变的，如旋转和平移。</li>
-</ul>
-<h2 id="PointNet-架构"><a href="#PointNet-架构" class="headerlink" title="PointNet 架构"></a>PointNet 架构</h2><p>网络具有三个关键模块：作为对称函数的最大池化层，用于聚合来自所有点的信息、局部和全局信息组合结构，以及两个对齐输入点和点特征的联合对齐网络。下面的单独段落中将讨论这些设计选择背后的原因。</p>
-<h3 id="无序输入的对称函数"><a href="#无序输入的对称函数" class="headerlink" title="无序输入的对称函数"></a>无序输入的对称函数</h3><p>为了解决无序性问题，论文给出了三种策略：</p>
-<ol>
-<li>引入一种规范的排序方式，但稳定的排序方式难以确定，且易受噪声的影响；</li>
-<li>把点云看作一个序列信号，并通过随机排列的方式训练 RNN 以驱使输出结果相同，但这种方法随着点云数量增长失去可行性；</li>
-<li>利用对称函数聚合来自每个点的信息。所谓聚合信息，即将 $n$ 个向量作为输入而产生一个对输入顺序不变的新向量。例如 $1+2+3 = 2+3 +1$ 。显然这种方法是较为合适的。</li>
-</ol>
-<p>定义函数 $h:\mathbb{R} ^N \rightarrow \mathbb{R} ^K$ ，用于对每个点进行处理；定义对称函数 $g:\underbrace{\mathbb{R} ^K\times\cdots\times\mathbb{R} ^K}_{n}\rightarrow\mathbb{R} $ ，聚合处理结果；则由输入到输出的一般函数 $f:2^{\mathbb{R} ^N}\rightarrow\mathbb{R} $ 定义为：  </p>
-<script type="math/tex; mode=display">
-f(\{x_1,\dots,x_n\}) \approx g(h(x_1),\dots ,h(x_n))</script><p>在实践中，论文采用多层感知器（MLP）来近似 $h$，利用最大池化函数来近似 $g$ 函数。</p>
-<h3 id="本地和全局信息聚合"><a href="#本地和全局信息聚合" class="headerlink" title="本地和全局信息聚合"></a>本地和全局信息聚合</h3><p><img src="/2023/05/21/pointnet/architecture.jpg" alt="architecture"></p>
-<p>对于分割任务，需要结合本地信息和局部信息。论文采用了简单高效的办法：将学习得到的全局特征和局部特征直接连接在一起，如上图所示。然后再重新提取每个点的特征，从而使得每个点的特征同时包含局部和全局信息。再利用新的组合特征训练几个 MLP ，即可实现每个点的类别判断，也就是分割；若要对单体点云进行识别分类，则直接利用全局特征训练。</p>
-<h3 id="联合对齐网络"><a href="#联合对齐网络" class="headerlink" title="联合对齐网络"></a>联合对齐网络</h3><p>为了使特征具有旋转平移不变性，论文引入了一种迷你网络 T-net 来直接预测仿射变换矩阵，并将该变换直接应用于原始输入。同样地，特征也需要引入旋转不变性，因此对点特征也可以训练一个对齐网络。</p>
-<p>关于 T-net 的结构，相当于小型的 PointNet，利用最大池化得到全局特征，再利用 MLP 得到$3\times 3$ 的转换矩阵。由于特征空间维数较大，增大了优化的难度，因此在 softmax 训练损失的基础上，添加了一个正则化项，用来将特征变换矩阵约束为近似<strong>正交矩阵</strong>：</p>
-<script type="math/tex; mode=display">
-L_{reg}=\| I-AA^T \|^2_F</script><p>其中 $A$ 是由迷你网络预测得到的旋转矩阵。正则项使得优化更稳定，性能更优。</p>
-<h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><p>为了直接针对点集进行处理，pointnet 的主要思想就是通过池化来解决无序性，通过 MLP 来扩大和缩放特征尺寸。同时为了引入旋转不变性，将点云坐标（或特征）对齐，使用了 T-net 来预测旋转矩阵。</p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>有时我们都需要一罐可乐<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/img/money2.jpg">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -280,106 +211,19 @@ L_{reg}=\| I-AA^T \|^2_F</script><p>其中 $A$ 是由迷你网络预测得到的
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zcliangyue.github.io/2023/05/21/pointnet/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
   
   
-    <a href="/2023/05/21/%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">从这里开始</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -402,9 +246,9 @@ L_{reg}=\| I-AA^T \|^2_F</script><p>其中 $A$ 是由迷你网络预测得到的
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: false,
