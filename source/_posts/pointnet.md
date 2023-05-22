@@ -1,10 +1,11 @@
 ---
-title: pointnet
+title: pointnet 阅读笔记
 date: 2023-05-21 22:35:37
 tags:
 - 点云 
 - 上采样 
 - 神经网络
+- 论文阅读笔记
 mathjax: ture
 typora-root-url: ./..
 ---
