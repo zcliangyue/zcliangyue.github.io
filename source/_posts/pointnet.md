@@ -5,6 +5,7 @@ tags:
 - 点云 
 - 上采样 
 - 神经网络
+mathjax: ture
 typora-root-url: ./..
 ---
 
@@ -33,7 +34,7 @@ typora-root-url: ./..
 
 # 四、具体方法
 
-## $\R^n$ 空间中点集的性质
+## $\mathbb{R} ^n$ 空间中点集的性质
 
 我们的输入是来自欧几里德空间的点的子集。它具有三个主要属性： 
 
@@ -53,7 +54,7 @@ typora-root-url: ./..
 2. 把点云看作一个序列信号，并通过随机排列的方式训练 RNN 以驱使输出结果相同，但这种方法随着点云数量增长失去可行性；
 3. 利用对称函数聚合来自每个点的信息。所谓聚合信息，即将 $n$ 个向量作为输入而产生一个对输入顺序不变的新向量。例如 $1+2+3 = 2+3 +1$ 。显然这种方法是较为合适的。
 
-定义函数 $h:\R^N \rightarrow \R^K$ ，用于对每个点进行处理；定义对称函数 $g:\underbrace{\R^K\times\cdots\times\R^K}_{n}\rightarrow\R$ ，聚合处理结果；则由输入到输出的一般函数 $f:2^{\R^N}\rightarrow\R$ 定义为：  
+定义函数 $h:\mathbb{R} ^N \rightarrow \mathbb{R} ^K$ ，用于对每个点进行处理；定义对称函数 $g:\underbrace{\mathbb{R} ^K\times\cdots\times\mathbb{R} ^K}_{n}\rightarrow\mathbb{R} $ ，聚合处理结果；则由输入到输出的一般函数 $f:2^{\mathbb{R} ^N}\rightarrow\mathbb{R} $ 定义为：  
 $$
 f(\{x_1,\dots,x_n\}) \approx g(h(x_1),\dots ,h(x_n))
 $$
