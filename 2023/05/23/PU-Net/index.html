@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PU-Net/37f39a858cd24513bdfccb33c9cdbf24.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PU-Net/7071501be5e84b49bb187fdad7ce74cb.png">
 <meta property="article:published_time" content="2023-05-23T06:08:41.000Z">
-<meta property="article:modified_time" content="2023-05-23T14:36:34.960Z">
+<meta property="article:modified_time" content="2023-05-23T14:37:36.980Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="点云上采样">
@@ -261,7 +261,7 @@ d_{CD}(S_1,S_2)=\sum_{x\in S_1}\underset{y\in S_2}{\min}\|x-y\|^2_2+\sum_{y\in S
 <script type="math/tex; mode=display">
 d_{CD}(S_1,S_2)=\frac{1}{S_1}\sum_{x\in S_1}\underset{y\in S_2}{\min}\|x-y\|^2_2+\frac{1}{S_2}\sum_{y\in S_1}\underset{x\in S_2}{\min}\|y-x\|^2_2</script><p>这个式子进一步考虑了两个点云数量不同的情况。</p>
 <p>除了上述两种度量方式，还有此前在 PCL 笔记里记过的 Hausdorff 距离（点到点集的最小距离的最大值），但显然不太适用于这里。</p>
-<script type="math/tex; mode=display">\boxed{\textbf{方法对比}}</script><p>文章中用两种损失函数来计算一系列“平均形状”，从而对两者进行对比分析，如下图所示。</p>
+<h4 id="方法对比"><a href="#方法对比" class="headerlink" title="方法对比"></a>方法对比</h4><p>文章中用两种损失函数来计算一系列“平均形状”，从而对两者进行对比分析，如下图所示。</p>
 <p><img src="/2023/05/23/PU-Net/7071501be5e84b49bb187fdad7ce74cb.png" alt="在这里插入图片描述" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>平均形状的具体计算方法没有详细说明，只提到用随机梯度下降法来最小化距离函数。从结果来看，平均形状的点数应该是固定好的，并且有一个合适的初始位置。</p>
 <p>观察图中的平均形状，论文给出了以下结论：</p>
