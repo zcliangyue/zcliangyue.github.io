@@ -1,16 +1,17 @@
 ---
-title: pointnet 阅读笔记
+title: pointnet 论文阅读笔记
 date: 2023-05-21 22:35:37
 tags:
 - 点云 
-- 上采样 
+- 点云上采样 
 - 神经网络
 - 论文阅读笔记
 mathjax: ture
-typora-root-url: ./..
+toc: true
+typora-root-url: ./pointnet
 ---
 
-参考文献：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation
+论文：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation
 
 # 一、摘要
 
@@ -71,7 +72,7 @@ $$
 
 为了使特征具有旋转平移不变性，论文引入了一种迷你网络 T-net 来直接预测仿射变换矩阵，并将该变换直接应用于原始输入。同样地，特征也需要引入旋转不变性，因此对点特征也可以训练一个对齐网络。
 
-关于 T-net 的结构，相当于小型的 PointNet，利用最大池化得到全局特征，再利用 MLP 得到$3\times 3$ 的转换矩阵。由于特征空间维数较大，增大了优化的难度，因此在 softmax 训练损失的基础上，添加了一个正则化项，用来将特征变换矩阵约束为近似**正交矩阵**：
+关于 T-net 的结构，其相当于小型的 PointNet，利用最大池化得到全局特征，再利用 MLP 得到 $3\times 3$ 的转换矩阵。由于特征空间维数较大，增大了优化的难度，因此在 softmax 训练损失的基础上，添加了一个正则化项，用来将特征变换矩阵约束为近似**正交矩阵**：
 $$
 L_{reg}=\| I-AA^T \|^2_F
 $$

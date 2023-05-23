@@ -4,6 +4,7 @@ menu:
   主页: /
   随笔: /tags/随笔/
   点云: /tags/点云/
+  论文阅读笔记: /tags/论文阅读笔记/
 
 # SubNav
 subnav:
@@ -121,11 +122,7 @@ smart_menu:
   aboutme: '关于我'
 
 friends:
-  武大官网: https://www.whu.edu.cn/
-  武大测绘官网: http://main.sgg.whu.edu.cn/
-  友情链接3: http://localhost:4000/
-  友情链接4: http://localhost:4000/
-  友情链接5: http://localhost:4000/
-  友情链接6: http://localhost:4000/
+  武汉大学官网: https://www.whu.edu.cn/
+  武汉大学测绘学院官网: http://main.sgg.whu.edu.cn/
 
-aboutme: 现就读于武汉大学，师从李煜教授 <br>（一天限定版）<br>
+aboutme: 在武测躺平
