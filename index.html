@@ -185,7 +185,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>论文：PU-Net: Point Cloud Upsampling Network</p>
-<h1 id="一、摘要"><a href="#一、摘要" class="headerlink" title="一、摘要"></a>一、摘要</h1><p>由于数据的稀疏性和不规则性，使用深度网络学习和分析 3D 点云具有挑战性。在本文中，我们提出了一种数据驱动的点云上采样技术。关键思想是学习每个点的多级特征，并通过隐含在特征空间中的多分支卷积单元扩展点集。然后将扩展的特征拆分为多个特征，然后将这些特征重建为上采样点集。我们的网络应用于 patch-level，通过联合损失函数驱使上采样点以均匀的分布保留在潜在表面上。我们使用合成和扫描数据进行各种实验以评估我们的方法，并证明其优于某些基础方法和基于优化的方法。结果表明，我们的上采样点具有更好的均匀性，并且更靠近潜在表面。</p>
+<h1 id="一、摘要"><a href="#一、摘要" class="headerlink" title="一、摘要"></a>一、摘要</h1><p>由于数据的稀疏性和不规则性，使用深度网络学习和分析 3D 点云具有挑战性。论文提出了一种数据驱动的点云上采样技术，即 PU-Net ，其关键思想是学习每个点的<strong>多级特征</strong>，并通过多层卷积单元<strong>扩展特征</strong>，然后将这些特征重建为上采样点集。网络应用于 patch-level，通过联合损失函数驱使上采样点以均匀的方式分布在隐式表面上。最后论文通过一系列实验展现网络的效果，并阐述了其局限性。</p>
         
       
 
@@ -272,7 +272,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>论文：PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space</p>
-<h1 id="一、摘要及引言"><a href="#一、摘要及引言" class="headerlink" title="一、摘要及引言"></a>一、摘要及引言</h1><p>Pointnet 是直接处理点集的开创性工作，其基本思想是学习每个点的空间编码，然后将所有单个点特征聚合为全局点云特征。但 pointnet 无法捕获局部特征，而是只对单个点编码。因此引入了分层神经网络 pointnet++ ，以分层方式处理点集，以获取不同尺度下的点集特征。</p>
+<h1 id="一、摘要及引言"><a href="#一、摘要及引言" class="headerlink" title="一、摘要及引言"></a>一、摘要及引言</h1><p>PointNet 是直接处理点集的开创性工作，其基本思想是学习每个点的空间编码，然后将所有单个点特征聚合为全局点云特征。但 PointNet 无法捕获局部特征，而是只对单个点编码。因此引入了分层神经网络 PointNet++ ，以分层方式处理点集，以获取不同尺度下的点集特征。</p>
         
       
 
@@ -359,7 +359,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>论文：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation</p>
-<h1 id="一、摘要"><a href="#一、摘要" class="headerlink" title="一、摘要"></a>一、摘要</h1><p>点云是一类重要的几何数据结构。由于其格式不规则，大多数研究人员将此类数据转换为规则的 3D 体素网格或图像集合。然而，这会使数据不必要地庞大并导致问题。在本文中，我们设计了一种直接作用于点云的新型神经网络，它很好地遵从了输入点的排列不变性。我们的网络名为 PointNet，为从对象分类、部分分割到场景语义解析的应用程序提供统一的架构。PointNet 虽然简单，但非常高效和有效。从经验上看，它表现出与现有技术相当甚至更好的强大性能。我们从理论上分析了网络学到了什么以及为什么网络在输入扰动和损坏方面是稳健的。</p>
+<h1 id="一、摘要"><a href="#一、摘要" class="headerlink" title="一、摘要"></a>一、摘要</h1><p>点云是一类重要的几何数据结构。由于其形式不规则，大多数研究人员将其转换为规则的 3D 体素网格或图像集合来处理。然而这会使数据不必要地庞大。该论文设计了一种<strong>直接作用于点云数据</strong>的新型神经网络 PointNet，它很好地遵从了输入点的<strong>排列不变性</strong>，并为从对象分类、部分分割到场景语义解析等应用场景提供统一的架构。PointNet 虽然简单，但展现出了很好的效果。</p>
         
       
 
