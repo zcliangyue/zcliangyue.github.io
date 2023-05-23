@@ -6,25 +6,27 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://zcliangyue.github.io">
-  <title>pointnet 论文阅读笔记 | ZCL&#39;BLOG</title>
+  <title>PointNet++ 论文阅读笔记 | ZCL&#39;BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="论文：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation 一、摘要点云是一类重要的几何数据结构。由于其格式不规则，大多数研究人员将此类数据转换为规则的 3D 体素网格或图像集合。然而，这会使数据不必要地庞大并导致问题。在本文中，我们设计了一种直接作用于点云的新型神经网络，它很好地遵从了输入点的排列">
+  <meta name="description" content="论文：PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space 一、摘要及引言Pointnet 是直接处理点集的开创性工作，其基本思想是学习每个点的空间编码，然后将所有单个点特征聚合为全局点云特征。但 pointnet 无法捕获局部特征，而是只对单个点编码。因此引入了分层神经网络 pointnet+">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pointnet 论文阅读笔记">
-<meta property="og:url" content="http://zcliangyue.github.io/2023/05/21/pointnet/index.html">
+<meta property="og:title" content="PointNet++ 论文阅读笔记">
+<meta property="og:url" content="http://zcliangyue.github.io/2023/05/23/PointNet++/index.html">
 <meta property="og:site_name" content="ZCL&#39;BLOG">
-<meta property="og:description" content="论文：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation 一、摘要点云是一类重要的几何数据结构。由于其格式不规则，大多数研究人员将此类数据转换为规则的 3D 体素网格或图像集合。然而，这会使数据不必要地庞大并导致问题。在本文中，我们设计了一种直接作用于点云的新型神经网络，它很好地遵从了输入点的排列">
+<meta property="og:description" content="论文：PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space 一、摘要及引言Pointnet 是直接处理点集的开创性工作，其基本思想是学习每个点的空间编码，然后将所有单个点特征聚合为全局点云特征。但 pointnet 无法捕获局部特征，而是只对单个点编码。因此引入了分层神经网络 pointnet+">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zcliangyue.github.io/2023/05/21/pointnet/architecture.jpg">
-<meta property="article:published_time" content="2023-05-21T14:35:37.000Z">
-<meta property="article:modified_time" content="2023-05-23T06:17:32.360Z">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PointNet++/1.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PointNet++/2.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PointNet++/3.png">
+<meta property="article:published_time" content="2023-05-23T06:08:41.000Z">
+<meta property="article:modified_time" content="2023-05-23T06:17:59.801Z">
 <meta property="article:author" content="张从朗">
 <meta property="article:tag" content="点云">
+<meta property="article:tag" content="上采样">
 <meta property="article:tag" content="神经网络">
 <meta property="article:tag" content="论文阅读笔记">
-<meta property="article:tag" content="点云上采样">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://zcliangyue.github.io/2023/05/21/pointnet/architecture.jpg">
+<meta name="twitter:image" content="http://zcliangyue.github.io/2023/05/23/PointNet++/1.png">
   
     <link rel="alternative" href="/atom.xml" title="ZCL&#39;BLOG" type="application/atom+xml">
   
@@ -172,61 +174,66 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-pointnet" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-PointNet++" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      pointnet 论文阅读笔记
+      PointNet++ 论文阅读笔记
     </h1>
   
 
         
-        <a href="/2023/05/21/pointnet/" class="archive-article-date">
-  	<time datetime="2023-05-21T14:35:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-21</time>
+        <a href="/2023/05/23/PointNet++/" class="archive-article-date">
+  	<time datetime="2023-05-23T06:08:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-23</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>论文：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation</p>
-<h1 id="一、摘要"><a href="#一、摘要" class="headerlink" title="一、摘要"></a>一、摘要</h1><p>点云是一类重要的几何数据结构。由于其格式不规则，大多数研究人员将此类数据转换为规则的 3D 体素网格或图像集合。然而，这会使数据不必要地庞大并导致问题。在本文中，我们设计了一种直接作用于点云的新型神经网络，它很好地遵从了输入点的排列不变性。我们的网络名为 PointNet，为从对象分类、部分分割到场景语义解析的应用程序提供统一的架构。PointNet 虽然简单，但非常高效和有效。从经验上看，它表现出与现有技术相当甚至更好的强大性能。我们从理论上分析了网络学到了什么以及为什么网络在输入扰动和损坏方面是稳健的。</p>
-<span id="more"></span>
-<h1 id="二、相关工作"><a href="#二、相关工作" class="headerlink" title="二、相关工作"></a>二、相关工作</h1><p>3D 深度学习方面，在此论文之前有很多形式出现：</p>
-<ul>
-<li>Volumetric CNNs：最早将 3D 卷积神经网络应用于体素化点云，但由于数据稀疏性和 3D 卷积的计算成本，受到分辨率的限制；</li>
-<li>Multiview CNNs：多视图 CNN 将 3D 点云或形状渲染成 2D 图像，然后应用 2D CNN 对其进行分类。然而将这种方法扩展到场景理解过其它 3D 任务并非易事；</li>
-<li>Spectral CNNs：这种卷积网络在网格点云的频率域上进行，但仅适用于具有规则结构的网格，难以应用于更加复杂和不规则的形状；</li>
-<li>Feature-based DNNs：通过提取传统形状特征将 3D 数据转换为向量，再利用全连接网络对形状分类，但受到特征本身表达能力的限制；</li>
-</ul>
-<p>这些方法都不能够直接处理无序点集，而是在尝试将点云转换为序列形式，以便用熟悉的卷积网络来操作，但同时面临计算复杂度等问题。</p>
-<h1 id="三、问题陈述"><a href="#三、问题陈述" class="headerlink" title="三、问题陈述"></a>三、问题陈述</h1><p>定义点云为一组 3D 点 $\{ P_i|i=1,\dots,n \}$ ，其中 $P_i$ 是包含 $(x,y,z)$ 和额外特征通道（如颜色、法线等）的向量，在论文中仅适用 $(x,y,z)$ 坐标。对于分类问题，输入点云可能是单体，也可能是从场景中预先分割得到。PointNet++ 为 $k$ 个候选类别输出 $k$ 个分数；对于分割问题，任务可能是从单体中分割出不同的结构，也可能是从三维场景中分割出不同的物体。若共有 $n$ 个点，$m$ 个类，则输出 $n\times m$ 个分数，表示每个点属于每个类的概率，从而进行分割。</p>
-<h1 id="四、具体方法"><a href="#四、具体方法" class="headerlink" title="四、具体方法"></a>四、具体方法</h1><h2 id="mathbb-R-n-空间中点集的性质"><a href="#mathbb-R-n-空间中点集的性质" class="headerlink" title="$\mathbb{R} ^n$ 空间中点集的性质"></a>$\mathbb{R} ^n$ 空间中点集的性质</h2><p>我们的输入是来自欧几里德空间的点的子集。它具有三个主要属性： </p>
-<ul>
-<li><strong>无序性</strong>。与图像中的像素阵列或体积网格中的体素阵列不同，点云是一组没有特定顺序的点。换句话说，一个使用 N 个 3D 点集的网络需要对 N ! 种输入点排列具有不变性；</li>
-<li><strong>点之间的关联性</strong>。这些点来自具有距离度量的空间。这意味着点不是孤立的，相邻的点形成一个有意义的子集。因此，该模型需要能够从附近的点捕获局部结构，以及局部结构之间的组合相互作用；</li>
-<li><strong>变换下的不变性</strong>。作为一个几何对象，点集的学习表示应该对某些变换是不变的，如旋转和平移。</li>
-</ul>
-<h2 id="PointNet-架构"><a href="#PointNet-架构" class="headerlink" title="PointNet 架构"></a>PointNet 架构</h2><p>网络具有三个关键模块：作为对称函数的最大池化层，用于聚合来自所有点的信息、局部和全局信息组合结构，以及两个对齐输入点和点特征的联合对齐网络。下面的单独段落中将讨论这些设计选择背后的原因。</p>
-<h3 id="无序输入的对称函数"><a href="#无序输入的对称函数" class="headerlink" title="无序输入的对称函数"></a>无序输入的对称函数</h3><p>为了解决无序性问题，论文给出了三种策略：</p>
+        <p>论文：PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space</p>
+<h1 id="一、摘要及引言"><a href="#一、摘要及引言" class="headerlink" title="一、摘要及引言"></a>一、摘要及引言</h1><p>Pointnet 是直接处理点集的开创性工作，其基本思想是学习每个点的空间编码，然后将所有单个点特征聚合为全局点云特征。但 pointnet 无法捕获局部特征，而是只对单个点编码。因此引入了分层神经网络 pointnet++ ，以分层方式处理点集，以获取不同尺度下的点集特征。</p>
+<h1 id="二、问题陈述"><a href="#二、问题陈述" class="headerlink" title="二、问题陈述"></a>二、问题陈述</h1><p>假设 $\mathcal{X} = (M, d)$ 是一个离散度量空间，其度量继承自欧氏空间 $\R^n$，其中 $M \subseteq \R^n$ 是点集，$d$ 是距离度量。此外，环境欧氏空间中 $M$ 的密度可能并非处处一致。我们感兴趣的是学习将 $\mathcal{X}$ 作为输入（连同每个点的附加特征）的集合函数 $f$ 并产生语义兴趣重新分级 $\mathcal{X}$ 的信息。和 PointNet 一样，这样的 $f$ 可以是将标签分配给 $\mathcal{X}$ 的分类函数，也可以是将标签分配给 $M$ 的每个成员的分割函数。</p>
+<h1 id="三、方法"><a href="#三、方法" class="headerlink" title="三、方法"></a>三、方法</h1><h2 id="PointNet-回顾"><a href="#PointNet-回顾" class="headerlink" title="PointNet 回顾"></a>PointNet 回顾</h2><p>对于无序点集 $\{x_1,\dots,x_n\}$ ，定义集合函数 $f:\mathcal{X}\rightarrow\R$ 将点集映射为向量：</p>
+<script type="math/tex; mode=display">
+f(x_1,\dots,x_n)=\gamma\left( \underset{i=1,\dots,n}{\max}\{h(x_i)\} \right)</script><p>其中 $\gamma$ 和 $h$ 通常为多层感知器。PointNet 论文中已经证明 $f$ 可以逼近任何一个连续集合函数，且对输入点排列不变。但 PointNet 缺乏捕捉到不同尺度的本地特征的能力。</p>
+<h2 id="分层点集特征学习"><a href="#分层点集特征学习" class="headerlink" title="分层点集特征学习"></a>分层点集特征学习</h2><p>PointNet++ 的层次结构由许多 SA 层（Set Abstraction Levels）组成。SA 层由三个关键层组成：<strong>采样（Sampling）层</strong>、<strong>组合（Grouping）层</strong>和 <strong>PointNet 层</strong>。</p>
+<p>抽象层次的输入矩阵大小为 $N\times(d+C)$ ，表示 $N$ 个具有 $d$ 维坐标和 $C$ 维点特征的点；输出矩阵大小为 $N’\times(d+C’)$ ，表示 $N’$ 个具有 $d$ 维坐标和 $C’$ 维点特征（以总结局部上下文）的<strong>子采样点</strong>。 </p>
+<p><img src="/2023/05/23/PointNet++/1.png" alt="在这里插入图片描述" style="zoom:50%;padding-top:20pt"></p>
+<h3 id="采样层"><a href="#采样层" class="headerlink" title="采样层"></a>采样层</h3><p>​      给定输入点 $\{x_1,x_2,\dots,x_n\}$ ，利用<strong>迭代最远点采样</strong>（FPS）来选择点的子集 $\{x_{i_1},x_{i_2},\dots,x_{i_m}\}$ ，使得 $x_{i_j}$ 是剩余点中距离点集 $\{x_{i_1},\dots,x_{i_{j-1}}\}$ 最远的点。论文原话虽然凝练但是略微抽象，这里详细阐述一下 FPS 算法的步骤：</p>
 <ol>
-<li>引入一种规范的排序方式，但稳定的排序方式难以确定，且易受噪声的影响；</li>
-<li>把点云看作一个序列信号，并通过随机排列的方式训练 RNN 以驱使输出结果相同，但这种方法随着点云数量增长失去可行性；</li>
-<li>利用对称函数聚合来自每个点的信息。所谓聚合信息，即将 $n$ 个向量作为输入而产生一个对输入顺序不变的新向量。例如 $1+2+3 = 2+3 +1$ 。显然这种方法是较为合适的。</li>
+<li>选定第 $i$ 个点为初始点，记作 $x_{i_1}$ ，此时候选集为 $x_{i_1}$ ；</li>
+<li>定义点 $x_k$ 到点集 $X$ 的距离为 $\min(|x_k-x |_2)(x\in X)$ ，即到点集中所有点距离的最小值；</li>
+<li>找到剩余点中距离候选集最远的点，纳入到候选集中；</li>
+<li>重复步骤 3，直到点数达到设定值。</li>
 </ol>
-<p>定义函数 $h:\mathbb{R} ^N \rightarrow \mathbb{R} ^K$ ，用于对每个点进行处理；定义对称函数 $g:\underbrace{\mathbb{R} ^K\times\cdots\times\mathbb{R} ^K}_{n}\rightarrow\mathbb{R} $ ，聚合处理结果；则由输入到输出的一般函数 $f:2^{\mathbb{R} ^N}\rightarrow\mathbb{R} $ 定义为：  </p>
+<p>其中距离的定义一般采用欧式距离，也可以采用测地线距离；初始点随机选择，也可以选择距离点云重心的最远点，使得结果没有随机性。FPS 算法和泊松盘采样很类似，但泊松盘采样提供了更多的随机性，并且对点与点之间的距离要求更宽松。另外，FPS 算法不需要任何参数，应该是更方便可靠的。</p>
+<p>​      采样层得到了 $N’$ 个采样点，这些点将被用来构成局部特征。</p>
+<h3 id="组合层"><a href="#组合层" class="headerlink" title="组合层"></a>组合层</h3><p>​      组合层的输入为 $N\times(d+C)$ 的点集和 $N’\times d$ 的采样点集合。对于每个采样点，收集其一定半径范围内最近的 $K$ 个点（$K$ 是因采样点而异的），这个操作称为 ball query 。与 KNN 相比，ball query 保证了固定的区域尺度。</p>
+<p>​      每个采样点会生成一个 $K\times(d+C)$ 的矩阵，因此最后组合得到 $N’\times K\times(d+C)$ 的矩阵。这个矩阵聚合了一系列的局部点集，如果类比到二维图像，则与 CNN 中的感受野类似，只不过 CNN 中只需要简单地滑动卷积核，而点云中稍微麻烦一些。类似地，PointNet++通过多个 SA 层，逐步扩大感受野，从而提取更高层的特征。</p>
+<h3 id="PointNet-层"><a href="#PointNet-层" class="headerlink" title="PointNet 层"></a>PointNet 层</h3><p>该层的输入为 $N’$ 个局部区域，每个 $K\times(d+C)$ 的局部区域将被聚合为一个 $(d+C’)$ 的局部特征向量，组合得到 $N’\times(d+C’)$ 的矩阵。</p>
+<p>具体地，首先将局部区域所有点中心化，即 ：</p>
 <script type="math/tex; mode=display">
-f(\{x_1,\dots,x_n\}) \approx g(h(x_1),\dots ,h(x_n))</script><p>在实践中，论文采用多层感知器（MLP）来近似 $h$，利用最大池化函数来近似 $g$ 函数。</p>
-<h3 id="本地和全局信息聚合"><a href="#本地和全局信息聚合" class="headerlink" title="本地和全局信息聚合"></a>本地和全局信息聚合</h3><p><img src="/2023/05/21/pointnet/architecture.jpg" alt="architecture"></p>
-<p>对于分割任务，需要结合本地信息和局部信息。论文采用了简单高效的办法：将学习得到的全局特征和局部特征直接连接在一起，如上图所示。然后再重新提取每个点的特征，从而使得每个点的特征同时包含局部和全局信息。再利用新的组合特征训练几个 MLP ，即可实现每个点的类别判断，也就是分割；若要对单体点云进行识别分类，则直接利用全局特征训练。</p>
-<h3 id="联合对齐网络"><a href="#联合对齐网络" class="headerlink" title="联合对齐网络"></a>联合对齐网络</h3><p>为了使特征具有旋转平移不变性，论文引入了一种迷你网络 T-net 来直接预测仿射变换矩阵，并将该变换直接应用于原始输入。同样地，特征也需要引入旋转不变性，因此对点特征也可以训练一个对齐网络。</p>
-<p>关于 T-net 的结构，其相当于小型的 PointNet，利用最大池化得到全局特征，再利用 MLP 得到 $3\times 3$ 的转换矩阵。由于特征空间维数较大，增大了优化的难度，因此在 softmax 训练损失的基础上，添加了一个正则化项，用来将特征变换矩阵约束为近似<strong>正交矩阵</strong>：</p>
+x_i^{(j)}=x_i^{(j)}-\hat{x}^{(j)},\mathrm{for}\ i=1,2\dots,K\ \mathrm{and}\ j=1,2,\dots,d</script><p>然后将相对坐标和点特征一起使用，从而捕获局部区域特征，并且消除平移对局部特征的影响。中心化也可以类比到卷积运算中的卷积核中心，因为卷积操作同样不关心每个点在图像中的绝对位置。</p>
+<h2 id="非均匀采样密度下的鲁棒特征学习"><a href="#非均匀采样密度下的鲁棒特征学习" class="headerlink" title="非均匀采样密度下的鲁棒特征学习"></a>非均匀采样密度下的鲁棒特征学习</h2><p>如前所述，点集在不同区域的密度不均匀是很常见的。这种不均匀性给点集特征学习带来了重大挑战。在密集数据中学习到的特征可能无法推广到稀疏采样区域。同时，为稀疏点云训练的模型可能无法识别细粒度的局部结构。</p>
+<p>理想情况下，我们希望尽可能捕获密集采样区域中的细节，但这在稀疏区域无法做到，因为局部特征可能会因采样不足而失效。在这种情况下，我们应该在附近寻找更大尺度的特征。为了实现这一目标，我们提出了<strong>密度自适应 PointNet 层</strong>（右图)，当输入采样密度发生变化时，它可以学习组合来自不同尺度区域的特征。我们将具有密度自适应 PointNet 层的分层网络称为 PointNet++。</p>
+<p>对比 <a href="#分层点集特征学习">分层点集特征学习</a> 章节所描述的 SA 层，PointNet++中每个 SA 层将提取多个尺度的局部特征，并根据点密度将它们组合，论文提出了两种类型的密度自适应层：MSG 和 MRG 。</p>
+<h3 id="多尺度组合（Multi-scale-Grouping，MSG）"><a href="#多尺度组合（Multi-scale-Grouping，MSG）" class="headerlink" title="多尺度组合（Multi-scale Grouping，MSG）"></a><img src="/2023/05/23/PointNet++/2.png" alt="在这里插入图片描述" style="zoom:45%;float:right;padding: 0 20pt">多尺度组合（Multi-scale Grouping，MSG）</h3><p>如右图（左）所示，在每个采样点上，用 PointNet 提取不同尺度的特征并将其组合形成多尺度特征。同时为了给网络提供不同密度的输入，采用 random input dropout 方法，随机选取 dropout 概率 $\theta\in<a href="p\le 1">0,p</a>$ ，以概率 $\theta$ 丢弃部分输入点，从而提供了稀疏性和不均匀性（随机性)。</p>
+<h3 id="多分辨率组合（Multi-resolution-Grouping，MRG）"><a href="#多分辨率组合（Multi-resolution-Grouping，MRG）" class="headerlink" title="多分辨率组合（Multi-resolution Grouping，MRG）"></a>多分辨率组合（Multi-resolution Grouping，MRG）</h3><p><img src="/2023/05/23/PointNet++/3.png" alt="MRG示意图" style="zoom:50%;float:right;padding-left:30pt">考虑到 MSG 方法计算代价较大，提出一种替代方法：MRG，如图（右)所示。对于每个局部区域的特征 $L_i$ ，都由两个特征组成：左边特征通过 SA 层得到，右边特征则通过对区域内所有点云利用 PointNet 获取特征（相当于在 SA 层中嵌套了一个 SA 层？）。</p>
+<p>当局部区域密度较低时，第一个向量往往不如第二个可靠，这时可以提高第二个向量的权重。相反地，局部区域密度较高时，第一个向量提供了更精细的细节特征。</p>
+<h2 id="用于点分割的特征传递"><a href="#用于点分割的特征传递" class="headerlink" title="用于点分割的特征传递"></a>用于点分割的特征传递</h2><p>SA 层对原始点集进行了下采样，然而在分割任务重我们希望获得所有原始点的点特征（即输入输出矩阵的行数应相等）。一种办法是在每个 SA 层中将所有点都采样为中心点（即去掉了 Sampling 层），但这样会导致计算代价非常大。因此论文给出了另一种方法：<strong>特征传播（FP）层</strong>（Feature Propagation level）。设 $N_l , N_{l-1}$ 是第 $l$ 个 SA 层输出和输入的点集大小（$N_l\le N_{l-1}$），FP 层通过在 $N_{l-1}$ 个点的坐标处插入 $N_l$ 个点的特征值 $f$ 来实现上采样。具体的插值方法，论文选择了基于 kNN 的反距离加权平均：</p>
 <script type="math/tex; mode=display">
-L_{reg}=\| I-AA^T \|^2_F</script><p>其中 $A$ 是由迷你网络预测得到的旋转矩阵。正则项使得优化更稳定，性能更优。</p>
-<h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><p>为了直接针对点集进行处理，pointnet 的主要思想就是通过池化来解决无序性，通过 MLP 来扩大和缩放特征尺寸。同时为了引入旋转不变性，将点云坐标（或特征）对齐，使用了 T-net 来预测旋转矩阵。</p>
+f^{(j)}(x)=\frac{\sum_{i=1}^kw_i(x)f_i^{(j)}}{\sum_{i=1}^kw_i(x)}\ \ \textrm{where}\ w_i(x)=\frac{1}{d(x,x_j)^p},\ j=1,\dots,C</script><p>然后将插值得到的特征和来自 SA 层的 $N_{l-1}$ 个特征连接（skip link）起来，并传递给 unit pointnet 。unit pointnet 论文中没有更多介绍，只说是类似于 $1\times 1$ 卷积核。由此来看，unit pointnet 应该就是没有池化操作的 pointnet ，因此只是重组了每个点的特征向量，并不会改变点的个数。</p>
+<p>重复通过与 SA 层个数相同的 FP 层，即可将输出矩阵行数恢复为 $N$ ，并且特征长度重组为 $k$ ，即类别个数，从而达到分割的目的。</p>
+<h1 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h1><p>针对 pointnet 难以获取局部特征的缺陷，pointnet++ 主要做了以下改进：</p>
+<ul>
+<li>采用多个 SA 层逐步获取多层次的特征信息。其中采样层利用 FPS 算法生成采样点；组合层利用 ball query 算法构成局部区域；pointnet 层提取局部区域特征；</li>
+<li>采用多个 FP 层进行特征上采样，融合高层特征和底层特征，实现分割任务。利用了反距离加权插值来上采样特征值，利用了 unit pointnet 来提取特征；</li>
+<li>提出了 MSG 和 MRG 两种方法来应对非均匀采样问题，主要原理是在 SA 层中为采样点生成多尺度的局部信息，并通过 dropout 方法来提供稀疏性和不均匀性。</li>
+</ul>
 
       
 
@@ -270,15 +277,15 @@ L_{reg}=\| I-AA^T \|^2_F</script><p>其中 $A$ 是由迷你网络预测得到的
         		</li>
       		 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">上采样</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
         		</li>
       		
 		</ul>
@@ -334,7 +341,7 @@ L_{reg}=\| I-AA^T \|^2_F</script><p>其中 $A$ 是由迷你网络预测得到的
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zcliangyue.github.io/2023/05/21/pointnet/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zcliangyue.github.io/2023/05/23/PointNet++/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -348,18 +355,9 @@ L_{reg}=\| I-AA^T \|^2_F</script><p>其中 $A$ 是由迷你网络预测得到的
   
 <nav id="article-nav">
   
-    <a href="/2023/05/23/PointNet++/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          PointNet++ 论文阅读笔记
-        
-      </div>
-    </a>
   
-  
-    <a href="/2023/05/21/%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">从这里开始</div>
+    <a href="/2023/05/21/pointnet/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">pointnet 论文阅读笔记</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -386,7 +384,7 @@ L_{reg}=\| I-AA^T \|^2_F</script><p>其中 $A$ 是由迷你网络预测得到的
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%91%98%E8%A6%81"><span class="toc-number">1.</span> <span class="toc-text">一、摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">二、相关工作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0"><span class="toc-number">3.</span> <span class="toc-text">三、问题陈述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%85%B7%E4%BD%93%E6%96%B9%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">四、具体方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mathbb-R-n-%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%82%B9%E9%9B%86%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="toc-number">4.1.</span> <span class="toc-text">$\mathbb{R} ^n$ 空间中点集的性质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PointNet-%E6%9E%B6%E6%9E%84"><span class="toc-number">4.2.</span> <span class="toc-text">PointNet 架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E5%BA%8F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AF%B9%E7%A7%B0%E5%87%BD%E6%95%B0"><span class="toc-number">4.2.1.</span> <span class="toc-text">无序输入的对称函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E5%92%8C%E5%85%A8%E5%B1%80%E4%BF%A1%E6%81%AF%E8%81%9A%E5%90%88"><span class="toc-number">4.2.2.</span> <span class="toc-text">本地和全局信息聚合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%94%E5%90%88%E5%AF%B9%E9%BD%90%E7%BD%91%E7%BB%9C"><span class="toc-number">4.2.3.</span> <span class="toc-text">联合对齐网络</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">五、总结</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%91%98%E8%A6%81%E5%8F%8A%E5%BC%95%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">一、摘要及引言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%97%AE%E9%A2%98%E9%99%88%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">二、问题陈述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">三、方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#PointNet-%E5%9B%9E%E9%A1%BE"><span class="toc-number">3.1.</span> <span class="toc-text">PointNet 回顾</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B1%82%E7%82%B9%E9%9B%86%E7%89%B9%E5%BE%81%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.2.</span> <span class="toc-text">分层点集特征学习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%87%E6%A0%B7%E5%B1%82"><span class="toc-number">3.2.1.</span> <span class="toc-text">采样层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%84%E5%90%88%E5%B1%82"><span class="toc-number">3.2.2.</span> <span class="toc-text">组合层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PointNet-%E5%B1%82"><span class="toc-number">3.2.3.</span> <span class="toc-text">PointNet 层</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E5%9D%87%E5%8C%80%E9%87%87%E6%A0%B7%E5%AF%86%E5%BA%A6%E4%B8%8B%E7%9A%84%E9%B2%81%E6%A3%92%E7%89%B9%E5%BE%81%E5%AD%A6%E4%B9%A0"><span class="toc-number">3.3.</span> <span class="toc-text">非均匀采样密度下的鲁棒特征学习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%B0%BA%E5%BA%A6%E7%BB%84%E5%90%88%EF%BC%88Multi-scale-Grouping%EF%BC%8CMSG%EF%BC%89"><span class="toc-number">3.3.1.</span> <span class="toc-text">多尺度组合（Multi-scale Grouping，MSG）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%9A%E5%88%86%E8%BE%A8%E7%8E%87%E7%BB%84%E5%90%88%EF%BC%88Multi-resolution-Grouping%EF%BC%8CMRG%EF%BC%89"><span class="toc-number">3.3.2.</span> <span class="toc-text">多分辨率组合（Multi-resolution Grouping，MRG）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E4%BA%8E%E7%82%B9%E5%88%86%E5%89%B2%E7%9A%84%E7%89%B9%E5%BE%81%E4%BC%A0%E9%80%92"><span class="toc-number">3.4.</span> <span class="toc-text">用于点分割的特征传递</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">四、总结</span></a></li></ol>
                     </div>
                 </span>
             </div>
