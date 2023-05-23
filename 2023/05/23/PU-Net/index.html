@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PU-Net/37f39a858cd24513bdfccb33c9cdbf24.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PU-Net/7071501be5e84b49bb187fdad7ce74cb.png">
 <meta property="article:published_time" content="2023-05-23T06:08:41.000Z">
-<meta property="article:modified_time" content="2023-05-23T14:34:37.046Z">
+<meta property="article:modified_time" content="2023-05-23T14:36:34.960Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="点云上采样">
@@ -244,7 +244,7 @@ E_2(X,Q)=\sum_{i'\in I}\lambda_{i'}\sum_{i\in I \setminus \{i'\}}\eta(\|x_{i'}-q
 f'=\mathcal{RS}(\ [\ \mathcal{C}^2_1(\mathcal{C}^1_1(f)),\dots,\mathcal{C}^2_r(\mathcal{C}^1_r(f))\ ]\ )</script><p>其中 $\mathcal{C}_{i}^1$ 和 $\mathcal{C}_{i}^2$ 是两个独立的 $1\times1$ 卷积，$\mathcal{RS}$ 是一个 reshape 操作，将大小为 $N\times r\widetilde{C}_2$ 的张量转换成大小为 $rN\times\widetilde{C}_2$ 的张量（以此实现点数的放大）。</p>
 <p>论文提到，嵌入特征 $f$ 已经聚合了来自邻域点的相关信息，因此在特征扩展时无需明确考虑空间信息。同时为了让扩张的特征相关性降低（避免生成的点距离太近），因此在 $\mathcal{C}_{i}^1$ 的基础上添加了 $\mathcal{C}_{i}^2$ 。这种特征扩展可以通过对 $r$ 个特征集应用分离卷积实现（如上图所示），也可以通过计算效率更高的分组卷积来实现。</p>
 <p>关于分组卷积的概念，参考了飞浆的<a target="_blank" rel="noopener" href="https://paddlepedia.readthedocs.io/en/latest/tutorials/CNN/convolution_operator/Group_Convolution.html">文档</a> 。简单来说，普通卷积有 $C_2$ 个，尺寸为 $h_1\times w_1\times C_1$ ，将大小为 $H_1\times W_1\times C_1$ 的输入张量转换为大小为 $H_2\times W_2\times C_2$ 的输出张量。分组卷积则将原始输入张量分割为 $g$ 个大小为 $H_1\times W_1\times \frac{C_1}{g}$ 的张量，对应地，将卷积核尺寸变为 $h_1\times w_1\times \frac{C_1}{g}$ ，卷积个数变为 $\frac{C_2}{g}$ ，使得输出尺寸为 $H_2\times W_2\times \frac{C_2}{g}$ 。最后将 $g$ 个输出拼接即可。如下图所示：</p>
-<p><img src="/2023/05/23/PU-Net/37f39a858cd24513bdfccb33c9cdbf24.png" alt="在这里插入图片描述" style="zoom:60%;padding:30pt;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/05/23/PU-Net/37f39a858cd24513bdfccb33c9cdbf24.png" alt="在这里插入图片描述" style="zoom:100%;padding:30pt;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>普通卷积的参数量为 $h_1\times w_1 \times C_1\times C_2$ ，而分组卷积的参数量缩减为：</p>
 <script type="math/tex; mode=display">
 h_1\times w_1\times \frac{C_1}{g} \times \frac{C_2}{g}\times g=h_1\times w_1 \times C_1\times C_2\times\frac{1}{g}</script><p>针对特征扩展问题，则将 $\widetilde{C}$ 视作通道数目，将其进行分组从而实现加速。</p>
@@ -262,7 +262,7 @@ d_{CD}(S_1,S_2)=\sum_{x\in S_1}\underset{y\in S_2}{\min}\|x-y\|^2_2+\sum_{y\in S
 d_{CD}(S_1,S_2)=\frac{1}{S_1}\sum_{x\in S_1}\underset{y\in S_2}{\min}\|x-y\|^2_2+\frac{1}{S_2}\sum_{y\in S_1}\underset{x\in S_2}{\min}\|y-x\|^2_2</script><p>这个式子进一步考虑了两个点云数量不同的情况。</p>
 <p>除了上述两种度量方式，还有此前在 PCL 笔记里记过的 Hausdorff 距离（点到点集的最小距离的最大值），但显然不太适用于这里。</p>
 <script type="math/tex; mode=display">\boxed{\textbf{方法对比}}</script><p>文章中用两种损失函数来计算一系列“平均形状”，从而对两者进行对比分析，如下图所示。</p>
-<p><img src="/2023/05/23/PU-Net/7071501be5e84b49bb187fdad7ce74cb.png" alt="在这里插入图片描述" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/05/23/PU-Net/7071501be5e84b49bb187fdad7ce74cb.png" alt="在这里插入图片描述" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>平均形状的具体计算方法没有详细说明，只提到用随机梯度下降法来最小化距离函数。从结果来看，平均形状的点数应该是固定好的，并且有一个合适的初始位置。</p>
 <p>观察图中的平均形状，论文给出了以下结论：</p>
 <ol>
@@ -729,5 +729,22 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
