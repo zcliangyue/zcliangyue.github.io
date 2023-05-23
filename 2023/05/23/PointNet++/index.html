@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PointNet++/3.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PointNet++/2.png">
 <meta property="article:published_time" content="2023-05-23T06:08:41.000Z">
-<meta property="article:modified_time" content="2023-05-23T06:50:11.650Z">
+<meta property="article:modified_time" content="2023-05-23T14:29:44.618Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="点云上采样">
@@ -204,7 +204,7 @@ f(x_1,\dots,x_n)=\gamma\left( \underset{i=1,\dots,n}{\max}\{h(x_i)\} \right)</sc
 <h2 id="分层点集特征学习"><a href="#分层点集特征学习" class="headerlink" title="分层点集特征学习"></a>分层点集特征学习</h2><p>PointNet++ 的层次结构由许多 SA 层（Set Abstraction Levels）组成。SA 层由三个关键层组成：<strong>采样（Sampling）层</strong>、<strong>组合（Grouping）层</strong>和 <strong>PointNet 层</strong>。</p>
 <p>抽象层次的输入矩阵大小为 $N\times(d+C)$ ，表示 $N$ 个具有 $d$ 维坐标和 $C$ 维点特征的点；输出矩阵大小为 $N’\times(d+C’)$ ，表示 $N’$ 个具有 $d$ 维坐标和 $C’$ 维点特征（以总结局部上下文）的<strong>子采样点</strong>。 </p>
 <p><img src="/2023/05/23/PointNet++/1.png" alt="architecture" style="zoom:70%;padding-top:20pt;display: block; margin-left: auto; margin-right: auto;"></p>
-<h3 id="采样层"><a href="#采样层" class="headerlink" title="采样层"></a>采样层</h3><p>​      给定输入点 $\{x_1,x_2,\dots,x_n\}$ ，利用<strong>迭代最远点采样</strong>（FPS）来选择点的子集 $\{x_{i_1},x_{i_2},\dots,x_{i_m}\}$ ，使得 $x_{i_j}$ 是剩余点中距离点集 $\{x_{i_1},\dots,x_{i_{j-1}}\}$ 最远的点。论文原话虽然凝练但是略微抽象，这里详细阐述一下 FPS 算法的步骤：</p>
+<h3 id="采样层"><a href="#采样层" class="headerlink" title="采样层"></a>采样层</h3><p>给定输入点 $\{x_1,x_2,\dots,x_n\}$ ，利用<strong>迭代最远点采样</strong>（FPS）来选择点的子集 $\{x_{i_1},x_{i_2},\dots,x_{i_m}\}$ ，使得 $x_{i_j}$ 是剩余点中距离点集 $\{x_{i_1},\dots,x_{i_{j-1}}\}$ 最远的点。论文原话虽然凝练但是略微抽象，这里详细阐述一下 FPS 算法的步骤：</p>
 <ol>
 <li>选定第 $i$ 个点为初始点，记作 $x_{i_1}$ ，此时候选集为 $x_{i_1}$ ；</li>
 <li>定义点 $x_k$ 到点集 $X$ 的距离为 $\min(|x_k-x |_2)(x\in X)$ ，即到点集中所有点距离的最小值；</li>
@@ -212,9 +212,9 @@ f(x_1,\dots,x_n)=\gamma\left( \underset{i=1,\dots,n}{\max}\{h(x_i)\} \right)</sc
 <li>重复步骤 3，直到点数达到设定值。</li>
 </ol>
 <p>其中距离的定义一般采用欧式距离，也可以采用测地线距离；初始点随机选择，也可以选择距离点云重心的最远点，使得结果没有随机性。FPS 算法和泊松盘采样很类似，但泊松盘采样提供了更多的随机性，并且对点与点之间的距离要求更宽松。另外，FPS 算法不需要任何参数，应该是更方便可靠的。</p>
-<p>​      采样层得到了 $N’$ 个采样点，这些点将被用来构成局部特征。</p>
-<h3 id="组合层"><a href="#组合层" class="headerlink" title="组合层"></a>组合层</h3><p>​      组合层的输入为 $N\times(d+C)$ 的点集和 $N’\times d$ 的采样点集合。对于每个采样点，收集其一定半径范围内最近的 $K$ 个点（$K$ 是因采样点而异的），这个操作称为 ball query 。与 KNN 相比，ball query 保证了固定的区域尺度。</p>
-<p>​      每个采样点会生成一个 $K\times(d+C)$ 的矩阵，因此最后组合得到 $N’\times K\times(d+C)$ 的矩阵。这个矩阵聚合了一系列的局部点集，如果类比到二维图像，则与 CNN 中的感受野类似，只不过 CNN 中只需要简单地滑动卷积核，而点云中稍微麻烦一些。类似地，PointNet++通过多个 SA 层，逐步扩大感受野，从而提取更高层的特征。</p>
+<p>采样层得到了 $N’$ 个采样点，这些点将被用来构成局部特征。</p>
+<h3 id="组合层"><a href="#组合层" class="headerlink" title="组合层"></a>组合层</h3><p>组合层的输入为 $N\times(d+C)$ 的点集和 $N’\times d$ 的采样点集合。对于每个采样点，收集其一定半径范围内最近的 $K$ 个点（$K$ 是因采样点而异的），这个操作称为 ball query 。与 KNN 相比，ball query 保证了固定的区域尺度。</p>
+<p>每个采样点会生成一个 $K\times(d+C)$ 的矩阵，因此最后组合得到 $N’\times K\times(d+C)$ 的矩阵。这个矩阵聚合了一系列的局部点集，如果类比到二维图像，则与 CNN 中的感受野类似，只不过 CNN 中只需要简单地滑动卷积核，而点云中稍微麻烦一些。类似地，PointNet++通过多个 SA 层，逐步扩大感受野，从而提取更高层的特征。</p>
 <h3 id="PointNet-层"><a href="#PointNet-层" class="headerlink" title="PointNet 层"></a>PointNet 层</h3><p>该层的输入为 $N’$ 个局部区域，每个 $K\times(d+C)$ 的局部区域将被聚合为一个 $(d+C’)$ 的局部特征向量，组合得到 $N’\times(d+C’)$ 的矩阵。</p>
 <p>具体地，首先将局部区域所有点中心化，即 ：</p>
 <script type="math/tex; mode=display">
@@ -355,6 +355,15 @@ f^{(j)}(x)=\frac{\sum_{i=1}^kw_i(x)f_i^{(j)}}{\sum_{i=1}^kw_i(x)}\ \ \textrm{whe
 
   
 <nav id="article-nav">
+  
+    <a href="/2023/05/23/PU-Net/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          PU-Net 论文阅读笔记
+        
+      </div>
+    </a>
   
   
     <a href="/2023/05/21/pointnet/" id="article-nav-older" class="article-nav-link-wrap">
@@ -505,10 +514,6 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">点云</a>
               </li>
              
@@ -522,6 +527,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
             
             <div class="clearfix"></div>
