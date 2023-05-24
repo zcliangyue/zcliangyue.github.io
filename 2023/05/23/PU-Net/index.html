@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PU-Net/37f39a858cd24513bdfccb33c9cdbf24.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PU-Net/7071501be5e84b49bb187fdad7ce74cb.png">
 <meta property="article:published_time" content="2023-05-23T14:47:31.000Z">
-<meta property="article:modified_time" content="2023-05-23T15:04:23.045Z">
+<meta property="article:modified_time" content="2023-05-24T13:42:18.198Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="点云上采样">
@@ -235,9 +235,9 @@ E_2(X,Q)=\sum_{i'\in I}\lambda_{i'}\sum_{i\in I \setminus \{i'\}}\eta(\|x_{i'}-q
 </ol>
 <p>泊松盘采样算法是一个计算密集型的过程，因此需要采用高效的算法来实现。通常，可以使用基于网格的算法（例如网格边长为 $r$ ，则非相邻的网格内两点距离一定大于 $r$ ）或基于随机抽样的算法来实现泊松盘采样。</p>
 <h2 id="点特征嵌入（Point-Feature-Embedding）"><a href="#点特征嵌入（Point-Feature-Embedding）" class="headerlink" title="点特征嵌入（Point Feature Embedding）"></a>点特征嵌入（Point Feature Embedding）</h2><p>为了从 patch 中学习局部和全局几何上下文，考虑以下两种特征学习策略，它们的优点相互补充。</p>
-<h3 id="分层特征学习"><a href="#分层特征学习" class="headerlink" title="分层特征学习"></a>分层特征学习</h3><p>论文采用了 <a href="#PointNet++">PointNet++</a> 中提出的层级特征学习机制作为网络的最前端，从而在不同尺度上提取点云的局部和全局特征。同时因为点云上采样需要涉及到更多的局部上下文，特地在每个级别中使用了相对较小的分组半径（grouping radius）。关于分层特征学习以及 PointNet++ 相关内容，参考笔记 <a href="./PointNet.md">PointNet.md</a> 和<a href="./PointNet++.md">PointNet++.md</a> 。</p>
-<h3 id="多级特征聚合"><a href="#多级特征聚合" class="headerlink" title="多级特征聚合"></a>多级特征聚合</h3><p>网络中较低层对应较小尺度的局部特征，较高层对应较大尺度的局部特征。在 pointnet++ 中采用了 skip link 来联合多级特征，但论文在实验中发现这种方法不适合上采样问题（暂时不懂为啥）。因此论文给出的方法是直接组合来自不同级别的特征，并让网络学习每个级别的重要性。</p>
-<p>如下图的 Point Feature Embedding 部分，补丁的输入为大小 $(N,3)$ 的坐标矩阵，在分层特征提取的过程中不断被下采样，同时特征被提取为不同的尺寸。为了融合不同特征，将每一层的特征上采样（反距离加权插值）为行数为 $N$ 的特征矩阵，并利用 $1\times 1$ 卷积（指 unit pointnet？）将特征长度减少为 $C$ ，最后直接拼接起来得到嵌入点特征 $f$ 。</p>
+<h3 id="分层特征学习"><a href="#分层特征学习" class="headerlink" title="分层特征学习"></a>分层特征学习</h3><p>论文采用了 <a href="https://zcliangyue.github.io/2023/05/23/PointNet++/">PointNet++ </a>中提出的层级特征学习机制作为网络的最前端，从而在不同尺度上提取点云的局部和全局特征。同时因为点云上采样需要涉及到更多的局部上下文，特地在每个级别中使用了相对较小的分组半径（grouping radius）。关于分层特征学习以及 PointNet++ 相关内容，参考笔记 <a href="https://zcliangyue.github.io/2023/05/21/pointnet/">PointNet </a>和<a href="https://zcliangyue.github.io/2023/05/23/PointNet++/">PointNet++ </a> 。</p>
+<h3 id="多级特征聚合"><a href="#多级特征聚合" class="headerlink" title="多级特征聚合"></a>多级特征聚合</h3><p>网络中较低层对应较小尺度的局部特征，较高层对应较大尺度的局部特征。在 pointnet++ 中采用了 skip link 来联合多级特征，但论文在实验中发现“这种自上而下的传播”方法不适合上采样问题（但似乎没有给出具体原因）。因此论文给出的方法是直接组合来自不同级别的特征，并让网络学习每个级别的重要性。</p>
+<p>如下图的 Point Feature Embedding 部分，补丁的输入为大小 $(N,3)$ 的坐标矩阵，在分层特征提取的过程中不断被下采样，同时特征被提取为不同的尺寸。为了融合不同特征，将每一层的特征上采样（反距离加权插值）为行数为 $N$ 的特征矩阵，并利用 $1\times 1$ 卷积（指 unit pointnet？似乎 PointNet 在后面的论文中都直接用卷积来表示了）将特征长度减少为 $C$ ，最后直接拼接起来得到嵌入点特征 $f$ 。</p>
 <p><img src="/2023/05/23/PU-Net/44e5a25cd1d046ec942a972b828d05ad.png" alt="在这里插入图片描述" style="zoom:60%;padding:30pt;display: block; margin-left: auto; margin-right: auto;"></p>
 <h2 id="特征扩展（Feature-Expansion）"><a href="#特征扩展（Feature-Expansion）" class="headerlink" title="特征扩展（Feature Expansion）"></a>特征扩展（Feature Expansion）</h2><p>在点特征嵌入组件之后，论文扩展了特征空间中的特征数量，从而扩大了点的数量，达到上采样的目的。假设 $f$ 的维度为 $N\times \widetilde{C}$ ，$N$为输入点数， $\widetilde{C}$ 为嵌入特征的特征维度。特征扩展操作将输出维度为 $rN \times \widetilde{C}_2$ 的特征 $f’$，其中 $r$ 是上采样率，$\widetilde{C}_2$ 是新的特征维度。本质上，这类似于图像相关任务中的特征上采样，在图像中可以通过反卷积（也称为转置卷积）或插值来完成。然而，由于点的不规则性和无序性，将这些操作应用于点云并非易事。因此，我们提出了一种基于<strong>亚像素卷积层</strong>的有效特征扩展操作。该操作可以表示为：</p>
 <script type="math/tex; mode=display">
@@ -572,10 +572,6 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">点云</a>
               </li>
              
@@ -589,6 +585,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
             
             <div class="clearfix"></div>
