@@ -19,7 +19,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PointNet++/3.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PointNet++/2.png">
 <meta property="article:published_time" content="2023-05-23T06:08:41.000Z">
-<meta property="article:modified_time" content="2023-05-23T15:12:31.386Z">
+<meta property="article:modified_time" content="2023-05-24T05:21:31.896Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="点云上采样">
@@ -97,9 +97,9 @@
 		        
 					<a class="qq" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2075969484&site=qq&menu=yes" title="qq"><i class="icon-qq"></i></a>
 		        
-					<a class="weixin" target="_blank" href="#" title="weixin"><i class="icon-weixin"></i></a>
+					<a class="weixin" target="_blank" href="https://img-blog.csdnimg.cn/df2a27364a77460da97203fc648ae113.jpeg" title="weixin"><i class="icon-weixin"></i></a>
 		        
-					<a class="mail" target="_blank" href="http://2075969484@qq.com" title="mail"><i class="icon-mail"></i></a>
+					<a class="mail" target="_blank" href="https://img-blog.csdnimg.cn/635b6833f4d0485ea676641dafdd20bf.png" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
 		</nav>
@@ -142,9 +142,9 @@
 			        
 						<a class="qq" target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=2075969484&site=qq&menu=yes" title="qq"><i class="icon-qq"></i></a>
 			        
-						<a class="weixin" target="_blank" href="#" title="weixin"><i class="icon-weixin"></i></a>
+						<a class="weixin" target="_blank" href="https://img-blog.csdnimg.cn/df2a27364a77460da97203fc648ae113.jpeg" title="weixin"><i class="icon-weixin"></i></a>
 			        
-						<a class="mail" target="_blank" href="http://2075969484@qq.com" title="mail"><i class="icon-mail"></i></a>
+						<a class="mail" target="_blank" href="https://img-blog.csdnimg.cn/635b6833f4d0485ea676641dafdd20bf.png" title="mail"><i class="icon-mail"></i></a>
 			        
 				</div>
 			</nav>
@@ -207,7 +207,7 @@ f(x_1,\dots,x_n)=\gamma\left( \underset{i=1,\dots,n}{\max}\{h(x_i)\} \right)</sc
 <h3 id="采样层"><a href="#采样层" class="headerlink" title="采样层"></a>采样层</h3><p>给定输入点 $\{x_1,x_2,\dots,x_n\}$ ，利用<strong>迭代最远点采样</strong>（FPS）来选择点的子集 $\{x_{i_1},x_{i_2},\dots,x_{i_m}\}$ ，使得 $x_{i_j}$ 是剩余点中距离点集 $\{x_{i_1},\dots,x_{i_{j-1}}\}$ 最远的点。论文原话虽然凝练但是略微抽象，这里详细阐述一下 FPS 算法的步骤：</p>
 <ol>
 <li>选定第 $i$ 个点为初始点，记作 $x_{i_1}$ ，此时候选集为 $x_{i_1}$ ；</li>
-<li>定义点 $x_k$ 到点集 $X$ 的距离为 $\min(|x_k-x |_2)(x\in X)$ ，即到点集中所有点距离的最小值；</li>
+<li>定义点 $x_k$ 到点集 $X$ 的距离为 $\min(\left|x_k-x \right|_2)(x\in X)$ ，即到点集中所有点距离的最小值；</li>
 <li>找到剩余点中距离候选集最远的点，纳入到候选集中；</li>
 <li>重复步骤 3，直到点数达到设定值。</li>
 </ol>
@@ -671,5 +671,22 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
