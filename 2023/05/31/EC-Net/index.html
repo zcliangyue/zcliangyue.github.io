@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/31/EC-Net/image-20230526202725949.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/31/EC-Net/d39191aed6af41fab68697431bc668b7.png">
 <meta property="article:published_time" content="2023-05-30T16:39:24.000Z">
-<meta property="article:modified_time" content="2023-05-30T16:41:01.138Z">
+<meta property="article:modified_time" content="2023-05-30T16:43:30.450Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="点云上采样">
@@ -203,13 +203,13 @@
 <span id="more"></span>
 <p>此外，为了使得网络具有<strong>边缘感知</strong>能力，论文将边缘和网格三角形信息同 patch 相关联，通过回归<strong>点到边缘的距离</strong>以及点坐标来训练网络。更重要的是，论文通过一种新颖的 edge-ware 联合损失函数，可以有效地比较输出点和基准 3D 网格。该损失函数鼓励输出点靠近底层表面和边缘，并更均匀地分布在表面上。</p>
 <h1 id="二、方法"><a href="#二、方法" class="headerlink" title="二、方法"></a>二、方法</h1><h2 id="训练数据准备"><a href="#训练数据准备" class="headerlink" title="训练数据准备"></a>训练数据准备</h2><p>论文从 ShapeNet 和其它在线存储库收集 3D 网格 ，包括简单的 3D 形状、机械零件和椅子等日常用品。并且采用了手动绘制折线的方式来标记网格上的锐利边缘，用于学习点到边缘的距离，如下图所示。</p>
-<p><img src="/2023/05/31/EC-Net/9914334e1a334b6aa2fb96ea8b3c64f7.png" alt="网格边缘标记" style="zoom:50%;"></p>
+<p><img src="/2023/05/31/EC-Net/9914334e1a334b6aa2fb96ea8b3c64f7.png" alt="网格边缘标记" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="虚拟扫描"><a href="#虚拟扫描" class="headerlink" title="虚拟扫描"></a>虚拟扫描</h3><p>为了从 3D 网格获取点云，论文采用了虚拟扫描的方式，具体来说。首先将网格归一化到 $\left[-1,+1\right]^3$ 单位距离空间里，并在物体周围水平均匀的布置 30 个虚拟相机（视角为 50°），相机距离物体中心两个单位距离，同时随机地扰动相机位置（向上或向下）。之后，通过渲染出网格对象的深度图并为深度值和像素位置添加量化噪声，最后反向投影每个像素得到点云。</p>
 <p>这种方式模拟了真实场景里的扫描仪，比一般的下采样方法更加贴合实际。其特点是存在线状的点分布（下图左），离相机越近的平面采样点越密集（下图右），同时具有随机误差。</p>
-<p><img src="/2023/05/31/EC-Net/2a1c179521514327bbf9b1b4f61402ab.png" alt="虚拟扫描" style="zoom:50%;"></p>
+<p><img src="/2023/05/31/EC-Net/2a1c179521514327bbf9b1b4f61402ab.png" alt="虚拟扫描" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="局部区域提取"><a href="#局部区域提取" class="headerlink" title="局部区域提取"></a>局部区域提取</h3><p>提取 patch 的依据是测地线距离，因为采用欧氏距离可能导致相邻点位于薄表面的两侧。具体的提取步骤如下：</p>
 <ul>
-<li><img src="/2023/05/31/EC-Net/f19afa3e9ca74fdc978749eeb712767f.png" alt="在这里插入图片描述" style="zoom:50%;float:right;padding-left:30pt">首先将每个点视为节点创建邻接图，图中每个点与其 $k$ 近邻点（$k=10$）相连，如右图所示。边权重设置为两点之间的欧氏距离；</li>
+<li><img src="/2023/05/31/EC-Net/f19afa3e9ca74fdc978749eeb712767f.png" alt="在这里插入图片描述" style="zoom:90%;float:right;padding-left:30pt">首先将每个点视为节点创建邻接图，图中每个点与其 $k$ 近邻点（$k=10$）相连，如右图所示。边权重设置为两点之间的欧氏距离；</li>
 <li>随机选择 $m=100$ 个点作为 patch 的中心点。对于每个选定的点，通过 Dijkstra 算法找到 $2048$ 个在<strong>邻接图上</strong>最近的点；</li>
 <li>在 $2048$ 个点里随机选取 $\hat{N}=1024$ 个点，从而引入随机性；</li>
 <li>将点坐标归一化到单位球内，坐标重心为原点；</li>
@@ -217,14 +217,14 @@
 </ul>
 <h2 id="边缘感知的点集整合网络"><a href="#边缘感知的点集整合网络" class="headerlink" title="边缘感知的点集整合网络"></a>边缘感知的点集整合网络</h2><h3 id="特征嵌入及扩展"><a href="#特征嵌入及扩展" class="headerlink" title="特征嵌入及扩展"></a>特征嵌入及扩展</h3><p>该组件首先使用 PointNet++ 将每个点周围的局部信息映射到 $D$ 维特征向量中（论文实验取 $D=256$ ）。考虑到 patch 边缘点的局部信息不准确，论文只保留了 $N = \frac{\hat{N}}{2}$ 个最接近 patch 中心的点对应的特征向量，因此特征嵌入组件的输入为 $N\times 3$ 的张量。</p>
 <p>下图为特征嵌入部分的详细结构，其中在四个级别分别采用了 $0.1、0.2、0.4、0.6$ 的分组半径来提取局部特征，这四个层次对应的点样本数分别为 $N,\frac{N}{2},\frac{N}{4},\frac{N}{8}$ 。这里虽然写的是 conv 层，但其实就是 PointNet++ 中的 SA 层。其特征组合方式参考了 PU-Net 。</p>
-<p><img src="/2023/05/31/EC-Net/537dcf63ed6d4f3f9c8a8729657f540c.png" alt="在这里插入图片描述" style="zoom:40%;"></p>
+<p><img src="/2023/05/31/EC-Net/537dcf63ed6d4f3f9c8a8729657f540c.png" alt="在这里插入图片描述" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>特征扩展部分和 PU-Net 一致，只不过在 PU-Net 中的 $1\times1$ 卷积，在这里也统一写成了卷积层。特征扩展部分的输出为 $rN\times128$ 的张量。</p>
-<p><img src="/image-20230526201933967.png" alt="image-20230526201933967" style="zoom:40%;"></p>
+<p><img src="/image-20230526201933967.png" alt="image-20230526201933967" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="边缘距离回归"><a href="#边缘距离回归" class="headerlink" title="边缘距离回归"></a>边缘距离回归</h3><p>这一组件将回归每个点到边缘的距离，从而进行边缘点识别。回归距离是点到最近的标记边缘的距离。具体来说，首先通过 MLP 从扩展特征中提取距离特征 $f_{dist}$ ，然后再通过另一个 MLP 回归点到边缘的距离（但是既然点是无序的，训练样本中的点到边缘距离如何排列？或者随机排列？）。</p>
-<p><img src="/2023/05/31/EC-Net/image-20230526202725949.png" alt="image-20230526202725949" style="zoom:40%;"></p>
+<p><img src="/2023/05/31/EC-Net/image-20230526202725949.png" alt="image-20230526202725949" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="坐标回归"><a href="#坐标回归" class="headerlink" title="坐标回归"></a>坐标回归</h3><p>基于边缘距离回归组件中的 $f_{dist}$ 特征，利用两个 MLP 回归点坐标。在这里论文采用了只回归<strong>残差坐标</strong>的方式，也就是上采样点相对当前点的偏移值，这样预测值会比较小，有利于网络学习。另外，论文提到除了最后用于回归的 MLP 层，其余所有卷积和 MLP 层后面都接的是 RELU 激活函数。</p>
 <h3 id="边缘点识别"><a href="#边缘点识别" class="headerlink" title="边缘点识别"></a>边缘点识别</h3><p>记 $d_i$ 为输出点 $x_i$ 到边缘的距离，则边缘点集为 $\mathcal{S}_{\Delta_d}=\{x_i \}_{d_i&lt;\Delta_d}$ 。该组件在训练和测试阶段都会执行。</p>
-<h2 id="边缘感知的联合损失函数"><a href="#边缘感知的联合损失函数" class="headerlink" title="边缘感知的联合损失函数"></a>边缘感知的联合损失函数</h2><p><img src="/2023/05/31/EC-Net/d39191aed6af41fab68697431bc668b7.png" alt="EC-Net架构图" style="zoom:50%;"></p>
+<h2 id="边缘感知的联合损失函数"><a href="#边缘感知的联合损失函数" class="headerlink" title="边缘感知的联合损失函数"></a>边缘感知的联合损失函数</h2><p><img src="/2023/05/31/EC-Net/d39191aed6af41fab68697431bc668b7.png" alt="EC-Net架构图" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>损失函数的设计主要基于以下目标：1）靠近底层物体表面；2）靠近标记边缘；3）均匀分布</p>
 <h3 id="表面损失（Surface-Loss）"><a href="#表面损失（Surface-Loss）" class="headerlink" title="表面损失（Surface Loss）"></a>表面损失（Surface Loss）</h3><p>表面损失定义为从每个输出点 $x_i$ 到与 patch 关联的所有网格三角形 $T$ 的最短距离：</p>
 <script type="math/tex; mode=display">
