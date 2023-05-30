@@ -19,11 +19,11 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/31/EC-Net/2a1c179521514327bbf9b1b4f61402ab.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/31/EC-Net/f19afa3e9ca74fdc978749eeb712767f.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/31/EC-Net/537dcf63ed6d4f3f9c8a8729657f540c.png">
-<meta property="og:image" content="http://zcliangyue.github.io/image-20230526201933967.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/05/31/EC-Net/image-20230526201933967.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/31/EC-Net/image-20230526202725949.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/31/EC-Net/d39191aed6af41fab68697431bc668b7.png">
 <meta property="article:published_time" content="2023-05-30T16:39:24.000Z">
-<meta property="article:modified_time" content="2023-05-30T16:43:30.450Z">
+<meta property="article:modified_time" content="2023-05-30T16:44:57.833Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="点云上采样">
@@ -219,7 +219,7 @@
 <p>下图为特征嵌入部分的详细结构，其中在四个级别分别采用了 $0.1、0.2、0.4、0.6$ 的分组半径来提取局部特征，这四个层次对应的点样本数分别为 $N,\frac{N}{2},\frac{N}{4},\frac{N}{8}$ 。这里虽然写的是 conv 层，但其实就是 PointNet++ 中的 SA 层。其特征组合方式参考了 PU-Net 。</p>
 <p><img src="/2023/05/31/EC-Net/537dcf63ed6d4f3f9c8a8729657f540c.png" alt="在这里插入图片描述" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>特征扩展部分和 PU-Net 一致，只不过在 PU-Net 中的 $1\times1$ 卷积，在这里也统一写成了卷积层。特征扩展部分的输出为 $rN\times128$ 的张量。</p>
-<p><img src="/image-20230526201933967.png" alt="image-20230526201933967" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/05/31/EC-Net/image-20230526201933967.png" alt="image-20230526201933967" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="边缘距离回归"><a href="#边缘距离回归" class="headerlink" title="边缘距离回归"></a>边缘距离回归</h3><p>这一组件将回归每个点到边缘的距离，从而进行边缘点识别。回归距离是点到最近的标记边缘的距离。具体来说，首先通过 MLP 从扩展特征中提取距离特征 $f_{dist}$ ，然后再通过另一个 MLP 回归点到边缘的距离（但是既然点是无序的，训练样本中的点到边缘距离如何排列？或者随机排列？）。</p>
 <p><img src="/2023/05/31/EC-Net/image-20230526202725949.png" alt="image-20230526202725949" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="坐标回归"><a href="#坐标回归" class="headerlink" title="坐标回归"></a>坐标回归</h3><p>基于边缘距离回归组件中的 $f_{dist}$ 特征，利用两个 MLP 回归点坐标。在这里论文采用了只回归<strong>残差坐标</strong>的方式，也就是上采样点相对当前点的偏移值，这样预测值会比较小，有利于网络学习。另外，论文提到除了最后用于回归的 MLP 层，其余所有卷积和 MLP 层后面都接的是 RELU 激活函数。</p>
@@ -683,5 +683,22 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
