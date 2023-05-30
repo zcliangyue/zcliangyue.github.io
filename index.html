@@ -185,7 +185,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>论文：EC-Net: an Edge-aware Point set Consolidation Network</p>
-<h1 id="一、摘要及引言"><a href="#一、摘要及引言" class="headerlink" title="一、摘要及引言"></a>一、摘要及引言</h1><p>​      点云整合（point cloud consolidation）是将点云“按摩”到表面上的过程，去噪、补全、重采样等等都属于其一部分。目前数据驱动方法展现出了很好的性能，但它们忽略了 3D 对象的锐利特征。该论文提出了第一个用于边缘感知整合网络 EC-Net ，其在 PointNet 的启发下，通过将坐标转换为深层特征并进行特征扩展产生更多点。同时论文提出了一种仅适用于点云的 patch 提取方案，以便提取 patch 并在训练和测试阶段共同使用。</p>
+<h1 id="一、摘要及引言"><a href="#一、摘要及引言" class="headerlink" title="一、摘要及引言"></a>一、摘要及引言</h1><p>点云整合（point cloud consolidation）是将点云“按摩”到表面上的过程，去噪、补全、重采样等等都属于其一部分。目前数据驱动方法展现出了很好的性能，但它们忽略了 3D 对象的锐利特征。该论文提出了第一个用于边缘感知整合网络 EC-Net ，其在 PointNet 的启发下，通过将坐标转换为深层特征并进行特征扩展产生更多点。同时论文提出了一种仅适用于点云的 patch 提取方案，以便提取 patch 并在训练和测试阶段共同使用。</p>
         
       
 
@@ -857,22 +857,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
