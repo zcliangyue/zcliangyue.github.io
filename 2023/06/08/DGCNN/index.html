@@ -6,15 +6,27 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://zcliangyue.github.io">
-  <title>Archives: 2023/5 | ZCL&#39;BLOG</title>
+  <title>从这里开始 | ZCL&#39;BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="ZCL&#39;BLOG">
-<meta property="og:url" content="http://zcliangyue.github.io/archives/2023/05/index.html">
+  <meta name="description" content="论文：Dynamic Graph CNN for Learning on Point Clouds  近来饱受专业实习折磨，学习方面，有所懈怠  一、摘要及引言在 PointNet、PointNet++ 中，都没有考虑到点云的拓扑结构，即相邻点之间的邻接关系。如果设计一个能够恢复拓扑结构的模型，应当可以增强网络的表示能力。基于这一想法，论文设计了网络模块 EdgeConv 来提取局部邻域信息和潜在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从这里开始">
+<meta property="og:url" content="http://zcliangyue.github.io/2023/06/08/DGCNN/index.html">
 <meta property="og:site_name" content="ZCL&#39;BLOG">
+<meta property="og:description" content="论文：Dynamic Graph CNN for Learning on Point Clouds  近来饱受专业实习折磨，学习方面，有所懈怠  一、摘要及引言在 PointNet、PointNet++ 中，都没有考虑到点云的拓扑结构，即相邻点之间的邻接关系。如果设计一个能够恢复拓扑结构的模型，应当可以增强网络的表示能力。基于这一想法，论文设计了网络模块 EdgeConv 来提取局部邻域信息和潜在">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/06/08/DGCNN/605d901a470d47739b7ee58670f91c82.jpg">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/06/08/DGCNN/image-20230608223623247.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/06/08/DGCNN/image-20230608215922553.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/06/08/DGCNN/image-20230608223703797.png">
+<meta property="article:published_time" content="2023-06-08T15:51:00.000Z">
+<meta property="article:modified_time" content="2023-06-08T15:58:31.213Z">
 <meta property="article:author" content="SGGZCL">
+<meta property="article:tag" content="点云">
+<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="论文阅读笔记">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zcliangyue.github.io/2023/06/08/DGCNN/605d901a470d47739b7ee58670f91c82.jpg">
   
     <link rel="alternative" href="/atom.xml" title="ZCL&#39;BLOG" type="application/atom+xml">
   
@@ -162,36 +174,119 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-DGCNN" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      从这里开始
+    </h1>
+  
+
+        
+        <a href="/2023/06/08/DGCNN/" class="archive-article-date">
+  	<time datetime="2023-06-08T15:51:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-06-08</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1801.07829.pdf">Dynamic Graph CNN for Learning on Point Clouds</a></p>
+<blockquote>
+<p>近来饱受专业实习折磨，学习方面，有所懈怠</p>
+</blockquote>
+<h1 id="一、摘要及引言"><a href="#一、摘要及引言" class="headerlink" title="一、摘要及引言"></a>一、摘要及引言</h1><p>在 PointNet、PointNet++ 中，都没有考虑到点云的拓扑结构，即相邻点之间的邻接关系。如果设计一个能够恢复<strong>拓扑结构</strong>的模型，应当可以增强网络的表示能力。基于这一想法，论文设计了网络模块 EdgeConv 来提取局部邻域信息和潜在的长距离语义特征。</p>
+<span id="more"></span>
+<p>PointNet 通过在局部邻域内独立地处理点，确保了顺序不变性，然而这种<strong>独立性</strong>一定程度上忽略了点之间的几何关系，因而难以捕获局部特征。而 EdgeConv 并不从点的嵌入中生成点特征，而是生成了描述点与其邻域内点之间关系的<strong>边特征</strong>，并且对邻域内点的排序具有不变性。同时 EdgeConv 易于嵌入到现有网络中。论文将其集成到 PointNet 中，得到了很好的性能。</p>
+<h1 id="二、方法"><a href="#二、方法" class="headerlink" title="二、方法"></a>二、方法</h1><h2 id="图卷积神经网络（Graphic-Convolutional-Neural-Networks，GCN）"><a href="#图卷积神经网络（Graphic-Convolutional-Neural-Networks，GCN）" class="headerlink" title="图卷积神经网络（Graphic Convolutional Neural Networks，GCN）"></a>图卷积神经网络（Graphic Convolutional Neural Networks，GCN）</h2><p>由于文章借鉴了图卷积神经网络，因此简单了解了一下图卷积的原理。与 CNN 相比，GCN 主要应用于<strong>图数据</strong>。也就是节点和边组成的图形。当然图像也是一种特殊的图形，它具有规整的结构。而在特征嵌入方面，两者都是局部连接，并且卷积核权重处处共享。不同之处在于 GCN 的邻接关系可能会随着层数变化而发生改变。</p>
+<p>因此 GCN 与 CNN 思想上是基本一致的，只不过应用场景不同。相比之下，GCN 所处理的数据结构会更复杂。</p>
+<p><img src="/2023/06/08/DGCNN/605d901a470d47739b7ee58670f91c82.jpg" style="zoom:60%;"></p>
+<h2 id="边卷积（Edge-Convolution）"><a href="#边卷积（Edge-Convolution）" class="headerlink" title="边卷积（Edge Convolution）"></a>边卷积（Edge Convolution）</h2><h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>利用点云能够生成的最简单的图，大概是体素连通性分割里的体素邻接图。但论文所使用的方法有所区别于 GCN，因为它会在每一层根据新的特征序列，重新计算节点的邻接关系。不同于使用空间距离构建的图，这样做意味着图会<strong>动态更新</strong>，即每个点的 $k$ 近邻点会在不同层之间发生变化。这使得<strong>非局部</strong>（non-local）信息能够得到扩散。下面阐述 EdgeConv 具体架构。</p>
+<p>将数量为 $n$ 的 $F$ 维点云记作 $\mathbf{X}=\left\{\mathbf{x}_1, \ldots, \mathbf{x}_n\right\} \subseteq \mathbb{R}^F$ ，令 $F=3$ ，则每个点包含三维坐标 $\mathbf{x}=(x_i,y_i,z_i)$ ，也可以包含颜色、法线等附加特征。因此 $F$ 更一般的含义是点特征。</p>
+<p>引入一个有向图 $\mathcal{G}=(\mathcal{V}, \mathcal{E})$ 来表示局部点云结构，其中 $\mathcal{V}=\{1, \ldots, n\}$ , $ \mathcal{E} \subseteq \mathcal{V} \times \mathcal{V}$ ，分别表示节点和边，最简单的 $\mathcal{G}$ 是 $k$ 近邻图。图中包含了自环（self-loop），即每个节点也会指向自己。论文定义了以 $\mathbf{x}_i,\mathbf{x}_j$ 为端点的边缘的特征：</p>
+<script type="math/tex; mode=display">
+\boldsymbol{e}_{i j}=h_{\Theta}\left(\mathbf{x}_i, \mathbf{x}_j\right)</script><p>其中 $h_{\boldsymbol{\Theta}}: \mathbb{R}^F \times \mathbb{R}^F \rightarrow \mathbb{R}^{F^{\prime}}$ 是一个非线性函数，$\Theta$ 为一组可学习优化的参数。</p>
+<p> 最后，将边缘特征定义为由顶点出发的所有边特征的聚合，聚合方式为对称函数（如求和或者池化），论文里记作一个<del>令人费解的</del>正方形：</p>
+<script type="math/tex; mode=display">
+\mathbf{x}_i^{\prime}=\underset{j:(i, j) \in \mathcal{E}}{\square} h_{\Theta}\left(\mathbf{x}_i, \mathbf{x}_j\right)</script><p>类比于图像卷积， $\mathbf{x}_i$ 为中心像点，$\{\mathbf{x}_j:(i,j)\in\mathcal{E}\}$ 为其邻域内像点。总之，给定一个 $F$ 维的点云，EdgeConv 将其转换为点数不变的 $F’$ 维点云。</p>
+<p><img src="/2023/06/08/DGCNN/image-20230608223623247.png" alt="image-20230608223623247" style="zoom:70%;"></p>
+<h3 id="函数的选择"><a href="#函数的选择" class="headerlink" title="函数的选择"></a>函数的选择</h3><p>在 EdgeConv 中主要涉及到两个函数的选取：$h$ 和 $\square$ 。若 $\mathbf{x}_1,\dots,\mathbf{x}_n$ 是规则网格上的图像像素，而图 $\mathcal{G}$ 中表示了每个像素周围固定大小的块的连通性，同时选取边缘函数为 $\Theta_m\cdot\mathbf{x}_j$ ，聚合操作为求和函数，就得到了标准的卷积操作：</p>
+<script type="math/tex; mode=display">
+x_{i m}^{\prime}=\sum_{j:(i, j) \in \mathcal{E}} \boldsymbol{\theta}_m \cdot \mathbf{x}_j,</script><p>这个表示的细节就不深究了，个人感觉和一般说的 CNN 不太一样，因为这里似乎对所有邻域内的点都共享了权重。另外左侧的 $x$ 的字体显然和前面不太统一，但还是尊重原文。</p>
+<p>后面论文列举了很多函数的选取，都比较常规，这里不再赘述。论文所采用的函数如下所示:</p>
+<script type="math/tex; mode=display">
+\left\{\begin{aligned}
+ &e'_{ijm}=\operatorname{ReLU}(\theta_m\cdot(\mathbf{x}_j-\mathbf{x}_i)+\boldsymbol{\phi}_m\cdot\mathbf{x}_i),
+\\
+&x'_{im} =\max\limits_{j:(i,j)\in\mathcal{E}}e'_{ijm},
+\end{aligned}\right.\label{4}</script><p>不同于 PointNet 中共享的 MLP ，这种特征提取方式考虑了边特征。论文中说可以用共享 MLP 实现，但我还没想明白如何做到的。</p>
+<h2 id="动态图更新（Dynamic-Graph-Update）"><a href="#动态图更新（Dynamic-Graph-Update）" class="headerlink" title="动态图更新（Dynamic Graph Update）"></a>动态图更新（Dynamic Graph Update）</h2><p>论文再次强调了在特征空间中定义图形的优势，即使得感受野和点云直径一样大，并且是稀疏的。用人话说就是不局限在周边点，还会将点云中其它具有相似特征的点纳入到感受野中。再具体实现中，计算了特征空间中的成对距离矩阵，从而为每个点提取最近的 $k$ 个点。</p>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><p>主要包括<strong>置换不变性</strong>和<strong>平移不变性</strong>。置换不变性就不必多说了，平移不变性则来自于 $\eqref{4}$ 式中的 $h$ 函数。若对点云进行平移操作 $T$ ，则特征值变为：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+e'_{ijm} &=\operatorname{ReLU}(\theta_m\cdot(\mathbf{x}_j+T-(\mathbf{x}_i+T))+\boldsymbol{\phi}_m\cdot(\mathbf{x}_i+T))
+\\
+&=\operatorname{ReLU}(\theta_m\cdot(\mathbf{x}_j-\mathbf{x}_i)+\boldsymbol{\phi}_m\cdot(\mathbf{x}_i+T))
+\end{aligned}</script><p>当 $\boldsymbol{\phi}_m=0$ 时，算子对平移是完全不变的。然而这会导致模型的简化，patches 的位置信息被忽略。以 $\mathbf{x}_j-\mathbf{x}_i$ 和 $\mathbf{x}_i$ 作为输入，既能保留全局形状信息，也能考虑到局部几何关系。</p>
+<h1 id="三、模型架构"><a href="#三、模型架构" class="headerlink" title="三、模型架构"></a>三、模型架构</h1><p><img src="/2023/06/08/DGCNN/image-20230608215922553.png" alt="image-20230608215922553" style="zoom:80%;"></p>
+<h2 id="变换块（Point-cloud-transform-block）"><a href="#变换块（Point-cloud-transform-block）" class="headerlink" title="变换块（Point cloud transform block）"></a>变换块（Point cloud transform block）</h2><p><img src="/2023/06/08/DGCNN/image-20230608223703797.png" alt="image-20230608223703797" style="zoom:80%;"></p>
+<p>在架构的最开始，对点云应用一个 $3\times 3$ 的矩阵变换以将其对齐。这和 PointNet 中的 T-Net 想法类似。为了学习到变换矩阵参数，构建了 $k$ 近邻图，并提取了每个点与其相邻点的坐标差张量。</p>
+<h2 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h2><p>输入为变换后 $n$ 个点的坐标，在 EdgeConv 中为每个点计算大小为 $k$ 的边特征集合，通过 MLP 扩展并聚合每个集合中的特征。不同于 PointNet++ 里的下采样，EdgeConv 并不改变点的大小和顺序，因此在多级特征组合的时候更为便利。</p>
+<p>四个 EdgeConv 层使用了三个共享的全连接层 $(64,64,128,256)$ ，并根据每个 EdgeConv 输出的特征重新计算图，将其应用于下一层。将这几层的输出连接后得到 $512$ 维的特征，通过一个 MLP 和池化操作将其扩展到 $1024$ 维，并进行池化操作，最终通过一系列 MLP 得到点云全局特征。</p>
+<p>对于超参数 $k$ 的选取，采用了留出验证的方式来评估不同 $k$ 对模型性能的影响。</p>
+<h2 id="分割"><a href="#分割" class="headerlink" title="分割"></a>分割</h2><p>分割不同于分类的点无非在于需要同时用到每个点的全局信息和局部信息。论文采用了非常类似于 PointNet 的方法，将多层 EdgeConv 得到的全局特征（和分类部分类似）与 MLP 处理后的分类张量（categorical vector） 相连接，得到 $1088$ 维的特征，并与前面每一层 EdgeConv 的输出相连接。最后通过一些列 MLP 将特征压缩到需要的维数。</p>
+<p>有待确认的是，架构图中的 categorical vector 具体来自于哪一层，论文中似乎没有具体说明。</p>
+<h1 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h1><p>关于 DGCNN ，主要需要关注的有以下几点：</p>
+<ul>
+<li>考虑了点云的拓扑结构（这么说好高级，但整体看下来似乎就只是构建了个图），关注了<strong>边特征</strong>；</li>
+<li>通过 MLP 提取边特征，通过池化来确保邻域内的置换不变性；</li>
+<li>图的构建基于<strong>特征空间</strong>，在每一层对图进行更新，即所谓的<strong>动态图</strong>。这种方式让感受野变得更大、更稀疏；</li>
+<li>EdgeConv 很容易嵌入到其它网络中；</li>
+<li>整体架构类似于 PointNet ，也就是用 EdgeConv 替换了 PointNet 中的共享 MLP 层；</li>
+</ul>
+<p>与 PointNet 及 PointNet++ 的对比：</p>
+<ul>
+<li>PointNet 是 DGCNN 的一个特例，即当 $k=1$ 时，边集为空集，边缘函数 $h$ 为 $h_{\Theta}(\mathbf{x}_i,\mathbf{x}_j)=h_{\Theta}(\mathbf{x}_i)$ 。换言之， PointNet 是不考虑边特征的 DGCNN ；</li>
+<li>PointNet++ 的主要组件是 SA 层，分为下采样和 PointNet 层，每一次输出后点数减少；EdgeConv 也考虑了点的邻域，但不改变点数，因此在特征组合时无需上采样。当然 PointNet++ 也可以取消采样层从而保持点数不变，但这不是分层的本意；</li>
+<li>PointNet++ 利用 PointNet 层来聚合局部信息， PointNet 能够对邻域内每个点特征进行编码然后池化；EdgeConv 则对边特征进行编码，而非每个点单独的特征；</li>
+</ul>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>有时我们都需要一罐可乐<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/money2.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2023" class="archive-year">2023</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/05/31/EC-Net/" class="archive-article-date">
-  	<time datetime="2023-05-30T16:39:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-31</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/05/31/EC-Net/">EC-Net 论文阅读笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -207,215 +302,110 @@
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
         		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
-        		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zcliangyue.github.io/2023/06/08/DGCNN/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/05/23/PU-Net/" class="archive-article-date">
-  	<time datetime="2023-05-23T14:47:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-23</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2023/05/31/EC-Net/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">EC-Net 论文阅读笔记</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/05/23/PU-Net/">PU-Net 论文阅读笔记</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">点云</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/05/23/PointNet++/" class="archive-article-date">
-  	<time datetime="2023-05-23T06:08:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/05/23/PointNet++/">PointNet++ 论文阅读笔记</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">点云</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/05/21/pointnet/" class="archive-article-date">
-  	<time datetime="2023-05-21T14:35:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/05/21/pointnet/">PointNet 论文阅读笔记</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">点云</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/05/21/%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B/" class="archive-article-date">
-  	<time datetime="2023-05-21T09:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/05/21/%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B/">从这里开始</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -438,8 +428,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
