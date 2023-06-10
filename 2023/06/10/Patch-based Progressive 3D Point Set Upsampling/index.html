@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/1686379552309.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/image-20230610193120100.png">
 <meta property="article:published_time" content="2023-06-10T15:29:00.000Z">
-<meta property="article:modified_time" content="2023-06-10T15:41:57.185Z">
+<meta property="article:modified_time" content="2023-06-10T15:48:52.957Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="神经网络">
@@ -227,7 +227,7 @@
 <p>实现层间连接的方式可以是对<strong>先前所有</strong>层的 $\widetilde{f}_i$ 进行插值和连接，即密集连接，这和特征提取单元是一样的。但是这样做意味着第 $\ell$ 层会有 $\ell C$ 个特征，导致扩展性差、优化困难。因此论文采用了<strong>残差跳跃连接</strong>，每个级别只需要和上一个级别的特征相连，这在下图中展现得很清楚。</p>
 <p><img src="/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/1686379552309.png" alt="1686379552309" style="zoom:120%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h2 id="实施细节"><a href="#实施细节" class="headerlink" title="实施细节"></a>实施细节</h2><h3 id="迭代提取-patch"><a href="#迭代提取-patch" class="headerlink" title="迭代提取 patch"></a>迭代提取 patch</h3><h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><p> $P_{\hat{L}},Q_{\hat{L}}$ 分别表示预测和参考 patch ，$T_{\hat{L}}$ 则表示该分辨率下的整体参考点云。在渐进式上采样过程中，则会有一系列预测和参考 patch ，记作 $P_{\ell},Q_{\ell}$ ，其中 $\ell=1\dots\hat{L}-1$ 。</p>
-<p>具体来说，$\ell$ 层的输入是通过对 $P_{\ell-1}$ 中的随机点 $p_{\ell-1}^<em>$ 执行 KNN 搜索得到的，其中 $k=N$ ，为 patch 的大小。而 $\widetilde{Q}_{\ell}$ 应与 $P_{\ell}$ 的空间范围相匹配，同时具有更高的分辨率，因此 $Q_{\ell}$ 可以通过在 $Q_{\ell-1}$ 中执行 KNN 得到，并且查询点为 $p_{\ell-1}^</em>$ 。此时 $k=2^{\hat{L}-\ell+1}N$ 。</p>
+<p>具体来说，$\ell$ 层的输入是通过对 $P_{\ell-1}$ 中的随机点 $p_{\ell-1}’$ 执行 KNN 搜索得到的，其中 $k=N$ ，为 patch 的大小。而 $\widetilde{Q}_{\ell}$ 应与 $P_{\ell}$ 的空间范围相匹配，同时具有更高的分辨率，因此 $Q_{\ell}$ 可以通过在 $Q_{\ell-1}$ 中执行 KNN 得到，并且查询点仍为 $p_{\ell-1}’$ 。此时 $k=2^{\hat{L}-\ell+1}N$ (这里符号表示和原文不同，因为 * 有转义字符的含义，网页里似乎优先级高于公式)。</p>
 <p>关于这个结论，可以先考虑第 $1$ 层：我们希望将第一层的 $N$ 个点上采样为 $2^{\hat{L}}$ 个点，因此在参考点云中，需要采样 $2^{\hat{L}-0}=2^{\hat{L}}$ 个点；而点云被上采样 $\ell-1$ 次之后，到达了 $\ell$ 层，此时需要在参考点云中采样的点数变为 $2^{\hat{L}-(\ell-1)}=2^{\hat{L}-\ell+1}$ 。如下图所示，需要注意的是 <strong>$Q_{\ell}$ 的分辨率是不随 $\ell$ 变化的</strong>，仅仅是空间范围变化而已，换言之，$\left|P_{\ell}\right|/\left|Q_{\ell}\right|$ 等于 $P_{\ell}$ 和基准点云的分辨率之比，随着上采样次数增加，$P_{\ell}$ 的分辨率增大，patch 点数不变的情况下， $Q_{\ell}$ 的点数随之减少。</p>
 <p><img src="/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/image-20230610193120100.png" alt="image-20230610193120100" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h4 id="推理"><a href="#推理" class="headerlink" title="推理"></a>推理</h4><p>推理阶段和训练主要有两个不同：</p>
@@ -674,5 +674,22 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>

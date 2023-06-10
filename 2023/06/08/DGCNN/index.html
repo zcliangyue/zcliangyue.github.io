@@ -8,19 +8,19 @@
   <link rel="dns-prefetch" href="http://zcliangyue.github.io">
   <title>DGCNN 论文阅读笔记 | ZCL&#39;BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="近来饱受专业实习折磨，学习方面，有所懈怠  论文：Dynamic Graph CNN for Learning on Point Clouds   一、摘要及引言在 PointNet、PointNet++ 中，都没有考虑到点云的拓扑结构，即相邻点之间的邻接关系。如果设计一个能够恢复拓扑结构的模型，应当可以增强网络的表示能力。基于这一想法，论文设计了网络模块 EdgeConv 来提取局部邻域信息和">
+  <meta name="description" content="近来饱受专业实习折磨，学习方面，有所懈怠  论文：Dynamic Graph CNN for Learning on Point Clouds 一、摘要及引言在 PointNet、PointNet++ 中，都没有考虑到点云的拓扑结构，即相邻点之间的邻接关系。如果设计一个能够恢复拓扑结构的模型，应当可以增强网络的表示能力。基于这一想法，论文设计了网络模块 EdgeConv 来提取局部邻域信息和潜在">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DGCNN 论文阅读笔记">
 <meta property="og:url" content="http://zcliangyue.github.io/2023/06/08/DGCNN/index.html">
 <meta property="og:site_name" content="ZCL&#39;BLOG">
-<meta property="og:description" content="近来饱受专业实习折磨，学习方面，有所懈怠  论文：Dynamic Graph CNN for Learning on Point Clouds   一、摘要及引言在 PointNet、PointNet++ 中，都没有考虑到点云的拓扑结构，即相邻点之间的邻接关系。如果设计一个能够恢复拓扑结构的模型，应当可以增强网络的表示能力。基于这一想法，论文设计了网络模块 EdgeConv 来提取局部邻域信息和">
+<meta property="og:description" content="近来饱受专业实习折磨，学习方面，有所懈怠  论文：Dynamic Graph CNN for Learning on Point Clouds 一、摘要及引言在 PointNet、PointNet++ 中，都没有考虑到点云的拓扑结构，即相邻点之间的邻接关系。如果设计一个能够恢复拓扑结构的模型，应当可以增强网络的表示能力。基于这一想法，论文设计了网络模块 EdgeConv 来提取局部邻域信息和潜在">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/06/08/DGCNN/605d901a470d47739b7ee58670f91c82.jpg">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/06/08/DGCNN/image-20230608223623247.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/06/08/DGCNN/image-20230608215922553.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/06/08/DGCNN/image-20230608223703797.png">
 <meta property="article:published_time" content="2023-06-08T15:51:00.000Z">
-<meta property="article:modified_time" content="2023-06-10T15:39:08.461Z">
+<meta property="article:modified_time" content="2023-06-10T15:42:43.947Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="神经网络">
@@ -198,8 +198,6 @@
 <p>近来饱受专业实习折磨，学习方面，有所懈怠</p>
 </blockquote>
 <p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1801.07829.pdf">Dynamic Graph CNN for Learning on Point Clouds</a></p>
-<blockquote>
-</blockquote>
 <h1 id="一、摘要及引言"><a href="#一、摘要及引言" class="headerlink" title="一、摘要及引言"></a>一、摘要及引言</h1><p>在 PointNet、PointNet++ 中，都没有考虑到点云的拓扑结构，即相邻点之间的邻接关系。如果设计一个能够恢复<strong>拓扑结构</strong>的模型，应当可以增强网络的表示能力。基于这一想法，论文设计了网络模块 EdgeConv 来提取局部邻域信息和潜在的长距离语义特征。</p>
 <span id="more"></span>
 <p>PointNet 通过在局部邻域内独立地处理点，确保了顺序不变性，然而这种<strong>独立性</strong>一定程度上忽略了点之间的几何关系，因而难以捕获局部特征。而 EdgeConv 并不从点的嵌入中生成点特征，而是生成了描述点与其邻域内点之间关系的<strong>边特征</strong>，并且对邻域内点的排序具有不变性。同时 EdgeConv 易于嵌入到现有网络中。论文将其集成到 PointNet 中，得到了很好的性能。</p>
@@ -686,5 +684,22 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
