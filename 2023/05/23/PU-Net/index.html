@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PU-Net/37f39a858cd24513bdfccb33c9cdbf24.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/05/23/PU-Net/7071501be5e84b49bb187fdad7ce74cb.png">
 <meta property="article:published_time" content="2023-05-23T14:47:31.000Z">
-<meta property="article:modified_time" content="2023-06-08T16:09:31.579Z">
+<meta property="article:modified_time" content="2023-07-21T06:38:44.957Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="神经网络">
@@ -257,9 +257,9 @@ h_1\times w_1\times \frac{C_1}{g} \times \frac{C_2}{g}\times g=h_1\times w_1 \ti
 L_{rec} = d_{EMD}(S_p,S_{gt})=\underset{\phi:S_p\rightarrow S_{gt}}{\min}\sum_{x_i\in S_p}\|x_i-\phi(x_i) \|_2</script><p>虽然概念上简单，但是 EMD 是一个优化问题，运算量比较大，可以通过给每个点分配固定的时间量并在一定错误率内终止来加快运行速度。     </p>
 <h4 id="CD"><a href="#CD" class="headerlink" title="CD"></a>CD</h4><p>CD 也称作“倒角距离”，定义为最近距离的平方和：</p>
 <script type="math/tex; mode=display">
-d_{CD}(S_1,S_2)=\sum_{x\in S_1}\underset{y\in S_2}{\min}\|x-y\|^2_2+\sum_{y\in S_1}\underset{x\in S_2}{\min}\|y-x\|^2_2</script><p>“由于三角不等式不成立，严格意义上 $d_{CD}$ 并非距离函数”。关于文章中提到的这点，反例很容易举出。在网上博客大多会找到这样的版本：</p>
+d_{CD}(S_1,S_2)=\sum_{x\in S_1}\underset{y\in S_2}{\min}\|x-y\|^2_2+\sum_{y\in S_2}\underset{x\in S_1}{\min}\|y-x\|^2_2</script><p>“由于三角不等式不成立，严格意义上 $d_{CD}$ 并非距离函数”。关于文章中提到的这点，反例很容易举出。在网上博客大多会找到这样的版本：</p>
 <script type="math/tex; mode=display">
-d_{CD}(S_1,S_2)=\frac{1}{S_1}\sum_{x\in S_1}\underset{y\in S_2}{\min}\|x-y\|^2_2+\frac{1}{S_2}\sum_{y\in S_1}\underset{x\in S_2}{\min}\|y-x\|^2_2</script><p>这个式子进一步考虑了两个点云数量不同的情况。</p>
+d_{CD}(S_1,S_2)=\frac{1}{\|S_1\|}\sum_{x\in S_1}\underset{y\in S_2}{\min}\|x-y\|^2_2+\frac{1}{\|S_2\|}\sum_{y\in S_2}\underset{x\in S_1}{\min}\|y-x\|^2_2</script><p>这个式子进一步考虑了两个点云数量不同的情况。</p>
 <p>除了上述两种度量方式，还有此前在 PCL 笔记里记过的 Hausdorff 距离（点到点集的最小距离的最大值），但显然不太适用于这里。</p>
 <h4 id="方法对比"><a href="#方法对比" class="headerlink" title="方法对比"></a>方法对比</h4><p>文章中用两种损失函数来计算一系列“平均形状”，从而对两者进行对比分析，如下图所示。</p>
 <p><img src="/2023/05/23/PU-Net/7071501be5e84b49bb187fdad7ce74cb.png" alt="在这里插入图片描述" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;"></p>
@@ -738,5 +738,22 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
