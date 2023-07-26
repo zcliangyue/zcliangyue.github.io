@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/06/08/DGCNN/image-20230608215922553.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/06/08/DGCNN/image-20230608223703797.png">
 <meta property="article:published_time" content="2023-06-08T15:51:00.000Z">
-<meta property="article:modified_time" content="2023-06-16T12:12:01.122Z">
+<meta property="article:modified_time" content="2023-07-26T05:16:24.316Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="神经网络">
@@ -240,15 +240,15 @@ e'_{ijm} &=\operatorname{ReLU}(\theta_m\cdot(\mathbf{x}_j+T-(\mathbf{x}_i+T))+\b
 <p>有待确认的是，架构图中的 categorical vector 具体来自于哪一层，论文中似乎没有具体说明。</p>
 <h1 id="四、总结"><a href="#四、总结" class="headerlink" title="四、总结"></a>四、总结</h1><p>关于 DGCNN ，主要需要关注的有以下几点：</p>
 <ul>
-<li>考虑了点云的拓扑结构（这么说好高级，但整体看下来似乎就只是构建了个图），关注了<strong>边特征</strong>；</li>
-<li>通过 MLP 提取边特征，通过池化来确保邻域内的置换不变性；</li>
+<li>考虑了点云的拓扑结构（个人觉得 PointNet++ 实际上也包含了简单的拓扑关系，但 DGCNN 的动态图使得其可能学到的更多），关注了<strong>边特征</strong>；</li>
+<li>EdgeConv 通过 MLP 提取边特征，通过池化来确保邻域内的置换不变性；</li>
 <li>图的构建基于<strong>特征空间</strong>，在每一层对图进行更新，即所谓的<strong>动态图</strong>。这种方式让感受野变得更大、更稀疏；</li>
 <li>EdgeConv 很容易嵌入到其它网络中；</li>
 <li>整体架构类似于 PointNet ，也就是用 EdgeConv 替换了 PointNet 中的共享 MLP 层；</li>
 </ul>
 <p>与 PointNet 及 PointNet++ 的对比：</p>
 <ul>
-<li>PointNet 是 DGCNN 的一个特例，即当 $k=1$ 时，边集为空集，边缘函数 $h$ 为 $h_{\Theta}(\mathbf{x}_i,\mathbf{x}_j)=h_{\Theta}(\mathbf{x}_i)$ 。换言之， PointNet 是不考虑边特征的 DGCNN ；</li>
+<li>PointNet 是 DGCNN 的一个特例，即当 $k=1$ 时，边集为空集，边缘函数 $h$ 为 $h_{\Theta}(\mathbf{x}_i,\mathbf{x}_j)=h_{\Theta}(\mathbf{x}_i)$ 。换言之， PointNet 是不考虑边特征、不考虑拓扑关系的 DGCNN ；</li>
 <li>PointNet++ 的主要组件是 SA 层，分为下采样和 PointNet 层，每一次输出后点数减少；EdgeConv 也考虑了点的邻域，但不改变点数，因此在特征组合时无需上采样。当然 PointNet++ 也可以取消采样层从而保持点数不变，但这不是分层的本意；</li>
 <li>PointNet++ 利用 PointNet 层来聚合局部信息， PointNet 能够对邻域内每个点特征进行编码然后池化；EdgeConv 则对边特征进行编码，而非每个点单独的特征；</li>
 </ul>
@@ -531,15 +531,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">点云上采样</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">点云上采样</a>
               </li>
              
               <li class="article-tag-list-item">
