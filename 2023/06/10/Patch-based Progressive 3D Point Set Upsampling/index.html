@@ -6,11 +6,11 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://zcliangyue.github.io">
-  <title>Progressive 3D PU 论文阅读笔记 | ZCL&#39;BLOG</title>
+  <title>3PU 论文阅读笔记 | ZCL&#39;BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="论文：Patch-based Progressive 3D Point Set Upsampling 一、摘要及引言点云通常是稀疏、嘈杂且不完整的，这意味着上采样技术非常重要，但将图像中的超分辨率方法迁移到点云中并不容易。PU-Net 通过多尺度学习及特征扩展的方式来扩大点集，但无论输入的几何结构是大规模的还是细粒度的，PU-Net 都将使用同样的尺度来处理，以致于其重建结果往往缺乏细粒度的几何结">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Progressive 3D PU 论文阅读笔记">
+<meta property="og:title" content="3PU 论文阅读笔记">
 <meta property="og:url" content="http://zcliangyue.github.io/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/index.html">
 <meta property="og:site_name" content="ZCL&#39;BLOG">
 <meta property="og:description" content="论文：Patch-based Progressive 3D Point Set Upsampling 一、摘要及引言点云通常是稀疏、嘈杂且不完整的，这意味着上采样技术非常重要，但将图像中的超分辨率方法迁移到点云中并不容易。PU-Net 通过多尺度学习及特征扩展的方式来扩大点集，但无论输入的几何结构是大规模的还是细粒度的，PU-Net 都将使用同样的尺度来处理，以致于其重建结果往往缺乏细粒度的几何结">
@@ -22,12 +22,12 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/1686379552309.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/image-20230610193120100.png">
 <meta property="article:published_time" content="2023-06-10T15:29:00.000Z">
-<meta property="article:modified_time" content="2023-06-11T06:51:41.673Z">
+<meta property="article:modified_time" content="2023-08-02T09:50:51.645Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
-<meta property="article:tag" content="点云上采样">
 <meta property="article:tag" content="神经网络">
 <meta property="article:tag" content="论文阅读笔记">
+<meta property="article:tag" content="点云上采样">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://zcliangyue.github.io/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/image-20230531170652387.png">
   
@@ -184,7 +184,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Progressive 3D PU 论文阅读笔记
+      3PU 论文阅读笔记
     </h1>
   
 
@@ -249,7 +249,6 @@ O=p_{num}^2\times \frac{N}{p_{num} }= N\times p_{num}</script><p>因此随着 pa
 <li>在不同层之间利用双边插值进行残差连接，同时考虑特征距离和空间距离；</li>
 <li>随着不断上采样、感受野缩小的同时，缩小了 patch 的空间跨度，即自适应 patch 。这使得网络可以端到端地训练；</li>
 </ul>
-<p>方法的主要缺点：论文没说，所以我也不知道。有一个是确定的，那就是网络不是为补全而设计，无法解决空洞问题（老常客了）。</p>
 
       
 
@@ -293,15 +292,15 @@ O=p_{num}^2\times \frac{N}{p_{num} }= N\times p_{num}</script><p>因此随着 pa
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
         		</li>
       		
 		</ul>
@@ -524,15 +523,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">点云上采样</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">点云上采样</a>
               </li>
              
               <li class="article-tag-list-item">
