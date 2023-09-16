@@ -186,7 +186,7 @@
       
         <p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1908.02111.pdf">Point Cloud Super Resolution with Adversarial Residual Graph Networks</a></p>
 <h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="AR-GCN-方法概述"><a href="#AR-GCN-方法概述" class="headerlink" title="AR-GCN 方法概述"></a>AR-GCN 方法概述</h2><p>AR-GCN 由两个网络组成，生成器 $G$ 和鉴别器 $D$ 。其中 $G$ 通过逐步上采样输入的 LR 来生成 HR 点云，而 $D$ 负责辨别 HR 点云是真还是假。</p>
-<p><img src="/2023/09/16/AR-GCN/image-20230721134533712.png" alt="image-20230721134533712" style="zoom:100%;"></p>
+<p><img src="/2023/09/16/AR-GCN/image-20230721134533712.png" alt="image-20230721134533712" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>论文提出了一个联合损失函数：</p>
 <script type="math/tex; mode=display">
 L(x,y)=\lambda L_{cd}(G(x),y)+L_G(G(x))</script><p>其中 $\lambda$ 控制损失函数 $L_{cd}$ 和 $L_G$ 的权重比。$L_{cd}$ 度量了 $y$ 和 $\hat{y}$ 之间的距离，类似于图像超分辨率中的 $L_2$ 损失：</p>
@@ -200,7 +200,7 @@ L_G(\hat{y})&=\left\|1-D(\hat{y}) \right\|^2_2
 L_D(\hat{y},y)&=\frac{1}{2}\|D(\hat{y}) \|^2_2+\frac{1}{2}\|1-D(y) \|^2_2
 \end{aligned}</script><p>简单来说，AR-GCN 使用了生成对抗网络，生成器和鉴别器的损失函数借鉴了 LSGAN 的定义方法；此外，问题的本质仍然是上采样问题，因此加入点云间的相似性度量，指导生成器的训练。论文通过设计新的联合损失函数，将 GAN 和点云上采样结合了起来。</p>
 <h2 id="残差图卷积生成器"><a href="#残差图卷积生成器" class="headerlink" title="残差图卷积生成器"></a>残差图卷积生成器</h2><p>首先来看生成器的组成。生成器的目标是将点云上采样，包含了残差图卷积块、反池化块以及特征网络。</p>
-<h3 id="残差图卷积块"><a href="#残差图卷积块" class="headerlink" title="残差图卷积块"></a>残差图卷积块</h3><p><img src="/2023/09/16/AR-GCN/image-20230916205731283.png" alt="image-20230916205731283" style="zoom:90%;"></p>
+<h3 id="残差图卷积块"><a href="#残差图卷积块" class="headerlink" title="残差图卷积块"></a>残差图卷积块</h3><p><img src="/2023/09/16/AR-GCN/image-20230916205731283.png" alt="image-20230916205731283" style="zoom:60%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>作者认为 PointNet++ 对中心点邻近点一视同仁，而图卷积的性能更加优异。观察上图，对于输入的特征  $f_{in}$ 和输入点云 $x_{in}$ ，通过 $x_{in}$ 在每次卷积时查询近邻点 $N(p)$ ，则每一层卷积的运算为：</p>
 <script type="math/tex; mode=display">
 f_{i+1}^p = w_0 f_l^p + w_1\sum_{q\in N(p)}f_l^q,\forall p\in v</script><p>其中 $w_0,w_1$ 是可学习的参数，$x_{in}$ 和 $x_{out}$ 没有区别。同时注意到块中引入了残差连接来提升性能。思路和 DGCNN 很类似，但 DGCNN 更关注边特征，而这里以点特征为主体。同时 DGCNN 的图是动态更新的，也是一点不同。</p>
@@ -213,7 +213,7 @@ f_{out}^p = \frac{1}{k}\sum_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</sc
 <h2 id="图判别器"><a href="#图判别器" class="headerlink" title="图判别器"></a>图判别器</h2><p>图判别器的结构依然基于残差图卷积块和特征网络，事实上，从第一张图可以看出，判别器和生成器唯一的区别就是用池化层替代了反池化层，最终输出一个标量预测。池化层的运算方法很简单，首先将点进行最远点采样，然后计算剩余点的特征为周围近邻点特征的池化：</p>
 <script type="math/tex; mode=display">
 f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特别的是，论文没有采用逐步下采样至单个标量的方式，因为这样做会导致伪像（我的理解是一些细微的噪声很难被整体鉴别器察觉，导致生成的数据上有伪影）。因此在这里鉴别器的输出包含不止 1 个点，并对每个点的局部 patch 进行鉴别，通过交叉熵来计算最终的总损失值。这里实际上是借鉴了另一篇文章：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1612.07828">Learning from Simulated and Unsupervised Images through Adversarial Training</a> ，下图很直观地说明了这种方法。</p>
-<p><img src="/2023/09/16/AR-GCN/image-20230916213653638.png" alt="image-20230916213653638" style="zoom:100%;"></p>
+<p><img src="/2023/09/16/AR-GCN/image-20230916213653638.png" alt="image-20230916213653638" style="zoom:100%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>主要的思路和方法就是以上这些，论文原文讲得非常详细。总得来说，AR-GCN 很好地在上采样过程中结合了 GAN 的思路，因此对于未见过的数据集有更强的泛化能力，能够生成细节更丰富的结果。并且通过回归坐标残差来提升收敛速度和稳定性，通过渐进式上采样取得更优的效果。</p>
 
       
@@ -232,11 +232,11 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
         		</li>
       		
 		</ul>
@@ -317,7 +317,7 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -325,7 +325,7 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
         		</li>
       		
 		</ul>
@@ -407,11 +407,11 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
         		</li>
       		
 		</ul>
@@ -490,7 +490,7 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -498,7 +498,7 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
         		</li>
       		
 		</ul>
@@ -577,7 +577,7 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -585,7 +585,7 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
         		</li>
       		
 		</ul>
@@ -664,11 +664,11 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
         		</li>
       		
 		</ul>
@@ -834,7 +834,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">点云上采样</a>
+                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -842,7 +842,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
+                <a href="javascript:void(0)" class="js-tag color1">点云上采样</a>
               </li>
              
               <li class="article-tag-list-item">
