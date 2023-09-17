@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/09/17/PU-GAN/image-20230917130847566.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/09/17/PU-GAN/image-20230917131251715.png">
 <meta property="article:published_time" content="2023-09-17T07:47:00.000Z">
-<meta property="article:modified_time" content="2023-09-17T07:53:44.927Z">
+<meta property="article:modified_time" content="2023-09-17T07:59:42.054Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="神经网络">
@@ -231,7 +231,7 @@ U_{\text{imbalance}}(S_j)=\frac{(|S_j|-\hat{n})^2}{\hat{n}}</script><p>为了计
 U_{\text{clutter}}(S_j)=\sum_{k=1}^{|S_j|}\frac{(d_{j,k}-\hat{d})^2}{\hat{d}}</script><p>根据上述定义可知，$U_{\text{imbalance}}$ 描述了非局部的分布均匀性，而 $U_{\text{clutter}}$ 描述了局部的分布均匀性，这是对 NUC 指标的改良。最终计算均匀损失为：</p>
 <script type="math/tex; mode=display">
 \mathcal{L}_{\text{uni}}= \sum_{j=1}^M U_{\text{imbalance}}(S_j)\cdot U_{\text{clutter}}(S_j)</script><h3 id="重建损失（Reconstruction-Loss）"><a href="#重建损失（Reconstruction-Loss）" class="headerlink" title="重建损失（Reconstruction Loss）"></a>重建损失（Reconstruction Loss）</h3><p>当然不能忘了上采样原本的目的：让生成的点位于表面上。PU-GAN 使用了 EMD 距离来衡量生成点云和实际点云的距离，记作 $\mathcal{L}_{\text{rec}}$ 。</p>
-<h3 id="联合损失"><a href="#联合损失" class="headerlink" title="联合损失"></a>联合损失</h3><p>最终我们定义生成器和鉴别器的训练损失分别为：</p>
+<h3 id="联合损失"><a href="#联合损失" class="headerlink" title="联合损失"></a>联合损失</h3><p>最终定义生成器和鉴别器的训练损失分别为：</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
 \mathcal{L}_G=&\lambda_{\text{gan}}\mathcal{L}_{\text{gan}}(G)+\lambda_{\text{rec}}\mathcal{L}_{\text{rec}}+\lambda_{\text{uni}}\mathcal{L}_{\text{uni}}
