@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/rangeview.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231031175129278.png">
 <meta property="og:image" content="http://zcliangyue.github.io/image-20231031190341496.png">
-<meta property="og:image" content="http://zcliangyue.github.io/image-20231031194443752.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231031194443752.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231031204141231.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231101133538701.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231101140717153.png">
@@ -41,7 +41,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231103110455119.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231103113108059.png">
 <meta property="article:published_time" content="2023-11-03T05:35:00.000Z">
-<meta property="article:modified_time" content="2023-11-03T06:21:00.086Z">
+<meta property="article:modified_time" content="2023-11-03T06:31:15.804Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="点云上采样">
@@ -254,7 +254,7 @@ L_i=\left\{(x,y,z)\in P \, \middle|\arctan\left(z\big/\sqrt{x^2+y^2}\right)=\var
 <p>逐点损失鼓励图像输出较为平滑的结果，因为它表示了平均误差。同时逐点损失只能在像素层面比较，无法获取高频信息。因此有许多方法使用感知模块来表征损失，使生成的图像更真实。论文采用了一个预训练好的特征提取器 $\phi$ ，将预测图和实际图作为输入，并计算每一层的损失：</p>
 <script type="math/tex; mode=display">
 \mathcal{L}_{f}=\sum_{c}\sum_{(i,j)\in I}\left| \phi_c(d)_{ij}-\phi_c(\hat{d})_{ij} \right|</script><p>其中 $\phi_c$ 对应了前 $c$ 层特征提取器。</p>
-<h3 id="语义一致性损失"><a href="#语义一致性损失" class="headerlink" title="语义一致性损失"></a>语义一致性损失</h3><p><img src="/image-20231031194443752.png" alt="image-20231031194443752" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
+<h3 id="语义一致性损失"><a href="#语义一致性损失" class="headerlink" title="语义一致性损失"></a>语义一致性损失</h3><p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231031194443752.png" alt="image-20231031194443752" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>语义一致性损失则利用了语义分割网络，以交叉熵方式比较两次扫描。对每个点预测一个语义类别概率，并和真值（one-hot 编码）进行比较，得到交叉熵损失 $\mathcal{L}_{ce}$ 。但仅有交叉熵损失无法约束点云的几何结构，因此通过可训练的权重参数将两个损失整合在一起：</p>
 <script type="math/tex; mode=display">
 \mathcal{L}_{sc}=\frac{1}{2\sigma_r^2}\mathcal{L}_{d}^{1}+\frac{1}{\sigma_c^2}\mathcal{L}_{ce}+\log\sigma_r+\log\sigma_c</script><p>这一结果来自 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1705.07115">Multi-Task Learning Using Uncertainty to Weigh Losses for Scene Geometry and Semantics</a> ，它通过对数似然推导了语义损失和回归损失的整合，但论文这里似乎把公式抄错了（丢了两个平方）。</p>
@@ -263,7 +263,7 @@ L_i=\left\{(x,y,z)\in P \, \middle|\arctan\left(z\big/\sqrt{x^2+y^2}\right)=\var
 <p>第一篇开源的工作，也是该任务下被引最多的。其思路非常简单：带有转置卷积的 U-Net 用于重建深度，蒙特卡洛 Dropout 用于克服噪声值。U-Net 就不赘述了，论文的关键想法其实是使用了 MC-Dropout 。</p>
 <p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231031204141231.png" alt="image-20231031204141231" style="zoom:27%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>简言之，普通的神经网络不能对自己的推理做出置信度判断，因此在模型性能不足或数据本身难以预测时，容易输出错误的结果而不“自知”，这两种情况对应了模型不确定性和数据不确定性。量化不确定性在神经网络中有很多方法去推导和近似，MC-Dropout 是常见的一种。</p>
-<p>一般来说，我们通过在卷积层之前添加 Dropout 随机废置一些参数，使其在训练中某一阶段不更新，从而达到防止过拟合的效果，而在测试阶段使用所有参数。MC-Dropout 的想法是：在测试阶段也应用 Dropout 进行多次预测，从而获取多个不同的值。对于变化剧烈的点，输出较低的置信度，并取平均值作为最终预测值。<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1506.02142">Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning</a> 论证了 MC-Dropout 可以被看作高斯过程中的近似贝叶斯推理，表达为下式（好地狱的符号表示），有时间再推导一下。</p>
+<p>一般来说，我们通过在卷积层之前添加 Dropout 随机废置一些参数，使其在训练中某一阶段不更新，从而达到防止过拟合的效果，而在测试阶段使用所有参数。MC-Dropout 的想法是：在测试阶段也应用 Dropout 进行多次预测，从而获取多个不同的值。对于变化剧烈的点，输出较低的置信度，并取平均值作为最终预测值。<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1506.02142">Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning</a> 论证了 MC-Dropout 可以被看作高斯过程中的近似贝叶斯推理，表达为下式（好地狱的符号），有时间再推导一下。</p>
 <script type="math/tex; mode=display">
 p(y^*|\mathbf{x}^*,\mathcal{D})\propto \int p(y^*|\theta^*)p(\mathbf{x}^*,\mathcal{D}|\theta^*)\mathrm{d}\theta^*
 \\
@@ -313,7 +313,7 @@ p(y^*|\mathbf{x}^*)=\frac{1}{T}\sum_{t=1}^{T}p(y^*|\mathbf{x}^*,\theta^*_t)</scr
 <p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231101163539525.png" alt="image-20231101163539525" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h2 id="LiDAR-Super-Resolution-Based-on-Segmentation-and-Geometric-Analysis"><a href="#LiDAR-Super-Resolution-Based-on-Segmentation-and-Geometric-Analysis" class="headerlink" title="LiDAR Super-Resolution Based on Segmentation and Geometric Analysis"></a><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/9875347">LiDAR Super-Resolution Based on Segmentation and Geometric Analysis</a></h2><p>无代码。这是一个步骤较多的无监督方法，并且基于点而非格网，但采用的是球面投影，因此同样保留扫描线结构。</p>
 <p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231101164701852.png" alt="image-20231101164701852" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
-<h3 id="地面点分割"><a href="#地面点分割" class="headerlink" title="地面点分割"></a>地面点分割</h3><p>这一步骤在 $x-y-z$ 坐标上进行，更准确的说，在每一列扫描线上进行。</p>
+<h3 id="地面点分割"><a href="#地面点分割" class="headerlink" title="地面点分割"></a>地面点分割</h3><p>这一步骤在 $xyz$ 坐标上进行，更准确的说，在每一列扫描线上进行。</p>
 <p>对于输入点 $P_l$ ，目标是分割得到地面点 $P_g$ 和非地面点 $P_{ng}$ 。考虑一列扫描点，点分布如下图所示。</p>
 <ul>
 <li>首先找到 $z$ 值最小的点，向两边顺序搜索，得到相邻点的向量 $V_l$ ；同时从最低点出发，连接所有点，得到向量 $V_r$ </li>
@@ -367,8 +367,8 @@ s=f_\theta(z,x)</script><p>其中 $z$ 是一个向量，$x\in \mathcal{X}$ 是�
 <script type="math/tex; mode=display">
 z\mapsto f_\theta(z,\cdot):\mathcal{X}\rightarrow\mathcal{S},</script><p>假设特征向量在二维空间均匀分布，为每一个特征分配一个二维坐标。对于连续图像 $I(i)$ ，坐标 $x_q$ 处的 RGB 值定义为：</p>
 <script type="math/tex; mode=display">
-I(x_q)=f_\theta(z^*, x_q-v^*),</script><p>其中 $z^<em>$ 是距离 $x_q$ 最近的一个特征向量，$v^</em>$ 是 $z^*$ 所在的位置。</p>
-<p>说了这么多，其实用人话说就是：对于任何一个需要预测的位置，找到离它最近的那个已知点，将该点的特征以及距离送入一个网络，输出预测值。仅此而已。这就好比点云上采样时，从一个点出发生成一系列点。</p>
+I(x_q)=f_\theta(z^*, x_q-v^*),</script><p>其中 $z^{*}$ 是距离 $x_q$ 最近的一个特征向量，$v$ 是对应的坐标。</p>
+<p>简而言之，对于任何一个需要预测的位置，找到离它最近的那个已知点，将该点的特征以及距离送入一个网络，输出预测值。仅此而已。这就好比点云上采样时，从一个点出发生成一系列点。</p>
 <p>但这样做还不够，因为一个特征过于单调。论文使用了一个叫“特征展开”的步骤，将 $M$ 中每个位置的 $3\times 3$ 邻域串联起来，得到新的特征图：</p>
 <script type="math/tex; mode=display">
 M_{jk}=\text{Concat}(\{M_{j+l,k+m}\}_{l,m \in \{-1,0,1\}}),</script><p>此外，由于两个像素连线中点处，会发生“跳变”的情况，因为 $z^*$ 发生了变化。为保证预测的连续性，将预测图像改写为：</p>
@@ -409,7 +409,7 @@ s=f_{cell}(z,[x,c])</script><p>其中 $c=[c_h,c_w]$ ，表示查询像素的大�
 <p>估计 $h_{floor},h_{ceiling}$ 的主要原因是，在 MC-Dropout 估计不确定度时，天花板和地面的点距离传感器较远，容易得到较低的置信度，但对于室内场景这些点至关重要。因此对于不同的高度采用不同的系数 $\lambda(h)$ ，再和方差相乘得到置信度。</p>
 <p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231103113108059.png" alt="image-20231103113108059" style="zoom:60%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="小结-5"><a href="#小结-5" class="headerlink" title="小结"></a>小结</h3><p>基本方法其实没啥变化，主要还是对室内场景做了一定的优化。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>目前的方法主要面临两个问题：边缘重建不准确，以及投影图的几何变形。对于前者，目前的方法主要有引入边缘一致性损失和量化不确定性（MC-Dropout，NP）；后者谈及比较少，有比较多改进的空间。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>目前的方法主要面临两个问题：边缘重建不准确，以及投影图的几何变形。对于前者，目前主要是引入边缘一致性损失和量化不确定性（MC-Dropout，NP）；后者谈及比较少，有比较多改进的空间，并且可以从检测精度的角度评估。</p>
 
       
 
@@ -700,11 +700,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
+                <a href="javascript:void(0)" class="js-tag color4">GAN</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">GAN</a>
+                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -857,5 +857,22 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
