@@ -34,14 +34,14 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231101172953666.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231102145918672.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231102152124742.png">
-<meta property="og:image" content="http://zcliangyue.github.io/image-20231102152552051.png">
-<meta property="og:image" content="http://zcliangyue.github.io/image-20231102161906330.png">
-<meta property="og:image" content="http://zcliangyue.github.io/image-20231102172250213.png">
-<meta property="og:image" content="http://zcliangyue.github.io/image-20231103094427059.png">
-<meta property="og:image" content="http://zcliangyue.github.io/image-20231103110455119.png">
-<meta property="og:image" content="http://zcliangyue.github.io/image-20231103113108059.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231102152552051.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231102161906330.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231102172250213.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231103094427059.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231103110455119.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231103113108059.png">
 <meta property="article:published_time" content="2023-11-03T05:35:00.000Z">
-<meta property="article:modified_time" content="2023-11-03T06:19:22.640Z">
+<meta property="article:modified_time" content="2023-11-03T06:21:00.086Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="点云上采样">
@@ -389,25 +389,25 @@ s=f_{cell}(z,[x,c])</script><p>其中 $c=[c_h,c_w]$ ，表示查询像素的大�
 <h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>作者认为距离图像的上下部分具有不同的高度分布规律，即上部分距离较远，方差较大，下部分距离较进，方差较小。这意味着上部区域具有更广泛的距离值分布，因此具有更高的空间频率。</p>
 <p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231102152124742.png" alt="image-20231102152124742" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>因此论文在距离图的不同高度使用不同的策略。远处物体被压缩，且通常出现在上方，因此关注小区域；近处物体较大，且通常出现在下方，因此关注较大的区域。所以论文问用两个感受野提取的特征进行上采样，并学习两个感受野的掩码，从而进行加权融合。</p>
-<p><img src="/image-20231102152552051.png" alt="image-20231102152552051" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231102152552051.png" alt="image-20231102152552051" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>DRB 是膨胀残差块，在<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2009.00206">RangeRCNN: Towards Fast and Accurate 3D Object Detection with Range Image Representation</a> 中提出，是专为激光雷达投影后图像设计的。</p>
 <blockquote>
 <p>不同距离的物体的尺度表现出显着的差异。为了更好地适应不同的尺度并获得更灵活的感受野，我们设计了膨胀残差块（DRB），它将膨胀卷积插入到正常残差块中。</p>
 </blockquote>
 <p>应用三个具有不同扩张率 $\{1,2,3\}$ 的 $3\times3$ 卷积来提取具有不同感受野的特征。三个扩张卷积的输出被连接起来，然后是一个 1 × 1 卷积，以融合具有不同感受野的特征。残差连接用于添加融合特征和输入特征。至于为什么要用膨胀卷积，可能是因为图像稀疏的特性吧，需要更大的感受野。</p>
-<p><img src="/image-20231102161906330.png" alt="image-20231102161906330" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231102161906330.png" alt="image-20231102161906330" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>但是作者这里没有说上采样层的结构。最终预测一个 $C+1$ 维的特征图，最后一维作为掩码。两个掩码进行 SoftMax ，使其和为一。</p>
 <h3 id="小结-4"><a href="#小结-4" class="headerlink" title="小结"></a>小结</h3><p>虽然作者讨论了高度和距离的关系，但是实际网络设计中是通过学习得到的掩码，并没有先验在其中。虽然最终的掩码可视化一定程度上能验证作者的想法，但我觉得既然问题的本质是距离，距离越远物体越小且点越稀疏，为什么不直接通过原始距离图像生成掩码，从而指导网络的学习。</p>
 <h2 id="SGSR-Net-Structure-Semantics-Guided-LiDAR-Super-Resolution-Network-for-Indoor-LiDAR-SLAM"><a href="#SGSR-Net-Structure-Semantics-Guided-LiDAR-Super-Resolution-Network-for-Indoor-LiDAR-SLAM" class="headerlink" title="SGSR-Net: Structure Semantics Guided LiDAR Super-Resolution Network for Indoor LiDAR SLAM"></a><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/10164213">SGSR-Net: Structure Semantics Guided LiDAR Super-Resolution Network for Indoor LiDAR SLAM</a></h2><p>陈老师发的论文，没找到代码。</p>
 <h3 id="CASE-模块"><a href="#CASE-模块" class="headerlink" title="CASE 模块"></a>CASE 模块</h3><p>为了缓解物体边界周围的边缘膨胀和混合，采用了 squeeze and excitation 方法和注意力机制结合。</p>
-<p><img src="/image-20231102172250213.png" alt="image-20231102172250213" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231102172250213.png" alt="image-20231102172250213" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>具体来说，对于输入的特征图 $(C\times H \times W)$ 做平均池化，得到压缩的特征 $(C\times 1\times W)$ ，再通过卷积将特征压缩到 $C/r’$ ，随后对特征图做批量归一化，并输入 sigmoid 得到注意力权重 $(C/r’ \times 1\times W)$ ，将其和原始特征矩阵相乘（没看懂咋乘的）。整体结构依然是 U-Net 。将 CASE 模块放在最前面，以避免在 Dropout 中丢失必要的信息。</p>
-<p><img src="/image-20231103094427059.png" alt="image-20231103094427059" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231103094427059.png" alt="image-20231103094427059" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="SGR-模块"><a href="#SGR-模块" class="headerlink" title="SGR 模块"></a>SGR 模块</h3><p>这部分主要是针对室内点云的特性，做一些简单的分割以引入语义信息。</p>
 <p>首先统计单帧点云的 $z$ 值直方图，找出频率最高的两个，作为地面和天花板的高度 $h_{floor},h_{ceiling}$ 。为了提升相邻帧检测的一致性，取前后 $N$ 帧的中值滤波结果。</p>
-<p><img src="/image-20231103110455119.png" alt="image-20231103110455119" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231103110455119.png" alt="image-20231103110455119" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>估计 $h_{floor},h_{ceiling}$ 的主要原因是，在 MC-Dropout 估计不确定度时，天花板和地面的点距离传感器较远，容易得到较低的置信度，但对于室内场景这些点至关重要。因此对于不同的高度采用不同的系数 $\lambda(h)$ ，再和方差相乘得到置信度。</p>
-<p><img src="/image-20231103113108059.png" alt="image-20231103113108059" style="zoom:60%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231103113108059.png" alt="image-20231103113108059" style="zoom:60%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="小结-5"><a href="#小结-5" class="headerlink" title="小结"></a>小结</h3><p>基本方法其实没啥变化，主要还是对室内场景做了一定的优化。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>目前的方法主要面临两个问题：边缘重建不准确，以及投影图的几何变形。对于前者，目前的方法主要有引入边缘一致性损失和量化不确定性（MC-Dropout，NP）；后者谈及比较少，有比较多改进的空间。</p>
 
@@ -700,11 +700,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">GAN</a>
+                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
+                <a href="javascript:void(0)" class="js-tag color4">GAN</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -857,22 +857,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
