@@ -6,28 +6,51 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://zcliangyue.github.io">
-  <title>AR-GCN 阅读笔记 | ZCL&#39;BLOG</title>
+  <title>激光雷达超分辨率——调研和总结 | ZCL&#39;BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="论文：Point Cloud Super Resolution with Adversarial Residual Graph Networks  以前的笔记原文占比太多了，以后就只写重要的部分。">
+  <meta name="description" content="毕业论文选题定在了激光雷达点云超分辨率，相关论文的思路基本也都过了一遍，特作此笔记详细记录调研的内容，也借此梳理自己的思路以及未来的规划。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="AR-GCN 阅读笔记">
-<meta property="og:url" content="http://zcliangyue.github.io/2023/09/16/AR-GCN/index.html">
+<meta property="og:title" content="激光雷达超分辨率——调研和总结">
+<meta property="og:url" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/index.html">
 <meta property="og:site_name" content="ZCL&#39;BLOG">
-<meta property="og:description" content="论文：Point Cloud Super Resolution with Adversarial Residual Graph Networks  以前的笔记原文占比太多了，以后就只写重要的部分。">
+<meta property="og:description" content="毕业论文选题定在了激光雷达点云超分辨率，相关论文的思路基本也都过了一遍，特作此笔记详细记录调研的内容，也借此梳理自己的思路以及未来的规划。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://zcliangyue.github.io/2023/09/16/AR-GCN/image-20230721134533712.png">
-<meta property="og:image" content="http://zcliangyue.github.io/2023/09/16/AR-GCN/image-20230916205731283.png">
-<meta property="og:image" content="http://zcliangyue.github.io/2023/09/16/AR-GCN/image-20230916213653638.png">
-<meta property="article:published_time" content="2023-09-16T15:12:00.000Z">
-<meta property="article:modified_time" content="2023-09-18T03:38:52.811Z">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/pointcloud.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/rangeview-32.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/rangeview.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231031175129278.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231031190341496.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231031194443752.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231031204141231.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231101133538701.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231101140717153.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231101154818026.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231101160136946.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231101160511380.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231101163539525.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231101164701852.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231101170403255.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231101170807215.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231101172953666.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231102145918672.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231102152124742.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231102152552051.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231102161906330.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231102172250213.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231103094427059.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231103110455119.png">
+<meta property="og:image" content="http://zcliangyue.github.io/image-20231103113108059.png">
+<meta property="article:published_time" content="2023-11-03T05:35:00.000Z">
+<meta property="article:modified_time" content="2023-11-03T05:35:38.228Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="点云上采样">
 <meta property="article:tag" content="神经网络">
-<meta property="article:tag" content="GAN">
 <meta property="article:tag" content="论文阅读笔记">
+<meta property="article:tag" content="激光雷达">
+<meta property="article:tag" content="研究现状调研">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://zcliangyue.github.io/2023/09/16/AR-GCN/image-20230721134533712.png">
+<meta name="twitter:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/pointcloud.png">
   
     <link rel="alternative" href="/atom.xml" title="ZCL&#39;BLOG" type="application/atom+xml">
   
@@ -175,61 +198,220 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-AR-GCN" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-LiDAR SR Methods" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      AR-GCN 阅读笔记
+      激光雷达超分辨率——调研和总结
     </h1>
   
 
         
-        <a href="/2023/09/16/AR-GCN/" class="archive-article-date">
-  	<time datetime="2023-09-16T15:12:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-16</time>
+        <a href="/2023/11/03/LiDAR%20SR%20Methods/" class="archive-article-date">
+  	<time datetime="2023-11-03T05:35:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-11-03</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1908.02111.pdf">Point Cloud Super Resolution with Adversarial Residual Graph Networks</a></p>
-<blockquote>
-<p>以前的笔记原文占比太多了，以后就只写重要的部分。</p>
-</blockquote>
+        <p>毕业论文选题定在了激光雷达点云超分辨率，相关论文的思路基本也都过了一遍，特作此笔记详细记录调研的内容，也借此梳理自己的思路以及未来的规划。</p>
 <span id="more"></span>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="AR-GCN-方法概述"><a href="#AR-GCN-方法概述" class="headerlink" title="AR-GCN 方法概述"></a>AR-GCN 方法概述</h2><p>AR-GCN 由两个网络组成，生成器 $G$ 和鉴别器 $D$ 。其中 $G$ 通过逐步上采样输入的 LR 来生成 HR 点云，而 $D$ 负责辨别 HR 点云是真还是假。</p>
-<p><img src="/2023/09/16/AR-GCN/image-20230721134533712.png" alt="image-20230721134533712" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
-<p>论文提出了一个联合损失函数：</p>
+<h1 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景"></a>研究背景</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>点云超分辨率关注点云的密度以及几何信息。对于给定的点云 $P$ ，我们希望得到更加密集的点云 $Q$ ，能够描述 $P$ 所在的底层形状。</p>
+<p>对于激光雷达点云，这个问题要特殊一些。常规的点云上采样容易受到点云数据不规则特性的困扰，但激光雷达点云具有规则的分布，这受益于激光雷达的环状扫描方式。下图是 $128$ 线模拟数据的可视化。</p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/pointcloud.png" alt="image-20231030223719964" style="zoom:25%;"></p>
+<p>鉴于激光雷达的扫描方式，一个自然的想法是将点云投影为球面坐标，即：</p>
 <script type="math/tex; mode=display">
-L(x,y)=\lambda L_{cd}(G(x),y)+L_G(G(x))</script><p>其中 $\lambda$ 控制损失函数 $L_{cd}$ 和 $L_G$ 的权重比。$L_{cd}$ 度量了 $y$ 和 $\hat{y}$ 之间的距离，类似于图像超分辨率中的 $L_2$ 损失：</p>
-<script type="math/tex; mode=display">
-L_{cd}(\hat{y},y)=\sum_{p\in y}min_{q\in\hat{y}}\|p-q\|_2^2</script><p>$L_{cd}$ 是 CD 距离的变体。原始倒角距离由两部分组成：$L_{cd}$ 和 $\hat{L}_{cd}$ ，两者形式上对称。但 $\hat{L}_{cd}$ 会促使预测点云 $\hat{y}$ 与输入相同，导致点云出现重复点（后续可以实验证明一下）。因此论文删去了 $\hat{L}_{cd}$ 。</p>
-<p>$L_G$ 损失则借鉴了 LSGAN（最小二乘生成对抗网络），被称作图对抗损失。LSGAN 主要工作是将 GAN 中的交叉熵损失函数替换为了最小二乘损失函数，克服了原始 GAN 生成结果不稳定、图像质量差的问题。具体有关 GAN 网络的原理及改进，在我另一篇笔记中有详细说明。以此有生成器和鉴别器的训练指标：</p>
-<script type="math/tex; mode=display">
+\begin{cases}
 \begin{aligned}
-L_G(\hat{y})&=\left\|1-D(\hat{y}) \right\|^2_2
+\varphi &= \arctan\left(z\big/\sqrt{x^2+y^2} \right) \\
+\theta &= \arctan(y/x)\\
+d  &=\sqrt{x^2+y^2+z^2}
+\end{aligned}
+\end{cases}</script><p>此时在 $\varphi-\theta$ 平面上，点的分布是规则的，这有利于后续的栅格化和上采样。使用这种投影的上采样方法通常总结为基于格网的方法。</p>
+<p>需要注意的是，有的激光雷达点云在垂直方向上并不均匀分布，例如 <a target="_blank" rel="noopener" href="https://hesaiweb2019.blob.core.chinacloudapi.cn/uploads/Pandar64_产品手册_640-zh-230510.pdf">Pandar64</a> 将 $3/4$ 的线束集中在了 $(-6°,+2°)$ ，而垂直视场角为 $(-25°,+15°)$ ，但这样的激光雷达目前还不多见。下图是 $32$ 和 $128$ 线模拟数据的投影图，为了投影的普适性，这里没有做栅格化，而是以散点的形式绘制。</p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/rangeview-32.png" alt="image-20231030223719964" style="zoom:40%;"></p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/rangeview.png" alt="image-20231030223719964" style="zoom:40%;"></p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>对于点云 $P$ ，可将其记作一系列扫描线的集合，即 $P=\{L_i \, |i=1,2,\dots,N_P\}$ ，其中</p>
+<script type="math/tex; mode=display">
+L_i=\left\{(x,y,z)\in P \, \middle|\arctan\left(z\big/\sqrt{x^2+y^2}\right)=\varphi_i \right\},</script><p>表示第 $i$ 条扫描线，我们希望预测点云 $Q=\{L_i \, |i=1,2,\dots,N_Q\}$ ，满足 $N_Q&gt;N_P$ ，且保有 $P$ 的几何特征和扫描线结构。同时我们希望点云 $Q$ 在同样的下游算法上表现出优于 $P$ 的性能。</p>
+<h2 id="研究意义"><a href="#研究意义" class="headerlink" title="研究意义"></a>研究意义</h2><p>对于该问题的研究意义，可以总结为以下几点：</p>
+<ul>
+<li>高分辨率的点云对于下游任务有相当大的帮助，如检测分割、LiDAR 里程计、SLAM等</li>
+<li>高分辨率的激光雷达意味着高成本和不易维护的缺点</li>
+<li>通过多帧拼接可以提升点云密度，但难以应对场景中移动的物体</li>
+</ul>
+<h1 id="研究现状"><a href="#研究现状" class="headerlink" title="研究现状"></a>研究现状</h1><p>这一节将阐述所有现有的方法及其思路，按照时间顺序排列，主要关注深度学习的方法。</p>
+<h2 id="CNN-based-synthesis-of-realistic-high-resolution-LiDAR-data（2019-6）"><a href="#CNN-based-synthesis-of-realistic-high-resolution-LiDAR-data（2019-6）" class="headerlink" title="CNN-based synthesis of realistic high-resolution LiDAR data（2019.6）"></a>CNN-based synthesis of realistic high-resolution LiDAR data（2019.6）</h2><p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1907.00787">CNN-based synthesis of realistic high-resolution LiDAR data</a> ，没开源（去作者主页看了一下，好像本来是有的，不知道因为什么没了）。</p>
+<h3 id="上采样"><a href="#上采样" class="headerlink" title="上采样"></a>上采样</h3><p>下图展示了网络的总体框架。对于低分辨率图像，其特征提取步骤通过一系列残差块执行，上采样则通过转置卷积（文中称分数跨步卷积）实现。在第一层和最后一层使用了 $9\times 9$ 的卷积，中间残差块中都是 $3\times 3$ 。</p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231031175129278.png" alt="image-20231031175129278" style="zoom:50%;"></p>
+<h3 id="修正的逐点损失函数"><a href="#修正的逐点损失函数" class="headerlink" title="修正的逐点损失函数"></a>修正的逐点损失函数</h3><p>论文考虑到图像中大量存在的缺失点，将 $\mathcal{L}_1、\mathcal{L}_2$ 损失修正为只对比非缺失点，记作集合 $V\subset I$ ，即：</p>
+<script type="math/tex; mode=display">
+\mathcal{L}_d^\alpha = \sum_{(i,j)\in V}\left| d_{ij}-\hat{d}_{ij} \right|^{\alpha},\alpha=1,2</script><h3 id="感知损失"><a href="#感知损失" class="headerlink" title="感知损失"></a>感知损失</h3><p><img src="/image-20231031190341496.png" alt="image-20231031190341496" style="zoom:40%;"></p>
+<p>逐点损失鼓励图像输出较为平滑的结果，因为它表示了平均误差。同时逐点损失只能在像素层面比较，无法获取高频信息。因此有许多方法使用感知模块来表征损失，使生成的图像更真实。论文采用了一个预训练好的特征提取器 $\phi$ ，将预测图和实际图作为输入，并计算每一层的损失：</p>
+<script type="math/tex; mode=display">
+\mathcal{L}_{f}=\sum_{c}\sum_{(i,j)\in I}\left| \phi_c(d)_{ij}-\phi_c(\hat{d})_{ij} \right|</script><p>其中 $\phi_c$ 对应了前 $c$ 层特征提取器。</p>
+<h3 id="语义一致性损失"><a href="#语义一致性损失" class="headerlink" title="语义一致性损失"></a>语义一致性损失</h3><p><img src="/image-20231031194443752.png" alt="image-20231031194443752" style="zoom:40%;"></p>
+<p>语义一致性损失则利用了语义分割网络，以交叉熵方式比较两次扫描。对每个点预测一个语义类别概率，并和真值（one-hot 编码）进行比较，得到交叉熵损失 $\mathcal{L}_{ce}$ 。但仅有交叉熵损失无法约束点云的几何结构，因此通过可训练的权重参数将两个损失整合在一起：</p>
+<script type="math/tex; mode=display">
+\mathcal{L}_{sc}=\frac{1}{2\sigma_r^2}\mathcal{L}_{d}^{1}+\frac{1}{\sigma_c^2}\mathcal{L}_{ce}+\log\sigma_r+\log\sigma_c</script><p>这一结果来自 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1705.07115">Multi-Task Learning Using Uncertainty to Weigh Losses for Scene Geometry and Semantics</a> ，它通过对数似然推导了语义损失和回归损失的整合，但论文这里似乎把公式抄错了（丢了两个平方）。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>在上采样部分，没有采用 U-Net 的结构，而是直接回归了深度值。图像尺寸的扩张通过转置卷积实现。同时引入了各种类型的损失，从论文的实验结果来看、</p>
+<h2 id="Simulation-based-Lidar-Super-resolution-for-Ground-Vehicles"><a href="#Simulation-based-Lidar-Super-resolution-for-Ground-Vehicles" class="headerlink" title="Simulation-based Lidar Super-resolution for Ground Vehicles"></a>Simulation-based Lidar Super-resolution for Ground Vehicles</h2><p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2004.05242">Simulation-based Lidar Super-resolution for Ground Vehicles</a> ，代码：<a target="_blank" rel="noopener" href="https://github.com/RobustFieldAutonomyLab/lidar_super_resolution">lidar_super_resolution</a> </p>
+<p>第一篇开源的工作，也是该任务下被引最多的。其思路非常简单：带有转置卷积的 U-Net 用于重建深度，蒙特卡洛 Dropout 用于克服噪声值。U-Net 就不赘述了，论文的关键想法其实是使用了 MC-Dropout 。</p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231031204141231.png" alt="image-20231031204141231" style="zoom:27%;"></p>
+<p>简言之，普通的神经网络不能对自己的推理做出置信度判断，因此在模型性能不足或数据本身难以预测时，容易输出错误的结果而不“自知”，这两种情况对应了模型不确定性和数据不确定性。量化不确定性在神经网络中有很多方法去推导和近似，MC-Dropout 是常见的一种。</p>
+<p>一般来说，我们通过在卷积层之前添加 Dropout 随机废置一些参数，使其在训练中某一阶段不更新，从而达到防止过拟合的效果，而在测试阶段使用所有参数。MC-Dropout 的想法是：在测试阶段也应用 Dropout 进行多次预测，从而获取多个不同的值。对于变化剧烈的点，输出较低的置信度，并取平均值作为最终预测值。<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1506.02142">Dropout as a Bayesian Approximation: Representing Model Uncertainty in Deep Learning</a> 论证了 MC-Dropout 可以被看作高斯过程中的近似贝叶斯推理，表达为下式（好地狱的符号表示），有时间再推导一下。</p>
+<script type="math/tex; mode=display">
+p(y^*|\mathbf{x}^*,\mathcal{D})\propto \int p(y^*|\theta^*)p(\mathbf{x}^*,\mathcal{D}|\theta^*)\mathrm{d}\theta^*
 \\
-L_D(\hat{y},y)&=\frac{1}{2}\|D(\hat{y}) \|^2_2+\frac{1}{2}\|1-D(y) \|^2_2
-\end{aligned}</script><p>简单来说，AR-GCN 使用了生成对抗网络，生成器和鉴别器的损失函数借鉴了 LSGAN 的定义方法；此外，问题的本质仍然是上采样问题，因此加入点云间的相似性度量，指导生成器的训练。论文通过设计新的联合损失函数，将 GAN 和点云上采样结合了起来。</p>
-<h2 id="残差图卷积生成器"><a href="#残差图卷积生成器" class="headerlink" title="残差图卷积生成器"></a>残差图卷积生成器</h2><p>首先来看生成器的组成。生成器的目标是将点云上采样，包含了残差图卷积块、反池化块以及特征网络。</p>
-<h3 id="残差图卷积块"><a href="#残差图卷积块" class="headerlink" title="残差图卷积块"></a>残差图卷积块</h3><p><img src="/2023/09/16/AR-GCN/image-20230916205731283.png" alt="image-20230916205731283" style="zoom:60%;display: block; margin-left: auto; margin-right: auto;"></p>
-<p>作者认为 PointNet++ 对中心点邻近点一视同仁，而图卷积的性能更加优异。观察上图，对于输入的特征  $f_{in}$ 和输入点云 $x_{in}$ ，通过 $x_{in}$ 在每次卷积时查询近邻点 $N(p)$ ，则每一层卷积的运算为：</p>
+\Downarrow
+\\
+p(y^*|\mathbf{x}^*)=\frac{1}{T}\sum_{t=1}^{T}p(y^*|\mathbf{x}^*,\theta^*_t)</script><p>MC-Dropout 在直觉上接近机器学习中的 Bagging，但它只需要一个模型。论文实验了有无 MC-Dropout 的两种效果，认为它对减少边缘导致的噪声有很大帮助。个人观点：这种方式更像是避免了预测边缘，从而保证精度，缺乏对边缘特征的恢复。</p>
+<center class="half">    
+   <img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231101133538701.png" alt="image-20231031204141231" style="zoom:33%;">      <img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231101140717153.png" alt="image-20231101140717153" style="zoom:33%;"></center>
+
+<h2 id="T-UNet-A-Novel-TC-Based-Point-Cloud-Super-Resolution-Model-for-Mechanical-LiDAR-，代码：donkeyofking-lidar-sr"><a href="#T-UNet-A-Novel-TC-Based-Point-Cloud-Super-Resolution-Model-for-Mechanical-LiDAR-，代码：donkeyofking-lidar-sr" class="headerlink" title="T-UNet: A Novel TC-Based Point Cloud Super-Resolution Model for Mechanical LiDAR ，代码：donkeyofking/lidar-sr"></a><a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/978-3-030-92635-9_40">T-UNet: A Novel TC-Based Point Cloud Super-Resolution Model for Mechanical LiDAR</a> ，代码：<a target="_blank" rel="noopener" href="https://github.com/donkeyofking/lidar-sr">donkeyofking/lidar-sr</a></h2><p>代码：<a target="_blank" rel="noopener" href="https://github.com/donkeyofking/lidar-sr">donkeyofking/lidar-sr</a> 。这篇文章内容有点少，直接看代码了。其主要思路是利用点云帧序列，而非单帧点云。</p>
+<h3 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h3><p>首先将序列点云存入变量 <code>split_x</code> ，总共 $16$ 帧，分别通过转置卷积进行上采样。</p>
+<pre><code class="lang-python">output1=[]# 0,1,2,3,4,5,6...15
+    for i in range(seq_length):
+        slice = split_x[i]
+        slice = Lambda(tf.squeeze, arguments=&#123;&#39;axis&#39;: 1,&#125;)(slice)
+        slice = up0(slice)
+        slice = BatchNormalization()(slice)
+        slice = Activation(&#39;relu&#39;)(slice)
+        slice = up1(slice)
+        slice = BatchNormalization()(slice)
+        slice = Activation(&#39;relu&#39;)(slice)
+        output1.append(slice)
+</code></pre>
+<p>将相邻两个特征图拼接，并通过（膨胀）卷积提取特征。论文用膨胀卷积取代了池化层，以减少信息的丢失。</p>
+<pre><code class="lang-python">output2=[]# 0,1,2,3,4,5,6,7
+    conv1 = Conv2D(filters=64, kernel_size=(3,3), dilation_rate=(2, 2), padding=&#39;same&#39;, kernel_initializer=&#39;he_normal&#39;)
+    conv2 = AtrousConvolution2D(filters=64, kernel_size=(3,3), dilation_rate=(2, 2), strides=(2,2), padding=&#39;same&#39;, kernel_initializer=&#39;he_normal&#39;)
+    for i in range(int(seq_length/2)):
+        slice = concatenate([output1[2*i],output1[2*i+1]],axis=3)
+        slice = conv1(slice)
+        slice = BatchNormalization()(slice)
+        slice = Activation(&#39;relu&#39;)(slice)
+        slice = conv2(slice)
+        slice = BatchNormalization()(slice)
+        slice = Activation(&#39;relu&#39;)(slice)
+        output2.append(slice)
+</code></pre>
+<p>重复上面一个步骤，直至得到一个特征图。然后通过一系列的转置卷积上采样，并和之前的特征图连接，类似 U-Net 的结构。</p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231101154818026.png" alt="image-20231101154818026" style="zoom:50%;"></p>
+<p>以上基本就是全部了，大致就是借鉴了 TCN 和 U-net ，在序列上做相邻的卷积，然后保留 U-Net 的结构。对时序上的方法确实不太了解，不知道这个方法怎么样。</p>
+<h2 id="Channel-Attention-based-Network-for-LiDAR-Super-resolution"><a href="#Channel-Attention-based-Network-for-LiDAR-Super-resolution" class="headerlink" title="Channel Attention based Network for LiDAR Super-resolution"></a><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/9727846">Channel Attention based Network for LiDAR Super-resolution</a></h2><p>无代码。网络架构由一个 U-Net 和一个基于通道注意力的重建块组成，主要来看后者。</p>
+<h3 id="基于通道注意力的重建块"><a href="#基于通道注意力的重建块" class="headerlink" title="基于通道注意力的重建块"></a>基于通道注意力的重建块</h3><p>从图中看到，首先两个转置卷积是少不了的，然后就是不断复用卷积层和通道注意力模块，并使用残差连接。最后用两个卷积层回归深度值，并和 U-Net 提取的信息逐点相加。论文希望 U-Net 能够捕获边缘信息，使重建更准确（但是并没有对提取边缘这一点做监督或者约束，比较奇怪，可能是玄学吧）。</p>
+<p><img src="/image-20231101160136946.png" alt="image-20231101160136946" style="zoom:50%;"></p>
+<p>通道注意力的结构就是最基本的自注意力机制，它关注不同通道之间的相关性（原文却说“每个通道上相邻像素之间的相关性”，可能是笔误）。首先将图像特征 $C\times V \times H$ 展平成 $C\times VH$ 的特征，和 $VH \times C$ 的矩阵执行点积，通过 SoftMax 得到 $C\times C$ 的注意力矩阵，然后和原来的特征矩阵相乘，得到新的特征图。</p>
+<p><img src="/image-20231101160511380.png" alt="image-20231101160511380" style="zoom:50%;"></p>
+<h3 id="环形填充"><a href="#环形填充" class="headerlink" title="环形填充"></a>环形填充</h3><p>球面投影需要一个角度来分割投影图，然后展平，因此在分割处提取不到真实的局部特征。论文的方法很简单，就是把图像往两边 padding，补充回丢掉的局部信息。</p>
+<p><img src="/image-20231101163539525.png" alt="image-20231101163539525" style="zoom:40%;"></p>
+<h2 id="LiDAR-Super-Resolution-Based-on-Segmentation-and-Geometric-Analysis"><a href="#LiDAR-Super-Resolution-Based-on-Segmentation-and-Geometric-Analysis" class="headerlink" title="LiDAR Super-Resolution Based on Segmentation and Geometric Analysis"></a><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/9875347">LiDAR Super-Resolution Based on Segmentation and Geometric Analysis</a></h2><p>无代码。这是一个步骤较多的无监督方法，并且基于点而非格网，但采用的是球面投影，因此同样保留扫描线结构。</p>
+<p><img src="/image-20231101164701852.png" alt="image-20231101164701852" style="zoom:50%;"></p>
+<h3 id="地面点分割"><a href="#地面点分割" class="headerlink" title="地面点分割"></a>地面点分割</h3><p>这一步骤在 $x-y-z$ 坐标上进行，更准确的说，在每一列扫描线上进行。</p>
+<p>对于输入点 $P_l$ ，目标是分割得到地面点 $P_g$ 和非地面点 $P_{ng}$ 。考虑一列扫描点，点分布如下图所示。</p>
+<ul>
+<li>首先找到 $z$ 值最小的点，向两边顺序搜索，得到相邻点的向量 $V_l$ ；同时从最低点出发，连接所有点，得到向量 $V_r$ </li>
+<li>求向量点积 $V_l \cdot V_r$ ，并通过点积的绝对值选取种子点（论文这里讲得不太清楚，应该就是求向量夹角）。最后通过一个 $z$ 值的低通滤波得到地面种子点</li>
+<li>基于种子点，利用最小二乘拟合一条直线，将距离直线一定阈值内的点纳入地面点，其余点纳入非地面点。对一圈的点执行上述操作，实现分割</li>
+</ul>
+<p><img src="/image-20231101170403255.png" alt="image-20231101170403255" style="zoom:50%;"></p>
+<h3 id="坐标重组"><a href="#坐标重组" class="headerlink" title="坐标重组"></a>坐标重组</h3><p>坐标重组就是球面投影。但论文这里没有采用栅格化为图像的方式，而是保留三维坐标 $(h,v,d)$ ，避免了任何信息损失。其中 $h,v$ 分别表示水平角和垂直角，$d$ 表示距离。</p>
+<h3 id="超分辨率"><a href="#超分辨率" class="headerlink" title="超分辨率"></a>超分辨率</h3><p>针对地面点和非地面点，采用两种上采样思路。</p>
+<h4 id="地面点"><a href="#地面点" class="headerlink" title="地面点"></a>地面点</h4><p>将地面点视作平面，若上下两个像素都是地面点，则考虑三角形角平分线的性质。这里的推导很简单，设前后两个点的球面坐标分别为：</p>
 <script type="math/tex; mode=display">
-f_{i+1}^p = w_0 f_l^p + w_1\sum_{q\in N(p)}f_l^q,\forall p\in v</script><p>其中 $w_0,w_1$ 是可学习的参数，$x_{in}$ 和 $x_{out}$ 没有区别。同时注意到块中引入了残差连接来提升性能。思路和 DGCNN 很类似，但 DGCNN 更关注边特征，而这里以点特征为主体。同时 DGCNN 的图是动态更新的，也是一点不同。</p>
-<h3 id="反池化块"><a href="#反池化块" class="headerlink" title="反池化块"></a>反池化块</h3><p>反池化的目的是增加点的数目。它首先通过残差图卷积块中的 G-Conv 层，将特征转换为 $\hat{n}\times 6$ 的张量，然后重塑为 $\hat{n}\times2\times3$ ，记作 $\delta x$ ，然后将原始点坐标复制一份，加到坐标残差上。反池化块的宗旨是预测输入点和输出点之间的残差，比直接预测点坐标更快，这在 EC-Net 中就有阐述。</p>
-<p>反池化块仅仅重塑了坐标，但破坏了特征。因此论文依然利用残差图卷积块所得到的特征，进行插值得到新点云 $x_{out}$ 中每点的特征：</p>
+\begin{cases}
+p_A = [I_i\cdot H_{\textrm{res}},a,v_1]
+\\
+p_B = [I_i\cdot H_{\textrm{res}},b,v_5]
+\end{cases}</script><p>则 $v_3=(v_1+v_5)/2$ ，只需求 $OD$ 的长度，结果如下：</p>
 <script type="math/tex; mode=display">
-f_{out}^p = \frac{1}{k}\sum_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>可以看到，此处对最近邻搜索 $N(p)$ 标注了搜索集合为 $x_{in}$ ，但计算的点坐标是来自 $x_{out}$ 的。个人觉得，如果把预测的残差和原始特征放进一个图卷积来预测新的特征，或许会更好一些，这里相当于直接用了平均池化层。</p>
-<h3 id="特征网络"><a href="#特征网络" class="headerlink" title="特征网络"></a>特征网络</h3><p>在进入残差图卷积块之前，需要提取点特征。论文采用了简单的 PointNet 结构，对每个点获取最近邻点，得到张量 $k\times 3$ ，然后通过一系列逐点卷积加上一个最大池化层，转换为 $1\times c$ 的特征 $f^p$ 。</p>
-<h3 id="渐进式上采样"><a href="#渐进式上采样" class="headerlink" title="渐进式上采样"></a>渐进式上采样</h3><p>另外，论文采用了两次 $2\times$ 的上采样，并在实验中发现这样做的精度更好。</p>
-<h2 id="图判别器"><a href="#图判别器" class="headerlink" title="图判别器"></a>图判别器</h2><p>图判别器的结构依然基于残差图卷积块和特征网络，事实上，从第一张图可以看出，判别器和生成器唯一的区别就是用池化层替代了反池化层，最终输出一个标量预测。池化层的运算方法很简单，首先将点进行最远点采样，然后计算剩余点的特征为周围近邻点特征的池化：</p>
+d = \frac{2ab}{a+b}\cos\frac{\alpha}{2}</script><p><img src="/image-20231101170807215.png" alt="image-20231101170807215" style="zoom:50%;"></p>
+<p>地面点还有一个优化，大致是对空缺点进行了讨论，然后用局部的平滑细化点。</p>
+<h4 id="非地面点"><a href="#非地面点" class="headerlink" title="非地面点"></a>非地面点</h4><p>从俯视图上，观察到非地面点呈现簇的分布，即同一物体的点之间相距较进。简单聚类后对每个物体进行上采样，将点分为物体内的点和物体间的点。对于物体间的点，由于缺乏先验知识，无法归类，为了提升远处物体的点数量，论文直接将其归到更远的物体上。</p>
+<p><img src="/image-20231101172953666.png" alt="image-20231101172953666" style="zoom:50%;"></p>
+<h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p>基本就是一个改进版本的线性插值模型，毕竟没有先验知识。从投影后的不同视图去思考问题，可能还是有一定参考价值的。</p>
+<h2 id="Fast-Point-Clouds-Upsampling-with-Uncertainty-Quantification-for-Autonomous-Vehicles"><a href="#Fast-Point-Clouds-Upsampling-with-Uncertainty-Quantification-for-Autonomous-Vehicles" class="headerlink" title="Fast Point Clouds Upsampling with Uncertainty Quantification for Autonomous Vehicles"></a><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/9811914">Fast Point Clouds Upsampling with Uncertainty Quantification for Autonomous Vehicles</a></h2><p>无代码。基本思路是用神经过程（NP）取代了 MC-Dropout，去实现更快速的不确定性量化。MC-Dropout 需要多次前向推理，论文认为这很费时（但 MC-Dropout 应该可以并行）。</p>
+<h3 id="使用-Conv-NPs-的上采样"><a href="#使用-Conv-NPs-的上采样" class="headerlink" title="使用 Conv-NPs 的上采样"></a>使用 Conv-NPs 的上采样</h3><p>对于低分辨率图像，论文用空白的掩码 $M_c$ 替代了转置卷积，直接增加图像的行数。与之对应的有 $M_t$ ，表示已知的部分。</p>
 <script type="math/tex; mode=display">
-f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特别的是，论文没有采用逐步下采样至单个标量的方式，因为这样做会导致伪像（我的理解是一些细微的噪声很难被整体鉴别器察觉，导致生成的数据上有伪影）。因此在这里鉴别器的输出包含不止 1 个点，并对每个点的局部 patch 进行鉴别，通过交叉熵来计算最终的总损失值。这里实际上是借鉴了另一篇文章：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1612.07828">Learning from Simulated and Unsupervised Images through Adversarial Training</a> ，下图很直观地说明了这种方法。</p>
-<p><img src="/2023/09/16/AR-GCN/image-20230916213653638.png" alt="image-20230916213653638" style="zoom:100%;display: block; margin-left: auto; margin-right: auto;"></p>
-<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>主要的思路和方法就是以上这些，论文原文讲得非常详细。总得来说，AR-GCN 很好地在上采样过程中结合了 GAN 的思路，因此对于未见过的数据集有更强的泛化能力，能够生成细节更丰富的结果。并且通过回归坐标残差来提升收敛速度和稳定性，通过渐进式上采样取得更优的效果。</p>
+M_c(i,j)=\begin{cases}
+\begin{aligned}
+1&, \text{if} \ \ (r_{up}|i) 
+\\
+0&, \text{otherwise}
+\end{aligned}
+\end{cases}</script><p>后续的方法分为四个模块。首先通过特征提取器，分别从掩码和扩大后的图像中提取特征图，并连接在一起。</p>
+<script type="math/tex; mode=display">
+\begin{cases}
+e=\zeta(M_c)\in \mathbb{R}^{U_{\mathcal{H}}\times V_{\mathcal{H}}\times K}
+\\
+e'=\zeta(\mathcal{I_P})\in \mathbb{R}^{U_{\mathcal{H}}\times V_{\mathcal{H}}\times K}
+\\
+\end{cases}
+\Rightarrow
+\epsilon=e \oplus e'</script><p>通过通过卷积层聚合邻域特征：</p>
+<script type="math/tex; mode=display">
+e_C = \gamma(\epsilon)\in \mathbb{R}^{U_{\mathcal{H}}\times V_{\mathcal{H}}\times 2}</script><p>再由掩码 $M_t$ 和特征 $e_C$ 预测一组高斯分布：</p>
+<script type="math/tex; mode=display">
+v=(\mu, \sigma)=\Phi(M_t,e_C)</script><p>得到了均值图像和方差图像，从而滤除不确定性较大的点。</p>
+<h3 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h3><p>因为还没看神经过程相关的内容，这篇文章里也直接拿来用，姑且理解成和 MC-Dropout 一样都是量化不确定性的方式。从它的输出结果来看，不确定性也集中在边缘区域。</p>
+<h2 id="Implicit-LiDAR-Network-LiDAR-Super-Resolution-via-Interpolation-Weight-Prediction"><a href="#Implicit-LiDAR-Network-LiDAR-Super-Resolution-via-Interpolation-Weight-Prediction" class="headerlink" title="Implicit LiDAR Network: LiDAR Super-Resolution via Interpolation Weight Prediction"></a><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.06413">Implicit LiDAR Network: LiDAR Super-Resolution via Interpolation Weight Prediction</a></h2><p>代码：<a target="_blank" rel="noopener" href="https://github.com/PinocchioYS/iln">PinocchioYS/iln</a> 。整体思路比较简单，但从别人的复现来看，似乎效果也不太好。</p>
+<h3 id="LIIF"><a href="#LIIF" class="headerlink" title="LIIF"></a>LIIF</h3><p>LIIF 是这篇文章的灵感来源，发表在 CVPR2021 。对于二维特征图 $M \in \mathbb{R}^{H\times W\times D}$ ，定义一个对于所有图像相同的解码器 $f_\theta$ ，其作用为：</p>
+<script type="math/tex; mode=display">
+s=f_\theta(z,x)</script><p>其中 $z$ 是一个向量，$x\in \mathcal{X}$ 是一个二维坐标，$s$ 为预测信号（通常为 RGB 值）。因此每一个 $z$ 对应了一个函数，即：</p>
+<script type="math/tex; mode=display">
+z\mapsto f_\theta(z,\cdot):\mathcal{X}\rightarrow\mathcal{S},</script><p>假设特征向量在二维空间均匀分布，为每一个特征分配一个二维坐标。对于连续图像 $I(i)$ ，坐标 $x_q$ 处的 RGB 值定义为：</p>
+<script type="math/tex; mode=display">
+I(x_q)=f_\theta(z^*, x_q-v^*),</script><p>其中 $z^<em>$ 是距离 $x_q$ 最近的一个特征向量，$v^</em>$ 是 $z^*$ 所在的位置。</p>
+<p>说了这么多，其实用人话说就是：对于任何一个需要预测的位置，找到离它最近的那个已知点，将该点的特征以及距离送入一个网络，输出预测值。仅此而已。这就好比点云上采样时，从一个点出发生成一系列点。</p>
+<p>但这样做还不够，因为一个特征过于单调。论文使用了一个叫“特征展开”的步骤，将 $M$ 中每个位置的 $3\times 3$ 邻域串联起来，得到新的特征图：</p>
+<script type="math/tex; mode=display">
+M_{jk}=\text{Concat}(\{M_{j+l,k+m}\}_{l,m \in \{-1,0,1\}}),</script><p>此外，由于两个像素连线中点处，会发生“跳变”的情况，因为 $z^*$ 发生了变化。为保证预测的连续性，将预测图像改写为：</p>
+<script type="math/tex; mode=display">
+I(x_q)=\sum_{t\in \{00,01,10,11\}}\frac{S_t}{S}\cdot f_\theta(z^*_t, x_q-v^*_t),</script><p>也就是将最近的四个像素的预测值取加权平均。权重系数和 $x_q$ 到 $v^*_t$ 构成的矩形面积 $S_t$ 成正比。</p>
+<p>除此之外还不够，由于 $f_\theta$ 预测了一个离散点的值，而我们实际上想要生成一个像素的值。这类似于 NeRF 与 Mip-NeRF 的区别，论文将像素的范围考虑在内，即：</p>
+<script type="math/tex; mode=display">
+s=f_{cell}(z,[x,c])</script><p>其中 $c=[c_h,c_w]$ ，表示查询像素的大小。具体细节论文似乎没讲，有时间看一下代码。</p>
+<h3 id="ILN"><a href="#ILN" class="headerlink" title="ILN"></a>ILN</h3><p>LIIF 通过周边信息直接预测了值，而 ILN 尝试预测权重，以在距离图像上取得比较稳定的效果。在 LIIF 中，权重是可以直接计算的。记权重函数为 $h$ ，值函数为 $g$ ，则 LIIF 可以表示为：</p>
+<script type="math/tex; mode=display">
+\hat{r}=\sum_{t}^{4}g(\cdot)h(\cdot |\theta)=\sum_{t}^{4}\frac{S_t}{S}\cdot h(z_t|\theta)</script><p>为了直接利用周边点的距离值，ILN 直接预测权重：</p>
+<script type="math/tex; mode=display">
+\hat{r}=\sum_{t}^{4}g(\cdot |\theta)h(\cdot )=\sum_{t}^{4} g(z_t|\theta)\cdot r_t</script><p>其主要思路很简单：首先对输入图像做特征提取，得到特征图；然后对于每个查询射线 $q$ ，找到最近的四个像素，将每个像素的相对距离 $\Delta q_t$ 编码后和特征 $z_t$ 组合在一起，得到 $z_t’$ 向量；之后通过一组自注意力块和线性层，直接获得四个权重值。</p>
+<p><img src="/image-20231102145918672.png" alt="image-20231102145918672" style="zoom:50%;"></p>
+<h3 id="小结-3"><a href="#小结-3" class="headerlink" title="小结"></a>小结</h3><p>ILN 的思路其实是沿用了 LIIF，虽然没有直接用像素距离作为权重，但在 $z_t’$ 中依然直接包含了像素距离，这对于距离图像来说并不是很好的策略，因为像素距离只能反映角度差异，而不能反映距离差异。</p>
+<p>另外，ILN 没有沿用 LIIF 将像素看成一个范围的思路，可能因为激光雷达本身是一根射线，直觉上看和像素并不一样。总的来说，感觉是一个在图像和激光雷达之间飘忽不定的方法。如果 LIIF 后续有在深度图上应用，或许可以去参考一下。</p>
+<h2 id="HALS-A-Height-Aware-Lidar-Super-Resolution-Framework-for-Autonomous-Driving"><a href="#HALS-A-Height-Aware-Lidar-Super-Resolution-Framework-for-Autonomous-Driving" class="headerlink" title="HALS: A Height-Aware Lidar Super-Resolution Framework for Autonomous Driving"></a><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2202.03901">HALS: A Height-Aware Lidar Super-Resolution Framework for Autonomous Driving</a></h2><p>无代码。但这一篇写得很详细，有比较多的分析和对过往方法的总结。</p>
+<h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>作者认为距离图像的上下部分具有不同的高度分布规律，即上部分距离较远，方差较大，下部分距离较进，方差较小。这意味着上部区域具有更广泛的距离值分布，因此具有更高的空间频率。</p>
+<p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231102152124742.png" alt="image-20231102152124742" style="zoom:50%;"></p>
+<p>因此论文在距离图的不同高度使用不同的策略。远处物体被压缩，且通常出现在上方，因此关注小区域；近处物体较大，且通常出现在下方，因此关注较大的区域。所以论文问用两个感受野提取的特征进行上采样，并学习两个感受野的掩码，从而进行加权融合。</p>
+<p><img src="/image-20231102152552051.png" alt="image-20231102152552051" style="zoom:50%;"></p>
+<p>DRB 是膨胀残差块，在<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2009.00206">RangeRCNN: Towards Fast and Accurate 3D Object Detection with Range Image Representation</a> 中提出，是专为激光雷达投影后图像设计的。</p>
+<blockquote>
+<p>不同距离的物体的尺度表现出显着的差异。为了更好地适应不同的尺度并获得更灵活的感受野，我们设计了膨胀残差块（DRB），它将膨胀卷积插入到正常残差块中。</p>
+</blockquote>
+<p>应用三个具有不同扩张率 $\{1,2,3\}$ 的 $3\times3$ 卷积来提取具有不同感受野的特征。三个扩张卷积的输出被连接起来，然后是一个 1 × 1 卷积，以融合具有不同感受野的特征。残差连接用于添加融合特征和输入特征。至于为什么要用膨胀卷积，可能是因为图像稀疏的特性吧，需要更大的感受野。</p>
+<p><img src="/image-20231102161906330.png" alt="image-20231102161906330" style="zoom:50%;"></p>
+<p>但是作者这里没有说上采样层的结构。最终预测一个 $C+1$ 维的特征图，最后一维作为掩码。两个掩码进行 SoftMax ，使其和为一。</p>
+<h3 id="小结-4"><a href="#小结-4" class="headerlink" title="小结"></a>小结</h3><p>虽然作者讨论了高度和距离的关系，但是实际网络设计中是通过学习得到的掩码，并没有先验在其中。虽然最终的掩码可视化一定程度上能验证作者的想法，但我觉得既然问题的本质是距离，距离越远物体越小且点越稀疏，为什么不直接通过原始距离图像生成掩码，从而指导网络的学习。</p>
+<h2 id="SGSR-Net-Structure-Semantics-Guided-LiDAR-Super-Resolution-Network-for-Indoor-LiDAR-SLAM"><a href="#SGSR-Net-Structure-Semantics-Guided-LiDAR-Super-Resolution-Network-for-Indoor-LiDAR-SLAM" class="headerlink" title="SGSR-Net: Structure Semantics Guided LiDAR Super-Resolution Network for Indoor LiDAR SLAM"></a><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/10164213">SGSR-Net: Structure Semantics Guided LiDAR Super-Resolution Network for Indoor LiDAR SLAM</a></h2><p>陈老师发的论文，没找到代码。</p>
+<h3 id="CASE-模块"><a href="#CASE-模块" class="headerlink" title="CASE 模块"></a>CASE 模块</h3><p>为了缓解物体边界周围的边缘膨胀和混合，采用了 squeeze and excitation 方法和注意力机制结合。</p>
+<p><img src="/image-20231102172250213.png" alt="image-20231102172250213" style="zoom:50%;"></p>
+<p>具体来说，对于输入的特征图 $(C\times H \times W)$ 做平均池化，得到压缩的特征 $(C\times 1\times W)$ ，再通过卷积将特征压缩到 $C/r’$ ，随后对特征图做批量归一化，并输入 sigmoid 得到注意力权重 $(C/r’ \times 1\times W)$ ，将其和原始特征矩阵相乘（没看懂咋乘的）。整体结构依然是 U-Net 。将 CASE 模块放在最前面，以避免在 Dropout 中丢失必要的信息。</p>
+<p><img src="/image-20231103094427059.png" alt="image-20231103094427059" style="zoom:40%;"></p>
+<h3 id="SGR-模块"><a href="#SGR-模块" class="headerlink" title="SGR 模块"></a>SGR 模块</h3><p>这部分主要是针对室内点云的特性，做一些简单的分割以引入语义信息。</p>
+<p>首先统计单帧点云的 $z$ 值直方图，找出频率最高的两个，作为地面和天花板的高度 $h_{floor},h_{ceiling}$ 。为了提升相邻帧检测的一致性，取前后 $N$ 帧的中值滤波结果。</p>
+<p><img src="/image-20231103110455119.png" alt="image-20231103110455119" style="zoom:33%;"></p>
+<p>估计 $h_{floor},h_{ceiling}$ 的主要原因是，在 MC-Dropout 估计不确定度时，天花板和地面的点距离传感器较远，容易得到较低的置信度，但对于室内场景这些点至关重要。因此对于不同的高度采用不同的系数 $\lambda(h)$ ，再和方差相乘得到置信度。</p>
+<p><img src="/image-20231103113108059.png" alt="image-20231103113108059" style="zoom:50%;"></p>
+<h3 id="小结-5"><a href="#小结-5" class="headerlink" title="小结"></a>小结</h3><p>基本方法其实没啥变化，主要还是对室内场景做了一定的优化。</p>
+<h1 id="研究思路"><a href="#研究思路" class="headerlink" title="研究思路"></a>研究思路</h1><p>目前的大部分方法在一个视图上操作，尽管基于格网的方法能够保留扫描线结构，预测的不好也会导致大量的噪声，所以也没有看起来那么容易。</p>
+<p>主要需要解决的问题有两个：一是边缘点的不连续性，二是投影图的几何变形。对于第一个问题，大多方法通过度量不确定性和损失函数改进，可以去深度补全里找一些解决方案；对于第二个问题，大部分方法主要考虑感受野问题，但没有更丰富的特征参与进来，因此融合点云特征应该会是一个比较直接的方案。</p>
+<p>关于隐式上采样，虽然个人比较喜欢这一类方法，因为可拓展的空间比较大，但 ILN 的效果似乎并不太好。</p>
 
       
 
@@ -281,11 +463,15 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">GAN</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">激光雷达</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">研究现状调研</a>
         		</li>
       		
 		</ul>
@@ -341,7 +527,7 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://zcliangyue.github.io/2023/09/16/AR-GCN/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -355,18 +541,9 @@ f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特�
   
 <nav id="article-nav">
   
-    <a href="/2023/09/17/PU-GAN/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          PU-GAN 论文阅读笔记
-        
-      </div>
-    </a>
   
-  
-    <a href="/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">MPU 论文阅读笔记</div>
+    <a href="/2023/09/17/PU-GAN/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">PU-GAN 论文阅读笔记</div>
       <i class="icon-circle-right"></i>
     </a>
   
