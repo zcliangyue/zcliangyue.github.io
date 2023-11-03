@@ -275,32 +275,9 @@ p(y^*|\mathbf{x}^*)=\frac{1}{T}\sum_{t=1}^{T}p(y^*|\mathbf{x}^*,\theta^*_t)</scr
 
 <h2 id="T-UNet-A-Novel-TC-Based-Point-Cloud-Super-Resolution-Model-for-Mechanical-LiDAR"><a href="#T-UNet-A-Novel-TC-Based-Point-Cloud-Super-Resolution-Model-for-Mechanical-LiDAR" class="headerlink" title="T-UNet: A Novel TC-Based Point Cloud Super-Resolution Model for Mechanical LiDAR"></a><a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/978-3-030-92635-9_40">T-UNet: A Novel TC-Based Point Cloud Super-Resolution Model for Mechanical LiDAR</a></h2><p>代码：<a target="_blank" rel="noopener" href="https://github.com/donkeyofking/lidar-sr">donkeyofking/lidar-sr</a> 。这篇文章内容有点少，直接看代码了。其主要思路是利用点云帧序列，而非单帧点云。</p>
 <h3 id="模型架构"><a href="#模型架构" class="headerlink" title="模型架构"></a>模型架构</h3><p>首先将序列点云存入变量 <code>split_x</code> ，总共 $16$ 帧，分别通过转置卷积进行上采样。</p>
-<pre><code class="lang-python">output1=[]# 0,1,2,3,4,5,6...15
-    for i in range(seq_length):
-        slice = split_x[i]
-        slice = Lambda(tf.squeeze, arguments=&#123;&#39;axis&#39;: 1,&#125;)(slice)
-        slice = up0(slice)
-        slice = BatchNormalization()(slice)
-        slice = Activation(&#39;relu&#39;)(slice)
-        slice = up1(slice)
-        slice = BatchNormalization()(slice)
-        slice = Activation(&#39;relu&#39;)(slice)
-        output1.append(slice)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">output1=[]<span class="comment"># 0,1,2,3,4,5,6...15</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(seq_length):</span><br><span class="line">        <span class="built_in">slice</span> = split_x[i]</span><br><span class="line">        <span class="built_in">slice</span> = Lambda(tf.squeeze, arguments=&#123;<span class="string">&#x27;axis&#x27;</span>: <span class="number">1</span>,&#125;)(<span class="built_in">slice</span>)</span><br><span class="line">        <span class="built_in">slice</span> = up0(<span class="built_in">slice</span>)</span><br><span class="line">        <span class="built_in">slice</span> = BatchNormalization()(<span class="built_in">slice</span>)</span><br><span class="line">        <span class="built_in">slice</span> = Activation(<span class="string">&#x27;relu&#x27;</span>)(<span class="built_in">slice</span>)</span><br><span class="line">        <span class="built_in">slice</span> = up1(<span class="built_in">slice</span>)</span><br><span class="line">        <span class="built_in">slice</span> = BatchNormalization()(<span class="built_in">slice</span>)</span><br><span class="line">        <span class="built_in">slice</span> = Activation(<span class="string">&#x27;relu&#x27;</span>)(<span class="built_in">slice</span>)</span><br><span class="line">        output1.append(<span class="built_in">slice</span>)</span><br></pre></td></tr></table></figure>
 <p>将相邻两个特征图拼接，并通过（膨胀）卷积提取特征。论文用膨胀卷积取代了池化层，以减少信息的丢失。</p>
-<pre><code class="lang-python">output2=[]# 0,1,2,3,4,5,6,7
-    conv1 = Conv2D(filters=64, kernel_size=(3,3), dilation_rate=(2, 2), padding=&#39;same&#39;, kernel_initializer=&#39;he_normal&#39;)
-    conv2 = AtrousConvolution2D(filters=64, kernel_size=(3,3), dilation_rate=(2, 2), strides=(2,2), padding=&#39;same&#39;, kernel_initializer=&#39;he_normal&#39;)
-    for i in range(int(seq_length/2)):
-        slice = concatenate([output1[2*i],output1[2*i+1]],axis=3)
-        slice = conv1(slice)
-        slice = BatchNormalization()(slice)
-        slice = Activation(&#39;relu&#39;)(slice)
-        slice = conv2(slice)
-        slice = BatchNormalization()(slice)
-        slice = Activation(&#39;relu&#39;)(slice)
-        output2.append(slice)
-</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">output2=[]<span class="comment"># 0,1,2,3,4,5,6,7</span></span><br><span class="line">    conv1 = Conv2D(filters=<span class="number">64</span>, kernel_size=(<span class="number">3</span>,<span class="number">3</span>), dilation_rate=(<span class="number">2</span>, <span class="number">2</span>), padding=<span class="string">&#x27;same&#x27;</span>, kernel_initializer=<span class="string">&#x27;he_normal&#x27;</span>)</span><br><span class="line">    conv2 = AtrousConvolution2D(filters=<span class="number">64</span>, kernel_size=(<span class="number">3</span>,<span class="number">3</span>), dilation_rate=(<span class="number">2</span>, <span class="number">2</span>), strides=(<span class="number">2</span>,<span class="number">2</span>), padding=<span class="string">&#x27;same&#x27;</span>, kernel_initializer=<span class="string">&#x27;he_normal&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">int</span>(seq_length/<span class="number">2</span>)):</span><br><span class="line">        <span class="built_in">slice</span> = concatenate([output1[<span class="number">2</span>*i],output1[<span class="number">2</span>*i+<span class="number">1</span>]],axis=<span class="number">3</span>)</span><br><span class="line">        <span class="built_in">slice</span> = conv1(<span class="built_in">slice</span>)</span><br><span class="line">        <span class="built_in">slice</span> = BatchNormalization()(<span class="built_in">slice</span>)</span><br><span class="line">        <span class="built_in">slice</span> = Activation(<span class="string">&#x27;relu&#x27;</span>)(<span class="built_in">slice</span>)</span><br><span class="line">        <span class="built_in">slice</span> = conv2(<span class="built_in">slice</span>)</span><br><span class="line">        <span class="built_in">slice</span> = BatchNormalization()(<span class="built_in">slice</span>)</span><br><span class="line">        <span class="built_in">slice</span> = Activation(<span class="string">&#x27;relu&#x27;</span>)(<span class="built_in">slice</span>)</span><br><span class="line">        output2.append(<span class="built_in">slice</span>)</span><br></pre></td></tr></table></figure>
 <p>重复上面一个步骤，直至得到一个特征图。然后通过一系列的转置卷积上采样，并和之前的特征图连接，类似 U-Net 的结构。</p>
 <p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231101154818026.png" alt="image-20231101154818026" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>以上基本就是全部了，大致就是借鉴了 TCN 和 U-net ，在序列上做相邻的卷积，然后保留 U-Net 的结构。对时序上的方法确实不太了解，不知道这个方法怎么样。</p>
@@ -708,15 +685,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">激光雷达</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">研究现状调研</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
             
             <div class="clearfix"></div>
@@ -857,22 +834,5 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
