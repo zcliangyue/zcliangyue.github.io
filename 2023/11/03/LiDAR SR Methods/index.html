@@ -41,12 +41,12 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231103110455119.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/03/LiDAR%20SR%20Methods/image-20231103113108059.png">
 <meta property="article:published_time" content="2023-11-03T05:35:00.000Z">
-<meta property="article:modified_time" content="2023-11-03T06:32:12.900Z">
+<meta property="article:modified_time" content="2023-11-03T06:34:01.316Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
+<meta property="article:tag" content="点云上采样">
 <meta property="article:tag" content="神经网络">
 <meta property="article:tag" content="论文阅读笔记">
-<meta property="article:tag" content="点云上采样">
 <meta property="article:tag" content="激光雷达">
 <meta property="article:tag" content="研究现状调研">
 <meta name="twitter:card" content="summary">
@@ -257,9 +257,9 @@ L_i=\left\{(x,y,z)\in P \, \middle|\arctan\left(z\big/\sqrt{x^2+y^2}\right)=\var
 <h3 id="语义一致性损失"><a href="#语义一致性损失" class="headerlink" title="语义一致性损失"></a>语义一致性损失</h3><p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231031194443752.png" alt="image-20231031194443752" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>语义一致性损失则利用了语义分割网络，以交叉熵方式比较两次扫描。对每个点预测一个语义类别概率，并和真值（one-hot 编码）进行比较，得到交叉熵损失 $\mathcal{L}_{ce}$ 。但仅有交叉熵损失无法约束点云的几何结构，因此通过可训练的权重参数将两个损失整合在一起：</p>
 <script type="math/tex; mode=display">
-\mathcal{L}_{sc}=\frac{1}{2\sigma_r^2}\mathcal{L}_{d}^{1}+\frac{1}{\sigma_c^2}\mathcal{L}_{ce}+\log\sigma_r+\log\sigma_c</script><p>这一结果来自 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1705.07115">Multi-Task Learning Using Uncertainty to Weigh Losses for Scene Geometry and Semantics</a> ，它通过对数似然推导了语义损失和回归损失的整合，但论文这里似乎把公式抄错了（丢了两个平方）。</p>
+\mathcal{L}_{sc}=\frac{1}{2\sigma_r^2}\mathcal{L}_{d}^{1}+\frac{1}{\sigma_c^2}\mathcal{L}_{ce}+\log\sigma_r+\log\sigma_c</script><p>这一结果来自 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1705.07115">Multi-Task Learning Using Uncertainty to Weigh Losses for Scene Geometry and Semantics</a> ，它通过对数似然推导了语义损失和回归损失的整合，但论文这里似乎把正则项抄错了（丢了两个平方）。</p>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>在上采样部分，没有采用 U-Net 的结构，而是直接回归了深度值。图像尺寸的扩张通过转置卷积实现。同时引入了各种类型的损失，从论文的实验结果来看、</p>
-<h2 id="Simulation-based-Lidar-Super-resolution-for-Ground-Vehicles"><a href="#Simulation-based-Lidar-Super-resolution-for-Ground-Vehicles" class="headerlink" title="Simulation-based Lidar Super-resolution for Ground Vehicles"></a>Simulation-based Lidar Super-resolution for Ground Vehicles</h2><p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2004.05242">Simulation-based Lidar Super-resolution for Ground Vehicles</a> ，代码：<a target="_blank" rel="noopener" href="https://github.com/RobustFieldAutonomyLab/lidar_super_resolution">lidar_super_resolution</a> </p>
+<h2 id="Simulation-based-Lidar-Super-resolution-for-Ground-Vehicles"><a href="#Simulation-based-Lidar-Super-resolution-for-Ground-Vehicles" class="headerlink" title="Simulation-based Lidar Super-resolution for Ground Vehicles"></a><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2004.05242">Simulation-based Lidar Super-resolution for Ground Vehicles</a></h2><p>代码：<a target="_blank" rel="noopener" href="https://github.com/RobustFieldAutonomyLab/lidar_super_resolution">lidar_super_resolution</a> </p>
 <p>第一篇开源的工作，也是该任务下被引最多的。其思路非常简单：带有转置卷积的 U-Net 用于重建深度，蒙特卡洛 Dropout 用于克服噪声值。U-Net 就不赘述了，论文的关键想法其实是使用了 MC-Dropout 。</p>
 <p><img src="/2023/11/03/LiDAR%20SR%20Methods/image-20231031204141231.png" alt="image-20231031204141231" style="zoom:27%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>简言之，普通的神经网络不能对自己的推理做出置信度判断，因此在模型性能不足或数据本身难以预测时，容易输出错误的结果而不“自知”，这两种情况对应了模型不确定性和数据不确定性。量化不确定性在神经网络中有很多方法去推导和近似，MC-Dropout 是常见的一种。</p>
@@ -453,15 +453,15 @@ s=f_{cell}(z,[x,c])</script><p>其中 $c=[c_h,c_w]$ ，表示查询像素的大�
         		</li>
       		 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -692,19 +692,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">点云上采样</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">GAN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
               </li>
              
               <li class="article-tag-list-item">
