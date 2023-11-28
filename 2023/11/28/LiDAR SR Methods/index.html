@@ -40,14 +40,14 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/28/LiDAR%20SR%20Methods/image-20231103094427059.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/28/LiDAR%20SR%20Methods/image-20231103110455119.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2023/11/28/LiDAR%20SR%20Methods/image-20231103113108059.png">
-<meta property="og:image" content="http://zcliangyue.github.io/25c774a139b7d3b25450e00c352cc6d.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2023/11/28/LiDAR%20SR%20Methods/25c774a139b7d3b25450e00c352cc6d.png">
 <meta property="article:published_time" content="2023-11-28T12:00:00.000Z">
-<meta property="article:modified_time" content="2023-11-28T11:25:37.045Z">
+<meta property="article:modified_time" content="2023-11-28T11:33:10.070Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
+<meta property="article:tag" content="点云上采样">
 <meta property="article:tag" content="神经网络">
 <meta property="article:tag" content="论文阅读笔记">
-<meta property="article:tag" content="点云上采样">
 <meta property="article:tag" content="激光雷达">
 <meta property="article:tag" content="研究现状调研">
 <meta name="twitter:card" content="summary">
@@ -223,7 +223,7 @@
 <span id="more"></span>
 <h1 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景"></a>研究背景</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>点云超分辨率关注点云的密度以及几何信息。对于给定的点云 $P$ ，我们希望得到更加密集的点云 $Q$ ，能够描述 $P$ 所在的底层形状。</p>
 <p>对于激光雷达点云，这个问题要特殊一些。常规的点云上采样容易受到点云数据不规则特性的困扰，但激光雷达点云具有规则的分布，这受益于激光雷达的环状扫描方式。</p>
-<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231128154333947.png" alt="image-20231128154333947" style="zoom:33%;"></p>
+<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231128154333947.png" alt="image-20231128154333947" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>鉴于激光雷达的扫描方式，一个自然的想法是将点云投影为球面坐标，即：</p>
 <script type="math/tex; mode=display">
 \begin{cases}
@@ -250,7 +250,7 @@ L_i=\left\{(x,y,z)\in P \, \middle|\arctan\left(z\big/\sqrt{x^2+y^2}\right)=\var
 <script type="math/tex; mode=display">
 \mathcal{L}_{sc}=\frac{1}{2\sigma_r^2}\mathcal{L}_{d}^{1}+\frac{1}{\sigma_c^2}\mathcal{L}_{ce}+\log\sigma_r+\log\sigma_c</script><p>这一结果来自 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/1705.07115">Multi-Task Learning Using Uncertainty to Weigh Losses for Scene Geometry and Semantics</a> ，它通过对数似然推导了语义损失和回归损失的整合，但论文这里似乎把正则项抄错了（丢了两个平方）。</p>
 <h3 id="评估指标"><a href="#评估指标" class="headerlink" title="评估指标"></a>评估指标</h3><p>MAE, MSE, mIoU 以及问卷投票。</p>
-<p><img src="/2023/11/28/LiDAR%20SR%20Methods/CNN-based-result.png" alt="CNN-based-result" style="zoom:20%;"></p>
+<p><img src="/2023/11/28/LiDAR%20SR%20Methods/CNN-based-result.png" alt="CNN-based-result" style="zoom:30%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>论文只实现了两倍上采样，从实验结果来看，使用逐点损失的 MAE 和 MSE 最高，使用感知损失的 mIoU 最高，使用语义的效果不好。但这些结论几乎没什么帮助。</p>
 <h2 id="Simulation-based-Lidar-Super-resolution-for-Ground-Vehicles"><a href="#Simulation-based-Lidar-Super-resolution-for-Ground-Vehicles" class="headerlink" title="Simulation-based Lidar Super-resolution for Ground Vehicles"></a><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2004.05242">Simulation-based Lidar Super-resolution for Ground Vehicles</a></h2><p>代码：<a target="_blank" rel="noopener" href="https://github.com/RobustFieldAutonomyLab/lidar_super_resolution">lidar-super-resolution</a> </p>
 <h3 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h3><p>第一篇开源的工作，也是该任务下被引最多的。其思路很简单：带有转置卷积的 U-Net 用于重建深度，蒙特卡洛 Dropout 用于克服噪声值。</p>
@@ -265,19 +265,17 @@ p(y^*|\mathbf{x}^*)=\frac{1}{T}\sum_{t=1}^{T}p(y^*|\mathbf{x}^*,\theta^*_t)</scr
 <p><center class="half">    
    <img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231101133538701.png" alt="image-20231031204141231" style="zoom:50%;">      <img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231101140717153.png" alt="image-20231101140717153" style="zoom:50%;"></center></p>
 <h3 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h3><p>通过生成预测点和 ground truth 的占用地图，绘制 ROC 曲线以及 AUC 的值。</p>
-<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231128173836966.png" alt="image-20231128173836966" style="zoom:50%;"></p>
+<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231128173836966.png" alt="image-20231128173836966" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h2 id="T-UNet-A-Novel-TC-Based-Point-Cloud-Super-Resolution-Model-for-Mechanical-LiDAR"><a href="#T-UNet-A-Novel-TC-Based-Point-Cloud-Super-Resolution-Model-for-Mechanical-LiDAR" class="headerlink" title="T-UNet: A Novel TC-Based Point Cloud Super-Resolution Model for Mechanical LiDAR"></a><a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/978-3-030-92635-9_40">T-UNet: A Novel TC-Based Point Cloud Super-Resolution Model for Mechanical LiDAR</a></h2><p>代码：<a target="_blank" rel="noopener" href="https://github.com/donkeyofking/lidar-sr">donkeyofking/lidar-sr</a> 。其主要思路是利用点云帧序列，而非单帧点云。</p>
-<h3 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h3><ol>
-<li><p>首先将 $16$ 帧序列点云分别通过转置卷积进行上采样。将相邻两个特征图拼接，并通过（膨胀）卷积提取特征。论文用膨胀卷积取代了池化层，以减少信息的丢失。</p>
-</li>
-<li><p>重复上述步骤，直至得到一个特征图。然后通过一系列的转置卷积上采样，并和之前的特征图连接，这里和 U-Net 的结构相同。</p>
-</li>
+<h3 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h3><ul>
+<li>首先将 $16$ 帧序列点云分别通过转置卷积进行上采样。将相邻两个特征图拼接，并通过（膨胀）卷积提取特征。论文用膨胀卷积取代了池化层，以减少信息的丢失。</li>
+<li>重复上述步骤，直至得到一个特征图。然后通过一系列的转置卷积上采样，并和之前的特征图连接，这里和 U-Net 的结构相同。</li>
 <li>采用 SSIM 作为损失函数。</li>
-</ol>
+</ul>
 <p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231101154818026.png" alt="image-20231101154818026" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="评价指标-1"><a href="#评价指标-1" class="headerlink" title="评价指标"></a>评价指标</h3><p>峰值信噪比 (PNSR), MSE, 结构相似性指数 (SSIM)。</p>
 <h2 id="Channel-Attention-based-Network-for-LiDAR-Super-resolution"><a href="#Channel-Attention-based-Network-for-LiDAR-Super-resolution" class="headerlink" title="Channel Attention based Network for LiDAR Super-resolution"></a><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/9727846">Channel Attention based Network for LiDAR Super-resolution</a></h2><p>无代码。网络架构由一个 U-Net 和一个基于通道注意力的重建块组成。</p>
-<h3 id="基于通道注意力的重建块"><a href="#基于通道注意力的重建块" class="headerlink" title="基于通道注意力的重建块"></a>基于通道注意力的重建块</h3><p>从图中看到，首先两个转置卷积是少不了的，然后就是不断复用卷积层和通道注意力模块，并使用残差连接。最后用两个卷积层回归深度值，并和 U-Net 提取的信息逐点相加。论文希望 U-Net 能够捕获边缘信息，使重建更准确（但是并没有对提取边缘这一点做监督或者约束，比较奇怪，可能是玄学吧）。</p>
+<h3 id="基于通道注意力的重建块"><a href="#基于通道注意力的重建块" class="headerlink" title="基于通道注意力的重建块"></a>基于通道注意力的重建块</h3><p>从图中看到，首先是两个转置卷积上采样四倍，然后就是不断复用卷积层和通道注意力模块，并使用残差连接。最后用两个卷积层回归深度值，并和 U-Net 提取的信息逐点相加。论文希望 U-Net 能够捕获边缘信息，使重建更准确（但是并没有对提取边缘这一点做监督或者约束，比较奇怪，可能是玄学吧）。</p>
 <p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231101160136946.png" alt="image-20231101160136946" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>通道注意力的结构就是最基本的自注意力机制，它关注不同通道之间的相关性（原文却说“每个通道上相邻像素之间的相关性”，可能是笔误）。首先将图像特征 $C\times V \times H$ 展平成 $C\times VH$ 的特征，和 $VH \times C$ 的矩阵执行点积，通过 SoftMax 得到 $C\times C$ 的注意力矩阵，然后和原来的特征矩阵相乘，得到新的特征图。</p>
 <p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231101160511380.png" alt="image-20231101160511380" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
@@ -374,14 +372,14 @@ s=f_{cell}(z,[x,c])</script><p>其中 $c=[c_h,c_w]$ ，表示查询像素的大�
 <p>但是作者这里没有说上采样层的结构。最终预测一个 $C+1$ 维的特征图，最后一维作为掩码。两个掩码进行 SoftMax 得到权重。</p>
 <h3 id="评价指标-5"><a href="#评价指标-5" class="headerlink" title="评价指标"></a>评价指标</h3><p>EMD、CD、MAE、RMSE、IoU、Precision、Recall、F1。</p>
 <h2 id="SGSR-Net-Structure-Semantics-Guided-LiDAR-Super-Resolution-Network-for-Indoor-LiDAR-SLAM"><a href="#SGSR-Net-Structure-Semantics-Guided-LiDAR-Super-Resolution-Network-for-Indoor-LiDAR-SLAM" class="headerlink" title="SGSR-Net: Structure Semantics Guided LiDAR Super-Resolution Network for Indoor LiDAR SLAM"></a><a target="_blank" rel="noopener" href="https://ieeexplore.ieee.org/document/10164213">SGSR-Net: Structure Semantics Guided LiDAR Super-Resolution Network for Indoor LiDAR SLAM</a></h2><h3 id="CASE-模块"><a href="#CASE-模块" class="headerlink" title="CASE 模块"></a>CASE 模块</h3><p>为了缓解物体边界周围的边缘膨胀和混合，采用了 squeeze and excitation 方法和注意力机制结合。</p>
-<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231102172250213.png" alt="image-20231102172250213" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231102172250213.png" alt="image-20231102172250213" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>具体来说，对于输入的特征图 $(C\times H \times W)$ 做平均池化，得到压缩的特征 $(C\times 1\times W)$ ，再通过卷积将特征压缩到 $C/r’$ ，随后对特征图做批量归一化，并输入 sigmoid 得到注意力权重 $(C/r’ \times 1\times W)$ ，将其和原始特征矩阵相乘（没看懂咋乘的）。整体结构依然是 U-Net 。将 CASE 模块放在最前面，以避免在 Dropout 中丢失必要的信息。</p>
-<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231103094427059.png" alt="image-20231103094427059" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231103094427059.png" alt="image-20231103094427059" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="SGR-模块"><a href="#SGR-模块" class="headerlink" title="SGR 模块"></a>SGR 模块</h3><p>这部分主要是针对室内点云的特性，做一些简单的分割以引入语义信息。</p>
 <p>首先统计单帧点云的 $z$ 值直方图，找出频率最高的两个，作为地面和天花板的高度 $h_{floor},h_{ceiling}$ 。为了提升相邻帧检测的一致性，取前后 $N$ 帧的中值滤波结果。</p>
-<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231103110455119.png" alt="image-20231103110455119" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231103110455119.png" alt="image-20231103110455119" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>估计 $h_{floor},h_{ceiling}$ 的主要原因是，在 MC-Dropout 估计不确定度时，天花板和地面的点距离传感器较远，容易得到较低的置信度，但对于室内场景这些点至关重要。因此对于不同的高度采用不同的系数 $\lambda(h)$ ，再和方差相乘得到置信度。</p>
-<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231103113108059.png" alt="image-20231103113108059" style="zoom:60%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231103113108059.png" alt="image-20231103113108059" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="评价指标-6"><a href="#评价指标-6" class="headerlink" title="评价指标"></a>评价指标</h3><p>RMSE、MAR、z RMSE（垂直方向上的误差），以及应用到 SLAM 算法中的评估结果（Mean、RMSE、SSE、STD、最大漂移和相对误差）。</p>
 <h3 id="结论-1"><a href="#结论-1" class="headerlink" title="结论"></a>结论</h3><p>MC-Dropout 或其它删除不确定点的操作有利于 SLAM 的结果更稳定。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>目前主要的问题包括：</p>
@@ -390,7 +388,7 @@ s=f_{cell}(z,[x,c])</script><p>其中 $c=[c_h,c_w]$ ，表示查询像素的大�
 <li>由于训练数据中大量存在平面特征，往往将物体表面也拟合成平面；</li>
 <li>对于生成的噪声没有合适的约束，容易在非表面区域生成不合理的点。</li>
 </ol>
-<p><img src="/25c774a139b7d3b25450e00c352cc6d.png" alt="25c774a139b7d3b25450e00c352cc6d" style="zoom:40%;"></p>
+<p><img src="/2023/11/28/LiDAR%20SR%20Methods/25c774a139b7d3b25450e00c352cc6d.png" alt="25c774a139b7d3b25450e00c352cc6d" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
 
       
 
@@ -434,15 +432,15 @@ s=f_{cell}(z,[x,c])</script><p>其中 $c=[c_h,c_w]$ ，表示查询像素的大�
         		</li>
       		 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
@@ -673,19 +671,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">点云上采样</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">GAN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
               </li>
              
               <li class="article-tag-list-item">
