@@ -23,9 +23,9 @@
 <meta property="article:modified_time" content="2023-07-21T06:38:44.957Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
+<meta property="article:tag" content="点云上采样">
 <meta property="article:tag" content="神经网络">
 <meta property="article:tag" content="论文阅读笔记">
-<meta property="article:tag" content="点云上采样">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://zcliangyue.github.io/2023/05/23/PU-Net/1bf0783fb26a47a8900a482c8de667b0.png">
   
@@ -345,15 +345,15 @@ NUC &= \sqrt{\frac{1}{K*D}\sum_{k=1}^K\sum_{i=1}^D\left(\frac{n_i^k}{N^k*p}-avg\
         		</li>
       		 
         		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
         		</li>
       		
 		</ul>
@@ -585,19 +585,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">点云上采样</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">GAN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -609,11 +609,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数学笔记</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color5">数学笔记</a>
               </li>
             
             <div class="clearfix"></div>
@@ -754,5 +754,22 @@ MathJax.Hub.Queue(function() {
 
 </div>
   </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
 </html>
