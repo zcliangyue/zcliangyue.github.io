@@ -23,7 +23,7 @@
 <meta property="og:image" content="http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714828330773.png">
 <meta property="og:image" content="http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/image-20240505171239531.png">
 <meta property="article:published_time" content="2024-05-05T09:30:00.000Z">
-<meta property="article:modified_time" content="2024-05-05T09:41:09.663Z">
+<meta property="article:modified_time" content="2024-05-05T11:08:41.550Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="神经网络">
 <meta property="article:tag" content="论文阅读笔记">
@@ -344,7 +344,7 @@ q(x_{t-1} \vert x_t, x_0)
 =& 1/(\frac{\alpha_t}{\beta_t} + \frac{1}{1 - \bar{\alpha}_{t-1}}) 
 = 1/(\frac{\alpha_t - \bar{\alpha}_t + \beta_t}{\beta_t(1 - \bar{\alpha}_{t-1})})
 = \frac{1 - \bar{\alpha}_{t-1}}{1 - \bar{\alpha}_t}\beta_t
-\end{aligned}</script><p>出人意料的整齐的形式，可以理解为 $x_t$ 和 $x_0$ 。然后继续将 $x_0$ 写作 $x_t$ 的表达式，代入可得</p>
+\end{aligned}</script><p>出人意料的整齐的形式，可以理解为 $x_t$ 和 $x_0$ 的某种插值。或者说，在已知 $x_0$ 的情况下，逆向过程是已知的、。然后继续将 $x_0$ 写作 $x_t$ 的表达式，代入可得</p>
 <script type="math/tex; mode=display">
 \begin{aligned}
 \mu_t &=
@@ -497,8 +497,8 @@ L^\text{simple}
 <nav id="article-nav">
   
   
-    <a href="/2023/12/14/%E5%92%8C%E5%BC%A6%E7%90%86%E8%AE%BA/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">和弦理论笔记（更新中）</div>
+    <a href="/2023/12/14/%E6%8A%BD%E8%B1%A1%E4%BB%A3%E6%95%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">抽象代数笔记（更新中）</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -649,19 +649,19 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">点云上采样</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">神经网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">GAN</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">论文阅读笔记</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -677,11 +677,11 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">音乐笔记</a>
+                <a href="javascript:void(0)" class="js-tag color5">数学笔记</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">数学笔记</a>
+                <a href="javascript:void(0)" class="js-tag color5">音乐笔记</a>
               </li>
              
               <li class="article-tag-list-item">
