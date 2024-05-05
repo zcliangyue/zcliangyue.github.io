@@ -6,15 +6,31 @@
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://zcliangyue.github.io">
-  <title>Archives | ZCL&#39;BLOG</title>
+  <title>VAE 和 DDPM ：一些数学公式推导 | ZCL&#39;BLOG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="ZCL&#39;BLOG">
-<meta property="og:url" content="http://zcliangyue.github.io/archives/index.html">
+  <meta name="description" content="该笔记的主要内容参考李宏毅老师的机器学习课程 Machine_Learning: 李宏毅2021&#x2F;2022&#x2F;2023春季机器学习课程课件及作业以及 Lil 的博客 What are Diffusion Models? ，主要关注其中涉及的公式推导。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VAE 和 DDPM ：一些数学公式推导">
+<meta property="og:url" content="http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/index.html">
 <meta property="og:site_name" content="ZCL&#39;BLOG">
+<meta property="og:description" content="该笔记的主要内容参考李宏毅老师的机器学习课程 Machine_Learning: 李宏毅2021&#x2F;2022&#x2F;2023春季机器学习课程课件及作业以及 Lil 的博客 What are Diffusion Models? ，主要关注其中涉及的公式推导。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714744539507.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1_ET6FM_KEmwa2N4qgW2MglQ.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714746405676.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714823867081.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714824422281.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714828330773.png">
+<meta property="og:image" content="http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/image-20240505171239531.png">
+<meta property="article:published_time" content="2024-05-05T09:30:00.000Z">
+<meta property="article:modified_time" content="2024-05-05T09:34:29.972Z">
 <meta property="article:author" content="SGGZCL">
+<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="论文阅读笔记">
+<meta property="article:tag" content="生成式模型">
+<meta property="article:tag" content="Diffusion Model">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714744539507.png">
   
     <link rel="alternative" href="/atom.xml" title="ZCL&#39;BLOG" type="application/atom+xml">
   
@@ -162,36 +178,237 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-生成式模型" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2024" class="archive-year">2024</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/" class="archive-article-date">
-  	<time datetime="2024-05-05T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-05-05</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/">VAE 和 DDPM ：一些数学公式推导</a>
+    <h1 class="article-title" itemprop="name">
+      VAE 和 DDPM ：一些数学公式推导
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/" class="archive-article-date">
+  	<time datetime="2024-05-05T09:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2024-05-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>该笔记的主要内容参考李宏毅老师的机器学习课程 <a target="_blank" rel="noopener" href="https://github.com/Fafa-DL/Lhy_Machine_Learning/tree/main?tab=readme-ov-file">Machine_Learning: 李宏毅2021/2022/2023春季机器学习课程课件及作业</a>以及 Lil 的博客 <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">What are Diffusion Models?</a> ，主要关注其中涉及的公式推导。</p>
+<span id="more"></span>
+<h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><p>在没有输入条件的情况下，生成式模型的目标是从通过一个网络，将一个随机分布变换为另一个分布，并使得该分布与特定的数据分布（图像，点云）尽可能得相近。</p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714744539507.png" alt="1714744539507" style="zoom:30%;"></p>
+<p>设数据分布为 $p_{\text{data}}(x)$ ，神经网络学习到的分布为 $p_{\theta}(x)$ ，神经网络中的可学习参数为 $\theta$ ，我们需要衡量两个分布的相似性。根据最大似然，我们从 $p_{\text{data}}(x)$ 中采样一系列数据</p>
+<script type="math/tex; mode=display">
+\left\{x^1,x^2,\dots,x^m\right\},</script><p>则目标为最大化 $p_{\theta}(x^i)$ ，即</p>
+<script type="math/tex; mode=display">
+\theta^* = \arg \max_{\theta} \prod_{i=1}^{m}p_{\theta}(x).</script><p>改写为对数似然</p>
+<script type="math/tex; mode=display">
+\theta^* = \arg \max_{\theta}\log\left( \prod_{i=1}^{m}p_{\theta}(x)\right)=\arg\max_{\theta}\sum_{i=1}^{m}\log p_{\theta}(x^i).</script><p>根据大数定律，我们可以将上式进一步表达为期望的形式</p>
+<script type="math/tex; mode=display">
+\theta^* =\arg\max_{\theta}\sum_{i=1}^{m}\log\left(p_{\theta}(x^i)\right)
+\approx \arg\max_{\theta}\mathbb{E}_{x\sim p_{\text{data}}}[\log p_{\theta}(x)]
+=\arg\max_{\theta}\int_{x}p_{\text{data}}(x)\log p_{\theta}(x)dx.</script><p>我们将其减去一个 $\theta$ 无关的量，则其等价于最小化两个分布的 KL 散度。</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\theta^* = \arg\max_{\theta}\int_{x}p_{\text{data}}(x)\log p_{\theta}(x)dx-\int_{x}p_{\text{data}}(x)\log p_{\text{data}}(x)dx\\
+=\arg\max_{\theta}\int_{x}p_{\text{data}}(x)\log \frac{p_{\theta}(x)}{p_{\text{data}}(x)}dx=\arg\min_{\theta}\text{KL}(p_{data}\| p_{\theta}).
+\end{aligned}</script><h1 id="VAE"><a href="#VAE" class="headerlink" title="VAE"></a>VAE</h1><p>AE 的思想是：通过一个 Encoder 将原始数据编码，然后用一个 Decoder 将其解码。而 VAE 进一步要求中间的潜在变量服从简单的高斯分布。VAE 的两端是同一个数据，也即所谓“自编码”。其工作流程大概是：通过一个 Encoder 将原始数据送到一个高斯分布，并要求该高斯分布与标准正态分布接近。然后从该分布中随机采样，输入到 Decoder 中，恢复出原始数据。通过适当的训练，编码器能够将原始数据映射到服从标准高斯分布的潜在空间，而解码器能够从中预测合适的数据分布。</p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1_ET6FM_KEmwa2N4qgW2MglQ.png" alt="1_ET6FM_KEmwa2N4qgW2MglQ" style="zoom:35%;"></p>
+<p>VAE 的假设就是 code 服从标准高斯分布，因此包含两个损失：一个是解码后的重建损失，度量解码结果和原始结果的相似性；另一个是编码分布和标准高斯分布的相似性，即 KL 散度。下面将更具体地推导为什么这两个损失能够实现生成式模型的目标。</p>
+<p>通过一个 Decoder $D$ 学习数据分布，其输入为服从简单先验分布的随机变量 $z$ ，输出为接近数据分布的 $x$ 。为了定义损失函数，我们需要计算 $p_{\theta}(x)$ ，可以表示为</p>
+<script type="math/tex; mode=display">
+p_{\theta}(x)=\int_z p(z)p_{\theta}(x|z)dz.</script><p>其中 $p(z)$ 已知，而 $p_{\theta}(x|z)$ 是较难计算的，且对参数 $\theta$ 不可导。为了计算便利，我们假设预测值实际上是高斯分布的均值，则 $p_\theta(x|z)$ 可以近似表示为以 $G(z)$ 为均值的高斯分布上的概率。 即</p>
+<script type="math/tex; mode=display">
+p_{\theta}(x|z)\propto \exp(-\|G(z)-x\|_2).</script><p>这种技巧也叫重参数化（或随机反向传播），保证了梯度的传播。</p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714746405676.png" alt="1714746405676" style="zoom:30%;"></p>
+<p>然而在实际计算时，我们没有办法直接最大化 $p_{\theta}(x)$ ，因为积分操作是难以实现的。取而代之的是最大化它的证据下界（Evidence lower bound，ELBO）。具体来说，我们可以定义任意一个分布 $q(\cdot|x)$ ，它都会满足</p>
+<script type="math/tex; mode=display">
+\int_z q(z|x)dz =1,</script><p>从而引出下面的等式</p>
+<script type="math/tex; mode=display">
+\log p_\theta(x) = \log p_{\theta}(x)\int_z q(z|x)dz=\int_z q(z|x)\log p_{\theta}(x)dz.</script><p>根据贝叶斯定理，$p_{\theta}(z, x) =p_{\theta}(z|x)\cdot p_\theta(x)$ ，因此</p>
+<script type="math/tex; mode=display">
+\log p_\theta(x) =\int_z q(z|x)\log\left(\frac{p_{\theta}(z, x)}{p_{\theta}(z|x)}\right)dz.</script><p>我们对原式进行放缩得到</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\log p_\theta(x) &=\int_z q(z|x)\log\left(\frac{p_{\theta}(z, x)}{q(z|x)}\frac{q(z|x)}{p_{\theta}(z|x)}\right)dz\\
+&=\int_z q(z|x)\log\left(\frac{p_{\theta}(z, x)}{q(z|x)}\right)dz+\int_z q(z|x)\log\left(\frac{q(z|x)}{p_{\theta}(z|x)}\right)dz\\
+&=\int_z q(z|x)\log\left(\frac{p_{\theta}(z, x)}{q(z|x)}\right)dz+\text{KL}(q(z|x)\|p_{\theta}(z|x)).
+\end{aligned}</script><p>KL 散度是恒大于等于零的，可以由 $\log$ 函数放缩来证明：设有两个概率分布 $f(x),g(x)$ ，则</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\text{KL}(f(x)\|g(x)) &= \int_xf(x)\log\left(\frac{f(x)}{g(x)}\right)dx
+\\
+&=-\int_xf(x)\log\left(\frac{g(x)}{f(x)}\right)dx
+\\
+&\ge -\int_xf(x)\left(\frac{g(x)}{f(x)}-1\right)dx
+\\
+&=-\int_x\left[g(x)-f(x)\right]dx=0
+\end{aligned}</script><p>因此 $\text{KL}(q(z|x)|p_{\theta}(z|x)) \ge 0$ ，则</p>
+<script type="math/tex; mode=display">
+\log p_{\theta}(x) \ge \int_z q(z|x)\log\left(\frac{p_{\theta}(z, x)}{q(z|x)}\right)dz=\mathbb{E}_{q(z|x)}\left[\log\left(\frac{p_{\theta}(z,x)}{q(z|x)}\right)\right]=L_b</script><p>因为 $\log p_\theta(x)$ 实际上只与 $p_\theta(x|z)$ 有关，即只与解码器有关，而与编码器无关。因此我们可以通过调整 $q(z|x)$ ，使其与后验分布 $p_\theta(z|x)$ 相同，此时 $\log p_\theta(x)=L_b$ 。因此当解码器不变时，最大化 $L_b$ 也就是等价于最小化 $\text{KL}(q(z|x)|p_{\theta}(z|x))$ 。即最大化 $L_b$ 。而 $q(z|x)$ 实际上就是 VAE 的 Encoder。</p>
+<p>下面求解 $L_b$ 的最大化。我们将其拆成两部分：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+L_b&=\int_z q(z|x)\log\left(\frac{p_{\theta}(z, x)}{q(z|x)}\right)dz= \int_z q(z|x)\log\left(\frac{p_{\theta}(x|z)p_\theta(z)}{q(z|x)}\right)dz
+\\
+&= \int_z q(z|x)\log\left(\frac{p_\theta(z)}{q(z|x)}\right)dz+ \int_z q(z|x)\log p_{\theta}(x|z)dz
+\\
+&=-\text{KL}(q(z|x)\| p_\theta(z)) +  \int_z q(z|x)\log p_{\theta}(x|z)dz.
+\end{aligned}</script><p>最大化 $L_b$ 首先要最小化第一项，也就是要求 $q(z|x)$ 接近于先验分布 $p_{\theta}(z)$ （实际上，这里 $p_\theta(z)=p(z)$ ，因为 $z$ 的选取与 $\theta$ 无关）。其次要最大化第二项，其本质是重建损失，即通过 VAE 后输入和输出的相似性。模型最终回归到了机器学习中常见的形式：重建损失+正则项。</p>
+<h1 id="DDPM"><a href="#DDPM" class="headerlink" title="DDPM"></a>DDPM</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>去噪扩散概率模型（Denoising Diffusion Probabilistic Models，DDPM）的思想是：首先定义一个前向扩散过程，其含义是不断向原始数据 $x_0$ 添加高斯噪声，得到 $x_{0:T}$ 。然后定义一个 Denoise 模块，其作用是输入当前图像 $x_t$ 和步骤 $t$ ，输出图像中包含的噪声，并与 $x_t$ 相加得到 $x_{t-1}$ ，以此类推，就可以从噪声中恢复原始图像。</p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714823867081.png" alt="1714823867081" style="zoom:60%;"></p>
+<p>值得注意的是，在整个链条中，每个 Denoise 模块是完全一样的，这也是为什么我们需要输入额外的步骤值 $t$ 。而为了降低网络拟合的难度，Denoise 不直接产生 $x_{t-1}$ ，而是预测 $x_t$ 中包含的噪声，即 $x_{t}-x_{t-1}$ 。通过学习这样一个去噪过程，DDPM 能够从任意一个高斯噪声中恢复具有高真实度的图像。如果是为了 text to image 或其它任务，只需要在 Denoise 的输入中增加一个额外的条件输入。当然，实际上的去噪模块和下图中还有些不同，这也会得到详细说明。</p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714824422281.png" alt="1714824422281" style="zoom:30%;"></p>
+<p>假设原始数据分布为 $q(x_0)$ ，总步骤数为 $T$，添加的噪声为 $\epsilon \sim \mathcal{N}(0,\mathbf{I})$ ，下面给出 DDPM 训练和推理的步骤及原理。</p>
+<h2 id="前向扩散过程"><a href="#前向扩散过程" class="headerlink" title="前向扩散过程"></a>前向扩散过程</h2><p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714828330773.png" alt="1714828330773" style="zoom:50%;"></p>
+<p>首先从原始数据分布中采样一个数据 $x_0\sim q(x_0)$ ，也就是一张干净的图像。我们需要往其中不断地加入噪声。正式地，我们定义这一过程为，</p>
+<script type="math/tex; mode=display">
+q(x_t|x_{t-1}):=\mathcal{N}(x_{t};\sqrt{1-\beta_t}x_{t-1},\beta_t\mathbf{I}).</script><p>其含义是根据预定义的权重 $\beta_t$ ，我们将 $\sqrt{1-\beta_t}x_{t-1}$  作为均值，$\sqrt{\beta_t}$ 作为标准差，定义了一个新的高斯分布，也就是 $x_t$ 服从的分布。这也可以写成更直观的形式：</p>
+<script type="math/tex; mode=display">
+x_t = \sqrt{1-\beta_t}x_{t-1} + \sqrt{\beta_t}\epsilon,\ \epsilon\sim \mathcal{N}(0,\mathbf{I}).</script><p>在原来的理解中，前向扩散需要不断地向数据中添加噪声，有些繁琐。但实际上，我们可以通过重参数来解决这一点。令 $\alpha_t=1-\beta_t$ ，则</p>
+<script type="math/tex; mode=display">
+x_t = \sqrt{\alpha_t}x_{t-1} + \sqrt{1-\alpha_t}\epsilon_{t-1}.</script><p>我们将 $x_{t-1}$ 继续拆开，</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+x_t &= \sqrt{\alpha_t}(\sqrt{\alpha_{t-1}}x_{t-2} + \sqrt{1-\alpha_{t-1}}\epsilon_{t-2}) + \sqrt{1-\alpha_t}\epsilon_{t-1}
+\\
+&=\sqrt{\alpha_t\alpha_{t-1}}x_{t-2}+\sqrt{\alpha_t-\alpha_t\alpha_{t-1}}\epsilon_{t-2}+
+\sqrt{1-\alpha_t}\epsilon_{t-1}.
+\end{aligned}</script><p>根据高斯分布的再生性，我们可以合并后面两项得到</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+x_t &=\sqrt{\alpha_t\alpha_{t-1}}x_{t-2}+\sqrt{1-\alpha_t\alpha_{t-1}}\overline\epsilon_{t-2}.
+\end{aligned}</script><p>我们会发现该形式和前面保持了一致。换言之，添加两次噪声可以用添加一次噪声来表示，那么同理，添加 $T$ 次噪声也是一样的。继续迭代，得到</p>
+<script type="math/tex; mode=display">
+x_t =\sqrt{\alpha_t\alpha_{t-1}\cdots\alpha_{1}}x_{0}+\sqrt{1-\alpha_t\alpha_{t-1}\cdots\alpha_{1}}\overline\epsilon=\sqrt{\overline\alpha_t}x_{0}+\sqrt{1-\overline\alpha_t}\epsilon.</script><p>这也解释了为什么要用 $\sqrt{\beta_t}$ 的形式而非 $\beta_t$ ：带了根号的形式优雅地合并了所有步骤。因为 $\beta_t\in[0,1]$ ，$\overline\alpha_t$ 是递减的，所以随着 $t$ 的增大，原始数据权重越来越小，噪声权重越来越大，这实现了前向扩散的目标。</p>
+<h2 id="反向扩散过程"><a href="#反向扩散过程" class="headerlink" title="反向扩散过程"></a>反向扩散过程</h2><p>反向过程的目标是学习上述过程的逆过程 $q(x_{t-1}|x_t)$。和 VAE 一样，首先我们需要知道优化的目标。在 VAE 中，我们知道</p>
+<script type="math/tex; mode=display">
+\log p_{\theta}(x) \ge \mathbb{E}_{q(z|x)}\left[\log\left(\frac{p_{\theta}(z,x)}{q(z|x)}\right)\right],</script><p>将这里的编码器 $q(z|x)$ 替换成前向过程 $q(x_{1:T}|x_0)$ ，则有</p>
+<script type="math/tex; mode=display">
+\log p_{\theta}(x_0) \ge \mathbb{E}_{q(x_{1:T}|x_0)}\left[\log\left(\frac{p_{\theta}(x_{1:T},x)}{q(x_{1:T}|x_0)}\right)\right]=\mathbb{E}_{q(x_{1:T}|x_0)}\left[\log\left(\frac{p_{\theta}(x_{0:T})}{q(x_{1:T}|x_0)}\right)\right],</script><p>令</p>
+<script type="math/tex; mode=display">
+L=-\mathbb{E}_{q(x_{1:T}|x_0)}\left[\log\left(\frac{p_{\theta}(x_{0:T})}{q(x_{1:T}|x_0)}\right)\right]=\mathbb{E}_{q(x_{1:T}|x_0)}\left[\log\left(\frac{q(x_{1:T}|x_0)}{p_{\theta}(x_{0:T})}\right)\right]</script><p>经过一些推导，可以将上式分解为一系列项：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+L
+&= \mathbb{E}_{q( x_{0:T})} \Big[ \log\frac{q( x_{1:T}\vert x_0)}{p_\theta( x_{0:T})} \Big] \\
+&= \mathbb{E}_q \Big[ \log\frac{\prod_{t=1}^T q( x_t\vert x_{t-1})}{ p_\theta( x_T) \prod_{t=1}^T p_\theta( x_{t-1} \vert x_t) } \Big] \\
+&= \mathbb{E}_q \Big[ -\log p_\theta( x_T) + \sum_{t=1}^T \log \frac{q( x_t\vert x_{t-1})}{p_\theta( x_{t-1} \vert x_t)} \Big] \\
+&= \mathbb{E}_q \Big[ -\log p_\theta( x_T) + \sum_{t=2}^T \log \frac{q( x_t\vert x_{t-1})}{p_\theta( x_{t-1} \vert x_t)} + \log\frac{q( x_1 \vert  x_0)}{p_\theta( x_0 \vert  x_1)} \Big] \\
+&= \mathbb{E}_q \Big[ -\log p_\theta( x_T) + \sum_{t=2}^T \log \Big( \frac{q( x_{t-1} \vert  x_t,  x_0)}{p_\theta( x_{t-1} \vert x_t)}\cdot \frac{q( x_t \vert  x_0)}{q( x_{t-1}\vert x_0)} \Big) + \log \frac{q( x_1 \vert  x_0)}{p_\theta( x_0 \vert  x_1)} \Big] \\
+&= \mathbb{E}_q \Big[ -\log p_\theta( x_T) + \sum_{t=2}^T \log \frac{q( x_{t-1} \vert  x_t,  x_0)}{p_\theta( x_{t-1} \vert x_t)} + \sum_{t=2}^T \log \frac{q( x_t \vert  x_0)}{q( x_{t-1} \vert  x_0)} + \log\frac{q( x_1 \vert  x_0)}{p_\theta( x_0 \vert  x_1)} \Big] \\
+&= \mathbb{E}_q \Big[ -\log p_\theta( x_T) + \sum_{t=2}^T \log \frac{q( x_{t-1} \vert  x_t,  x_0)}{p_\theta( x_{t-1} \vert x_t)} + \log\frac{q( x_T \vert  x_0)}{q( x_1 \vert  x_0)} + \log \frac{q( x_1 \vert  x_0)}{p_\theta( x_0 \vert  x_1)} \Big]\\
+&= \mathbb{E}_q \Big[ \log\frac{q( x_T \vert  x_0)}{p_\theta( x_T)} + \sum_{t=2}^T \log \frac{q( x_{t-1} \vert  x_t,  x_0)}{p_\theta( x_{t-1} \vert x_t)} - \log p_\theta( x_0 \vert  x_1) \Big] \\
+&= \mathbb{E}_q [\underbrace{D_\text{KL}(q( x_T \vert  x_0) \parallel p_\theta( x_T))}_{L_T} + \sum_{t=2}^T \underbrace{D_\text{KL}(q( x_{t-1} \vert  x_t,  x_0) \parallel p_\theta( x_{t-1} \vert x_t))}_{L_{t-1}} \underbrace{- \log p_\theta( x_0 \vert  x_1)}_{L_0} ]
+\end{aligned}</script><p>这个过程实际上就是把第 0 项、第 $T$ 项和中间项拆分开了，得到了 $L_T,L_{t-1}$ 和 $L_0$ 。而重要的是，$L_T$ 是一个常数，因为 $x_0$ 是已知图像，$x_T$ 是纯噪声。$L_0$ 同样可以视作已知项。而 $L_{t-1}$ 中的 KL 散度直接将 $p_\theta(x_{t−1}|x_t)$ 与前向过程后验 $q( x_{t-1} \vert  x_t,  x_0)$ 进行比较。这也和 VAE 的结果是相当类似的。</p>
+<p>让我们进一步处理这个前向过程后验。应用贝叶斯定理，</p>
+<script type="math/tex; mode=display">
+q(x_{t-1} \vert x_t, x_0) 
+=\frac{q(x_t,x_0, x_{t-1})}{q(x_t,x_0)}
+=\frac{q(x_t|x_{0},x_{t-1})q(x_0,x_{t-1})}{q(x_t,x_0)}
+= q(x_t \vert x_{t-1}, x_0) \frac{ q(x_{t-1} \vert x_0) }{ q(x_t \vert x_0) } .</script><p>得益于重参数化的结果， $x_t$ 可以用 $x_{t-1}$ 表示，也可以用 $x_0$ 表示，并且他们都是正态分布，可以直接得到概率密度的表达式 $\exp \left(-\frac{1}{2}\frac{(x-\mu)^2}{\sigma^2}\right)$。因此有</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+q(x_t|x_{t-1},x_0)&\propto \exp \left(-\frac{1}{2}\frac{(x_t-\sqrt{\alpha_t}x_{t-1})^2}{\beta_t}\right),
+\\
+q(x_{t-1}|x_0)&\propto \exp \left(-\frac{1}{2}\frac{( x_{t-1} - \sqrt{\bar{\alpha}_{t-1}}  x_0)^2}{1-\bar{\alpha}_{t-1}}\right),
+\\
+q(x_{t}|x_0)&\propto \exp \left(-\frac{1}{2}\frac{( x_{t} - \sqrt{\bar{\alpha}_{t}}  x_0)^2}{1-\bar{\alpha}_{t}}\right).
+\end{aligned}</script><p>代入并整理同类项，得到</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+q(x_{t-1} \vert x_t, x_0) 
+&= q(x_t \vert x_{t-1}, x_0) \frac{ q(x_{t-1} \vert x_0) }{ q(x_t \vert x_0) } \\
+&\propto \exp \Big(-\frac{1}{2} \big(\frac{( x_t - \sqrt{\alpha_t}  x_{t-1})^2}{\beta_t} + \frac{( x_{t-1} - \sqrt{\bar{\alpha}_{t-1}}  x_0)^2}{1-\bar{\alpha}_{t-1}} - \frac{( x_t - \sqrt{\bar{\alpha}_t}  x_0)^2}{1-\bar{\alpha}_t} \big) \Big) \\
+&= \exp \Big(-\frac{1}{2} \big(\frac{ x_t^2 - 2\sqrt{\alpha_t}  x_t \color{blue}{ x_{t-1}} \color{black}{+ \alpha_t} \color{red}{ x_{t-1}^2} }{\beta_t} + \frac{ \color{red}{ x_{t-1}^2} \color{black}{- 2 \sqrt{\bar{\alpha}_{t-1}}  x_0} \color{blue}{ x_{t-1}} \color{black}{+ \bar{\alpha}_{t-1}  x_0^2}  }{1-\bar{\alpha}_{t-1}} - \frac{( x_t - \sqrt{\bar{\alpha}_t}  x_0)^2}{1-\bar{\alpha}_t} \big) \Big) \\
+&= \exp\Big( -\frac{1}{2} \big( \color{red}{(\frac{\alpha_t}{\beta_t} + \frac{1}{1 - \bar{\alpha}_{t-1}})}  x_{t-1}^2 - \color{blue}{(\frac{2\sqrt{\alpha_t}}{\beta_t}  x_t + \frac{2\sqrt{\bar{\alpha}_{t-1}}}{1 - \bar{\alpha}_{t-1}}  x_0)}  x_{t-1} \color{black}{ + C( x_t,  x_0) \big) \Big)}
+\end{aligned}</script><p>其中 $C(x_t,x_0)$ 是与 $x_{t-1}$ 无关的部分。由于这个分布还是高斯分布，我们可以求取它的均值和方差：</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mu_t =&\frac{1}{2}\frac{\frac{2\sqrt{\alpha_t}}{\beta_t}  x_t + \frac{2\sqrt{\bar{\alpha}_{t-1}}}{1 - \bar{\alpha}_{t-1}}  x_0}{\frac{\alpha_t}{\beta_t} + \frac{1}{1 - \bar{\alpha}_{t-1}}}
+=
+\beta_t\frac{\frac{\sqrt{\alpha_t}}{\beta_t}  x_t + \frac{\sqrt{\bar{\alpha}_{t-1}}}{1 - \bar{\alpha}_{t-1}}  x_0}{\alpha_t + \frac{\beta_t}{1 - \bar{\alpha}_{t-1}}}
+\\
+=&\beta_t\frac{\frac{\sqrt{\alpha_t}}{\beta_t}  x_t + \frac{\sqrt{\bar{\alpha}_{t-1}}}{1 - \bar{\alpha}_{t-1}}  x_0}{ \frac{\alpha_t-\bar{\alpha_t}+\beta_t}{1 - \bar{\alpha}_{t-1}}}
+=\beta_t\frac{\frac{\sqrt{\alpha_t}}{\beta_t}  x_t + \frac{\sqrt{\bar{\alpha}_{t-1}}}{1 - \bar{\alpha}_{t-1}}  x_0}{ \frac{1-\bar{\alpha_t}}{1 - \bar{\alpha}_{t-1}}}
+\\=& 
+\frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha_t}}x_t + \frac{\beta_t\sqrt{\bar{\alpha}_{t-1}}}{1-\bar{\alpha_t}}x_0.
+\\
+\\
+\sigma_t 
+=& 1/(\frac{\alpha_t}{\beta_t} + \frac{1}{1 - \bar{\alpha}_{t-1}}) 
+= 1/(\frac{\alpha_t - \bar{\alpha}_t + \beta_t}{\beta_t(1 - \bar{\alpha}_{t-1})})
+= \frac{1 - \bar{\alpha}_{t-1}}{1 - \bar{\alpha}_t}\beta_t
+\end{aligned}</script><p>出人意料的整齐的形式，可以理解为 $x_t$ 和 $x_0$ 。然后继续将 $x_0$ 写作 $x_t$ 的表达式，代入可得</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mu_t &=
+\frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t-1})}{1-\bar{\alpha_t}}x_t + \frac{\beta_t\sqrt{\bar{\alpha}_{t-1}}}{1-\bar{\alpha_t}}x_0.
+\\
+&= \frac{\sqrt{\alpha_t}(1 - \bar{\alpha}_{t-1})}{1 - \bar{\alpha}_t} x_t + \frac{\sqrt{\bar{\alpha}_{t-1}}\beta_t}{1 - \bar{\alpha}_t} \frac{1}{\sqrt{\bar{\alpha}_t}}(x_t - \sqrt{1 - \bar{\alpha}_t}\epsilon) \\
+&=\frac{1}{\sqrt{\alpha_t}} \left( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon \right)
+\end{aligned}</script><p>我们将逆向过程解释为高斯分布，并且通过网络预测均值和方差，因此目标就是通过神经网络 $\mu_\theta$ ，使输入结果接近 $\mu_t$ 。而根据上面的推导，$\mu_t$ 中有一大部分是网络的输入 $x_t$ ，因此我们可以再次重参数化，使用一个噪声预测模块 $\epsilon_{\theta}$ 来达到这一效果。</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+\mu_\theta(x_t, t) &= \frac{1}{\sqrt{\alpha_t}} \Big( x_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \epsilon_\theta(x_t, t) \Big).
+\end{aligned}</script><p>换言之，网络在每一级都会直接预测第一次采样的噪声，只不过在前面加上了权重，使得其仍然表达的是从 $x_t$ 到 $x_{t-1}$ 的过程。</p>
+<p>理论上我们还需要预测标准差，然后使用高斯分布的 KL 散度公式计算 $L_{t-1}$ 中的每一项。但实际上 DDPM 并没有使用神经网络去预测方差，而是假定 $p_\theta(x_{t-1}|x_t)$ 和 $q(x_{t-1}|x_0,x_t)$ 具有相同的方差，也就是上面求解的 $\sigma_t$ 。因此我们的损失函数可以写作</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+L_t 
+&= \mathbb{E}_{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{1}{2 \sigma_t^2} \|\tilde{\boldsymbol{\mu}}_t(\mathbf{x}_t, \mathbf{x}_0) - \boldsymbol{\mu}_\theta(\mathbf{x}_t, t) \|^2 \Big] \\
+&= \mathbb{E}_{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{1}{2  \sigma_t^2} \color{blue}{\frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\epsilon}_t \Big)} - \color{green}{\frac{1}{\sqrt{\alpha_t}} \Big( \mathbf{x}_t - \frac{1 - \alpha_t}{\sqrt{1 - \bar{\alpha}_t}} \boldsymbol{\boldsymbol{\epsilon}}_\theta(\mathbf{x}_t, t) \Big)} \|^2 \Big] \\
+&= \mathbb{E}_{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{ (1 - \alpha_t)^2 }{2 \alpha_t (1 - \bar{\alpha}_t) \sigma_t^2} \|\boldsymbol{\epsilon}_t - \boldsymbol{\epsilon}_\theta(\mathbf{x}_t, t)\|^2 \Big] \\
+&= \mathbb{E}_{\mathbf{x}_0, \boldsymbol{\epsilon}} \Big[\frac{ (1 - \alpha_t)^2 }{2 \alpha_t (1 - \bar{\alpha}_t) \sigma_t^2} \|\boldsymbol{\epsilon}_t - \epsilon_\theta(\sqrt{\bar{\alpha}_t}\mathbf{x}_0 + \sqrt{1 - \bar{\alpha}_t}\epsilon_t, t)\|^2 \Big] 
+\end{aligned}</script><p>这里主要是消除了两个均值的公共项，留下了噪声部分。而 DDPM 也发现，忽略这个方差能够取得更好的效果，也就得到简化后的损失函数</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+L^\text{simple}
+&= \mathbb{E}_{t \sim [1, T], x_0, \epsilon_t} \Big[\|\epsilon_t - \epsilon_\theta(x_t, t)\|^2 \Big] \\
+&= \mathbb{E}_{t \sim [1, T], x_0, \epsilon_t} \Big[\|\epsilon_t - \epsilon_\theta(\sqrt{\bar{\alpha}_t}x_0 + \sqrt{1 - \bar{\alpha}_t}\epsilon_t, t)\|^2 \Big]
+\end{aligned}</script><p>简化之前的 $\sigma_t$ 等同于给不同样本不同的权重，简化后则忽略了它们。原论文的解释是，忽略这些权重能够让网络更专注于噪声更多的部分，也就是 $t$ 较大的部分。</p>
+<h2 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h2><p>有了上述推导，我们已经可以训练一个标准的 DDPM 了。但对于生成模型，还需要有一个采样生成的过程。这里将论文中的算法贴出来。有了上面的推导，它们已经很容易被理解了。</p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/image-20240505171239531.png" alt="image-20240505171239531" style="zoom:50%;"></p>
+<p>在 Sampling 的步骤中，注意到 $x_{t-1}$ 的表达式后面还多出来一项随机项。这一项的作用就是引入随机性，因为网络只预测了均值，而非高斯分布。加入这项噪声后，相当于手动给了一个方差，可能能够增强模型的生成能力。当然，这些都只是空想，毕竟我还没有实践过。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>有时我们都需要一罐可乐<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/img/money2.jpg">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -215,475 +432,106 @@
 		</ul>
 	</div>
 
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
       
-        </div></section>
+
       
+
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2023" class="archive-year">2023</a>
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/12/14/%E6%8A%BD%E8%B1%A1%E4%BB%A3%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2023-12-14T12:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-12-14</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/12/14/%E6%8A%BD%E8%B1%A1%E4%BB%A3%E6%95%B0/">抽象代数笔记（更新中）</a>
-    </h1>
-  
+      </div>
+    </span>
+  </div>
+</div>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">数学笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://zcliangyue.github.io/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/" alt="微信分享二维码">
+    </div>
+</div>
 
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/12/14/%E5%92%8C%E5%BC%A6%E7%90%86%E8%AE%BA/" class="archive-article-date">
-  	<time datetime="2023-12-14T12:30:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-12-14</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2023/12/14/%E6%8A%BD%E8%B1%A1%E4%BB%A3%E6%95%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">抽象代数笔记（更新中）</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/12/14/%E5%92%8C%E5%BC%A6%E7%90%86%E8%AE%BA/">和弦理论笔记（更新中）</a>
-    </h1>
-  
+        
+        
+    </div>
+</aside>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">音乐笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/11/28/LiDAR%20SR%20Methods/" class="archive-article-date">
-  	<time datetime="2023-11-28T12:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-11-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/11/28/LiDAR%20SR%20Methods/">激光雷达点云上采样调研</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">点云</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">激光雷达</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">研究现状调研</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/09/17/PU-GAN/" class="archive-article-date">
-  	<time datetime="2023-09-17T07:47:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/09/17/PU-GAN/">PU-GAN 论文阅读笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">点云</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">GAN</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/09/16/AR-GCN/" class="archive-article-date">
-  	<time datetime="2023-09-16T15:12:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-09-16</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/09/16/AR-GCN/">AR-GCN 阅读笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">点云</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">GAN</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/" class="archive-article-date">
-  	<time datetime="2023-06-10T15:29:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-06-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/">MPU 论文阅读笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">点云</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/06/08/DGCNN/" class="archive-article-date">
-  	<time datetime="2023-06-08T15:51:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-06-08</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/06/08/DGCNN/">DGCNN 论文阅读笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">点云</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/05/31/EC-Net/" class="archive-article-date">
-  	<time datetime="2023-05-30T16:39:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-31</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/05/31/EC-Net/">EC-Net 论文阅读笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">点云</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2023/05/23/PU-Net/" class="archive-article-date">
-  	<time datetime="2023-05-23T14:47:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2023-05-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2023/05/23/PU-Net/">PU-Net 论文阅读笔记</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">点云</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">神经网络</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">论文阅读笔记</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">点云上采样</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
   
-    </div></section>
   
 
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">下一页</a>
-    </nav>
   
 
+  
 
-
-
+  
 
 
           </div>
@@ -706,8 +554,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
