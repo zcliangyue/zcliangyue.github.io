@@ -15,7 +15,7 @@
 
 
 
-<title>AR-GCN 阅读笔记 | ZCL&#39;BLOG</title>
+<title>标签: 关于我 | ZCL&#39;BLOG</title>
 
 
 
@@ -507,63 +507,105 @@
   </div>
 </div>
   <main>
-    <!-- css -->
-
-<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
-
+    <section class="px-2 py-8 max-w-prose mx-auto gap-4 grid grid-cols-1">
   
-<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
-
-    <!-- toc -->
+  <!-- Sort posts by date -->
+  
+  
     
-  <!-- tocbot -->
-<nav class="post-toc toc text-sm w-40 relative top-32 right-4 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
-
-
-<section class="px-6 max-w-prose mx-auto md:px-0">
-  <!-- Post header before content -->
-  <header class="py-4">
-    <div class="flex flex-col gap-2 pt-4 md:pt-6">
-      <!-- Title -->
-      <div id="article-title" class="leading-snug">
-        <p class="text-3xl font-bold text-[var(--c-100)] mb-4">AR-GCN 阅读笔记</p>
+    <!-- Large text showing the year in the background -->
+    
+      <div class="relative pointer-events-none h-[30px]">
+        <div class="absolute -top-6 w-[100%]">
+          <p class="
+            text-clip overflow-hidden -translate-x-3 text-9xl
+            font-extrabold
+            text-[var(--c-theme)]
+            opacity-10
+            dark:opacity-20">
+            2024
+          </p>
+        </div>
       </div>
-      <!-- Meta data -->
-      <div>
-        <section class="
-          flex flex-col gap-x-2 gap-y-1 text-sm text-[var(--c-100)]">
-          <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <!-- Dates -->
-            <div class="flex items-center gap-1">
-              <iconify-icon width="18" icon="mingcute:add-circle-fill" ></iconify-icon>
-              Created: <time class="w-max">2023-09-16</time>
-            </div>
-            <div class="flex items-center gap-1">
-              <iconify-icon width="18" icon="mingcute:refresh-3-fill" ></iconify-icon>
-              Edited: <time class="w-max">2023-09-18</time>
-            </div>
-          </div>
-          <div class="flex flex-wrap items-center gap-x-3 gap-y-3">
-            <!-- Author -->
+    
+    <!-- The post -->
+    <div class="w-full">
+      <!-- One post item in a list -->
+<div class="
+    post-container
+    px-2 py-2
+    flex flex-col gap-3">
+    <div class="flex flex-row gap-4">
+        
+            <div class="flex flex-col gap-1">
+                <!-- Post title -->
+                <a href="/2024/08/12/about/">
+                    <h2 class="
+                        text-[var(--c-80)]
+                        font-bold
+                        text-xl
+                        hover:text-[var(--c-theme)]
+                        transition-all
+                        hover:underline">
+                        about
+                    </h2>
+                </a>
+            <!-- Post excerpt -->
             
-
-            <!-- Word count -->
-            <span class="flex items-center gap-1">
-              <iconify-icon width="18" icon="mingcute:book-2-fill" ></iconify-icon>
-              <span>1.5k words, 5 min</span>
+            </div>
+        </div>
+        <!-- Post Statistics -->
+        <div class="flex flex-wrap items-center gap-x-2 text-sm
+            text-[var(--c-70)]">
+            <span class="flex flex-row items-center gap-1 group">
+                <iconify-icon width="16"
+                    icon="mingcute:add-circle-fill"></iconify-icon>
+                <time class="w-max">
+                    2024-08-12
+                </time>
+            </span>
+            <span class="flex flex-row items-center gap-1 group">
+                <iconify-icon width="16"
+                    icon="mingcute:refresh-3-fill"></iconify-icon>
+                <time class="w-max">
+                    2024-08-12
+                </time>
+            </span>
+            <span class="flex flex-row items-center gap-1 group">
+                <iconify-icon width="16"
+                    icon="mingcute:book-2-fill"></iconify-icon>
+                <p class="w-max">
+                    6 words, 1 min
+                </p>
             </span>
             <!-- Categories -->
+            <span class="flex flex-row items-center gap-1 group">
+                
+                    <iconify-icon class="
+                            group-hover:scale-125
+                            transition-transform
+                            group-hover:text-[var(--c-theme)]
+                        "
+                        width="16"
+                        icon="mingcute:classify-2-fill" class="mr-0">
+                    </iconify-icon>
+                    
+                        <a class="underline underline-offset-2"
+                            href="/categories/about/">
+                            About
+                        </a>
+                    
+                
+            </span>
+        </div>
+        <!-- Tags -->
+        <div>
             
-          </div>
-        </section>
-      </div>
-      <!-- tags -->
-      <div>
-        
+                
 <div class="flex flex-wrap gap-1">
   
     
-      <a href="/tags/%E7%82%B9%E4%BA%91/" 
+      <a href="/tags/%E5%85%B3%E4%BA%8E%E6%88%91/" 
         class="
           tag
           text-sm
@@ -579,272 +621,22 @@
           hover:text-[var(--c-0)]
           dark:hover:text-[var(--c-theme-2)]
         ">
-        点云
-      </a>
-    
-      <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        神经网络
-      </a>
-    
-      <a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        论文阅读笔记
-      </a>
-    
-      <a href="/tags/%E7%82%B9%E4%BA%91%E4%B8%8A%E9%87%87%E6%A0%B7/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        点云上采样
-      </a>
-    
-      <a href="/tags/GAN/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        GAN
+        关于我
       </a>
     
   
 </div>
-      </div>
+            
+        </div>
+</div>
     </div>
-  </header>
-  <!-- content -->
-  <article class="post-content prose m-auto dark:prose-invert">
-    <p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1908.02111.pdf">Point Cloud Super Resolution with Adversarial Residual Graph Networks</a></p>
-<blockquote>
-<p>以前的笔记原文占比太多了，以后就只写重要的部分。</p>
-</blockquote>
-<span id="more"></span>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><h2 id="AR-GCN-方法概述"><a href="#AR-GCN-方法概述" class="headerlink" title="AR-GCN 方法概述"></a>AR-GCN 方法概述</h2><p>AR-GCN 由两个网络组成，生成器 $G$ 和鉴别器 $D$ 。其中 $G$ 通过逐步上采样输入的 LR 来生成 HR 点云，而 $D$ 负责辨别 HR 点云是真还是假。</p>
-<p><img src="/2023/09/16/AR-GCN/image-20230721134533712.png" alt="image-20230721134533712" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
-<p>论文提出了一个联合损失函数：</p>
-<script type="math/tex; mode=display">
-L(x,y)=\lambda L_{cd}(G(x),y)+L_G(G(x))</script><p>其中 $\lambda$ 控制损失函数 $L_{cd}$ 和 $L_G$ 的权重比。$L_{cd}$ 度量了 $y$ 和 $\hat{y}$ 之间的距离，类似于图像超分辨率中的 $L_2$ 损失：</p>
-<script type="math/tex; mode=display">
-L_{cd}(\hat{y},y)=\sum_{p\in y}min_{q\in\hat{y}}\|p-q\|_2^2</script><p>$L_{cd}$ 是 CD 距离的变体。原始倒角距离由两部分组成：$L_{cd}$ 和 $\hat{L}_{cd}$ ，两者形式上对称。但 $\hat{L}_{cd}$ 会促使预测点云 $\hat{y}$ 与输入相同，导致点云出现重复点（后续可以实验证明一下）。因此论文删去了 $\hat{L}_{cd}$ 。</p>
-<p>$L_G$ 损失则借鉴了 LSGAN（最小二乘生成对抗网络），被称作图对抗损失。LSGAN 主要工作是将 GAN 中的交叉熵损失函数替换为了最小二乘损失函数，克服了原始 GAN 生成结果不稳定、图像质量差的问题。具体有关 GAN 网络的原理及改进，在我另一篇笔记中有详细说明。以此有生成器和鉴别器的训练指标：</p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-L_G(\hat{y})&=\left\|1-D(\hat{y}) \right\|^2_2
-\\
-L_D(\hat{y},y)&=\frac{1}{2}\|D(\hat{y}) \|^2_2+\frac{1}{2}\|1-D(y) \|^2_2
-\end{aligned}</script><p>简单来说，AR-GCN 使用了生成对抗网络，生成器和鉴别器的损失函数借鉴了 LSGAN 的定义方法；此外，问题的本质仍然是上采样问题，因此加入点云间的相似性度量，指导生成器的训练。论文通过设计新的联合损失函数，将 GAN 和点云上采样结合了起来。</p>
-<h2 id="残差图卷积生成器"><a href="#残差图卷积生成器" class="headerlink" title="残差图卷积生成器"></a>残差图卷积生成器</h2><p>首先来看生成器的组成。生成器的目标是将点云上采样，包含了残差图卷积块、反池化块以及特征网络。</p>
-<h3 id="残差图卷积块"><a href="#残差图卷积块" class="headerlink" title="残差图卷积块"></a>残差图卷积块</h3><p><img src="/2023/09/16/AR-GCN/image-20230916205731283.png" alt="image-20230916205731283" style="zoom:60%;display: block; margin-left: auto; margin-right: auto;"></p>
-<p>作者认为 PointNet++ 对中心点邻近点一视同仁，而图卷积的性能更加优异。观察上图，对于输入的特征  $f_{in}$ 和输入点云 $x_{in}$ ，通过 $x_{in}$ 在每次卷积时查询近邻点 $N(p)$ ，则每一层卷积的运算为：</p>
-<script type="math/tex; mode=display">
-f_{i+1}^p = w_0 f_l^p + w_1\sum_{q\in N(p)}f_l^q,\forall p\in v</script><p>其中 $w_0,w_1$ 是可学习的参数，$x_{in}$ 和 $x_{out}$ 没有区别。同时注意到块中引入了残差连接来提升性能。思路和 DGCNN 很类似，但 DGCNN 更关注边特征，而这里以点特征为主体。同时 DGCNN 的图是动态更新的，也是一点不同。</p>
-<h3 id="反池化块"><a href="#反池化块" class="headerlink" title="反池化块"></a>反池化块</h3><p>反池化的目的是增加点的数目。它首先通过残差图卷积块中的 G-Conv 层，将特征转换为 $\hat{n}\times 6$ 的张量，然后重塑为 $\hat{n}\times2\times3$ ，记作 $\delta x$ ，然后将原始点坐标复制一份，加到坐标残差上。反池化块的宗旨是预测输入点和输出点之间的残差，比直接预测点坐标更快，这在 EC-Net 中就有阐述。</p>
-<p>反池化块仅仅重塑了坐标，但破坏了特征。因此论文依然利用残差图卷积块所得到的特征，进行插值得到新点云 $x_{out}$ 中每点的特征：</p>
-<script type="math/tex; mode=display">
-f_{out}^p = \frac{1}{k}\sum_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>可以看到，此处对最近邻搜索 $N(p)$ 标注了搜索集合为 $x_{in}$ ，但计算的点坐标是来自 $x_{out}$ 的。个人觉得，如果把预测的残差和原始特征放进一个图卷积来预测新的特征，或许会更好一些，这里相当于直接用了平均池化层。</p>
-<h3 id="特征网络"><a href="#特征网络" class="headerlink" title="特征网络"></a>特征网络</h3><p>在进入残差图卷积块之前，需要提取点特征。论文采用了简单的 PointNet 结构，对每个点获取最近邻点，得到张量 $k\times 3$ ，然后通过一系列逐点卷积加上一个最大池化层，转换为 $1\times c$ 的特征 $f^p$ 。</p>
-<h3 id="渐进式上采样"><a href="#渐进式上采样" class="headerlink" title="渐进式上采样"></a>渐进式上采样</h3><p>另外，论文采用了两次 $2\times$ 的上采样，并在实验中发现这样做的精度更好。</p>
-<h2 id="图判别器"><a href="#图判别器" class="headerlink" title="图判别器"></a>图判别器</h2><p>图判别器的结构依然基于残差图卷积块和特征网络，事实上，从第一张图可以看出，判别器和生成器唯一的区别就是用池化层替代了反池化层，最终输出一个标量预测。池化层的运算方法很简单，首先将点进行最远点采样，然后计算剩余点的特征为周围近邻点特征的池化：</p>
-<script type="math/tex; mode=display">
-f_{out}^p =\max_{q\in N[x_{in}](p)}f_{in}^q,\forall p\in x_{out}</script><p>特别的是，论文没有采用逐步下采样至单个标量的方式，因为这样做会导致伪像（我的理解是一些细微的噪声很难被整体鉴别器察觉，导致生成的数据上有伪影）。因此在这里鉴别器的输出包含不止 1 个点，并对每个点的局部 patch 进行鉴别，通过交叉熵来计算最终的总损失值。这里实际上是借鉴了另一篇文章：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1612.07828">Learning from Simulated and Unsupervised Images through Adversarial Training</a> ，下图很直观地说明了这种方法。</p>
-<p><img src="/2023/09/16/AR-GCN/image-20230916213653638.png" alt="image-20230916213653638" style="zoom:100%;display: block; margin-left: auto; margin-right: auto;"></p>
-<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>主要的思路和方法就是以上这些，论文原文讲得非常详细。总得来说，AR-GCN 很好地在上采样过程中结合了 GAN 的思路，因此对于未见过的数据集有更强的泛化能力，能够生成细节更丰富的结果。并且通过回归坐标残差来提升收敛速度和稳定性，通过渐进式上采样取得更优的效果。</p>
-
-  </article>
-
-  <!-- prev and next -->
-  <div class="flex justify-between mt-4 pt-4
-    border-t border-[var(--c-sep)] text-sm
-    gap-2 text-[var(--c-50)]
-  ">
-    <div>
-      
-        <a href="/2023/09/17/PU-GAN/"
-          class="
-            transition-all
-            flex justify-center
-            hover:-translate-x-1
-            hover:text-[var(--c-80)]
-          ">
-          <iconify-icon width="20" icon="mingcute:left-fill" data-inline="false">
-          </iconify-icon>
-          PU-GAN 论文阅读笔记
-        </a>
-      
-    </div>
-    <div>
-      
-        <a href="/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/"
-          class="
-            flex 
-            justify-center
-            hover:translate-x-1 
-            transition-transform
-            hover:text-[var(--c-100)]
-          "
-        >
-          MPU 论文阅读笔记
-          <iconify-icon width="20" icon="mingcute:right-fill" data-inline="false"></iconify-icon>
-        </a>
-      
-    </div>
-  </div>
-
-  <!-- comment -->
-  <div class="article-comments mt-12">
-    
-
-  </div>
+  
 </section>
-<!-- js inspect -->
 
-<script src="/lib/clipboard.min.js"></script>
+<div class="border-t border-[--c-40]">
 
+</div>
 
-<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    "HTML-CSS": {
-        preferredFont: "TeX",
-        availableFonts: ["STIX","TeX"],
-        linebreaks: { automatic:true },
-        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
-    },
-    tex2jax: {
-        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
-        processEscapes: true,
-        ignoreClass: "tex2jax_ignore|dno",
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        equationNumbers: { autoNumber: "AMS" },
-        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
-        Macros: { href: "{}" }
-    },
-    messageStyle: "none"
-  });
-</script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-      var all = MathJax.Hub.getAllJax(), i;
-      for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-      }
-  });
-</script>
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-<script>
-  $(document).ready(() => {
-    const maraidConfig = {
-      theme: "default",
-      logLevel: 3,
-      flowchart: { curve: "linear" },
-      gantt: { axisFormat: "%m/%d/%Y" },
-      sequence: { actorMargin: 50 },
-    };
-    mermaid.initialize(maraidConfig);
-  });
-</script>
-
-
-
-<script src="/lib/fancybox/fancybox.umd.min.js"></script>
-
-<script>
-  $(document).ready(() => {
-    $('.post-content').each(function(i){
-      $(this).find('img').each(function(){
-        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
-        var alt = this.alt;
-        var title = this.title;
-        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
-        if (title) $(this).after('<span class="fancybox-title">' + title + '</span>');
-        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
-      });
-      $(this).find('.fancybox').each(function(){
-        $(this).attr('rel', 'article' + i);
-      });
-    });
-
-    Fancybox.bind('[data-fancybox="gallery"]', {
-        // options
-    })
-  })
-</script>
-
-<!-- tocbot begin -->
-
-<script src="/lib/tocbot/tocbot.min.js"></script>
-
-<script>
-  $(document).ready(() => {
-      tocbot.init({
-        // Where to render the table of contents.
-        tocSelector: '.post-toc',
-        // Where to grab the headings to build the table of contents.
-        contentSelector: '.post-content',
-        // Which headings to grab inside of the contentSelector element.
-        headingSelector: 'h1, h2, h3',
-        // For headings inside relative or absolute positioned containers within content.
-        hasInnerContainers: true,
-    });
-  })
-</script>
-<!-- tocbot end -->
 
   </main>
   <footer class="flex flex-col mt-18 mb-12 items-center
