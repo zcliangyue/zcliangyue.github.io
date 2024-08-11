@@ -540,7 +540,7 @@
             </div>
             <div class="flex items-center gap-1">
               <iconify-icon width="18" icon="mingcute:refresh-3-fill" ></iconify-icon>
-              Edited: <time class="w-max">2024-05-05</time>
+              Edited: <time class="w-max">2024-08-12</time>
             </div>
           </div>
           <div class="flex flex-wrap items-center gap-x-3 gap-y-3">
@@ -649,7 +649,7 @@
     <p>该笔记的主要内容参考李宏毅老师的机器学习课程 <a target="_blank" rel="noopener" href="https://github.com/Fafa-DL/Lhy_Machine_Learning/tree/main?tab=readme-ov-file">Machine_Learning: 李宏毅2021/2022/2023春季机器学习课程课件及作业</a>以及 Lil 的博客 <a target="_blank" rel="noopener" href="https://lilianweng.github.io/posts/2021-07-11-diffusion-models/">What are Diffusion Models?</a> ，主要关注其中涉及的公式推导。</p>
 <span id="more"></span>
 <h1 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h1><p>在没有输入条件的情况下，生成式模型的目标是从通过一个网络，将一个随机分布变换为另一个分布，并使得该分布与特定的数据分布（图像，点云）尽可能得相近。</p>
-<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714744539507.png" alt="1714744539507" style="zoom:30%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714744539507.png" alt="神经网络拟合数据分布" style="zoom:30%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>设数据分布为 $p_{\text{data}}(x)$ ，神经网络学习到的分布为 $p_{\theta}(x)$ ，神经网络中的可学习参数为 $\theta$ ，我们需要衡量两个分布的相似性。根据最大似然，我们从 $p_{\text{data}}(x)$ 中采样一系列数据</p>
 <script type="math/tex; mode=display">
 \left\{x^1,x^2,\dots,x^m\right\},</script><p>则目标为最大化 $p_{\theta}(x^i)$ ，即</p>
@@ -666,14 +666,14 @@
 \theta^* = \arg\max_{\theta}\int_{x}p_{\text{data}}(x)\log p_{\theta}(x)dx-\int_{x}p_{\text{data}}(x)\log p_{\text{data}}(x)dx\\
 =\arg\max_{\theta}\int_{x}p_{\text{data}}(x)\log \frac{p_{\theta}(x)}{p_{\text{data}}(x)}dx=\arg\min_{\theta}\text{KL}(p_{data}\| p_{\theta}).
 \end{aligned}</script><h1 id="VAE"><a href="#VAE" class="headerlink" title="VAE"></a>VAE</h1><p>AE 的思想是：通过一个 Encoder 将原始数据编码，然后用一个 Decoder 将其解码。而 VAE 进一步要求中间的潜在变量服从简单的高斯分布。VAE 的两端是同一个数据，也即所谓“自编码”。其工作流程大概是：通过一个 Encoder 将原始数据送到一个高斯分布，并要求该高斯分布与标准正态分布接近。然后从该分布中随机采样，输入到 Decoder 中，恢复出原始数据。通过适当的训练，编码器能够将原始数据映射到服从标准高斯分布的潜在空间，而解码器能够从中预测合适的数据分布。</p>
-<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1_ET6FM_KEmwa2N4qgW2MglQ.png" alt="1_ET6FM_KEmwa2N4qgW2MglQ" style="zoom:35%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1_ET6FM_KEmwa2N4qgW2MglQ.png" alt="VAE架构" style="zoom:35%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>VAE 的假设就是 code 服从标准高斯分布，因此包含两个损失：一个是解码后的重建损失，度量解码结果和原始结果的相似性；另一个是编码分布和标准高斯分布的相似性，即 KL 散度。下面将更具体地推导为什么这两个损失能够实现生成式模型的目标。</p>
 <p>通过一个 Decoder $D$ 学习数据分布，其输入为服从简单先验分布的随机变量 $z$ ，输出为接近数据分布的 $x$ 。为了定义损失函数，我们需要计算 $p_{\theta}(x)$ ，可以表示为</p>
 <script type="math/tex; mode=display">
 p_{\theta}(x)=\int_z p(z)p_{\theta}(x|z)dz.</script><p>其中 $p(z)$ 已知，而 $p_{\theta}(x|z)$ 是较难计算的，且对参数 $\theta$ 不可导。为了计算便利，我们假设预测值实际上是高斯分布的均值，则 $p_\theta(x|z)$ 可以近似表示为以 $G(z)$ 为均值的高斯分布上的概率。 即</p>
 <script type="math/tex; mode=display">
 p_{\theta}(x|z)\propto \exp(-\|G(z)-x\|_2).</script><p>这种技巧也叫重参数化（或随机反向传播），保证了梯度的传播。</p>
-<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714746405676.png" alt="1714746405676" style="zoom:30%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714746405676.png" alt="重参数化使得梯度能够反向传播" style="zoom:30%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>然而在实际计算时，我们没有办法直接最大化 $p_{\theta}(x)$ ，因为积分操作是难以实现的。取而代之的是最大化它的证据下界（Evidence lower bound，ELBO）。具体来说，我们可以定义任意一个分布 $q(\cdot|x)$ ，它都会满足</p>
 <script type="math/tex; mode=display">
 \int_z q(z|x)dz =1,</script><p>从而引出下面的等式</p>
@@ -709,11 +709,11 @@ L_b&=\int_z q(z|x)\log\left(\frac{p_{\theta}(z, x)}{q(z|x)}\right)dz= \int_z q(z
 &=-\text{KL}(q(z|x)\| p_\theta(z)) +  \int_z q(z|x)\log p_{\theta}(x|z)dz.
 \end{aligned}</script><p>最大化 $L_b$ 首先要最小化第一项，也就是要求 $q(z|x)$ 接近于先验分布 $p_{\theta}(z)$ （实际上，这里 $p_\theta(z)=p(z)$ ，因为 $z$ 的选取与 $\theta$ 无关）。其次要最大化第二项，其本质是重建损失，即通过 VAE 后输入和输出的相似性。模型最终回归到了机器学习中常见的形式：重建损失+正则项。</p>
 <h1 id="DDPM"><a href="#DDPM" class="headerlink" title="DDPM"></a>DDPM</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>去噪扩散概率模型（Denoising Diffusion Probabilistic Models，DDPM）的思想是：首先定义一个前向扩散过程，其含义是不断向原始数据 $x_0$ 添加高斯噪声，得到 $x_{0:T}$ 。然后定义一个 Denoise 模块，其作用是输入当前图像 $x_t$ 和步骤 $t$ ，输出图像中包含的噪声，并与 $x_t$ 相加得到 $x_{t-1}$ ，以此类推，就可以从噪声中恢复原始图像。</p>
-<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714823867081.png" alt="1714823867081" style="zoom:60%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714823867081.png" alt="去噪过程" style="zoom:60%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>值得注意的是，在整个链条中，每个 Denoise 模块是完全一样的，这也是为什么我们需要输入额外的步骤值 $t$ 。而为了降低网络拟合的难度，Denoise 不直接产生 $x_{t-1}$ ，而是预测 $x_t$ 中包含的噪声，即 $x_{t}-x_{t-1}$ 。通过学习这样一个去噪过程，DDPM 能够从任意一个高斯噪声中恢复具有高真实度的图像。如果是为了 text to image 或其它任务，只需要在 Denoise 的输入中增加一个额外的条件输入。当然，实际上的去噪模块和下图中还有些不同，这也会得到详细说明。</p>
-<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714824422281.png" alt="1714824422281" style="zoom:30%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714824422281.png" alt="去噪模块" style="zoom:30%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>假设原始数据分布为 $q(x_0)$ ，总步骤数为 $T$，添加的噪声为 $\epsilon \sim \mathcal{N}(0,\mathbf{I})$ ，下面给出 DDPM 训练和推理的步骤及原理。</p>
-<h2 id="前向扩散过程"><a href="#前向扩散过程" class="headerlink" title="前向扩散过程"></a>前向扩散过程</h2><p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714828330773.png" alt="1714828330773" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
+<h2 id="前向扩散过程"><a href="#前向扩散过程" class="headerlink" title="前向扩散过程"></a>前向扩散过程</h2><p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/1714828330773.png" alt="前向扩散过程" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>首先从原始数据分布中采样一个数据 $x_0\sim q(x_0)$ ，也就是一张干净的图像。我们需要往其中不断地加入噪声。正式地，我们定义这一过程为，</p>
 <script type="math/tex; mode=display">
 q(x_t|x_{t-1}):=\mathcal{N}(x_{t};\sqrt{1-\beta_t}x_{t-1},\beta_t\mathbf{I}).</script><p>其含义是根据预定义的权重 $\beta_t$ ，我们将 $\sqrt{1-\beta_t}x_{t-1}$  作为均值，$\sqrt{\beta_t}$ 作为标准差，定义了一个新的高斯分布，也就是 $x_t$ 服从的分布。这也可以写成更直观的形式：</p>
@@ -821,7 +821,7 @@ L^\text{simple}
 &= \mathbb{E}_{t \sim [1, T], x_0, \epsilon_t} \Big[\|\epsilon_t - \epsilon_\theta(\sqrt{\bar{\alpha}_t}x_0 + \sqrt{1 - \bar{\alpha}_t}\epsilon_t, t)\|^2 \Big]
 \end{aligned}</script><p>简化之前的 $\sigma_t$ 等同于给不同样本不同的权重，简化后则忽略了它们。原论文的解释是，忽略这些权重能够让网络更专注于噪声更多的部分，也就是 $t$ 较大的部分。</p>
 <h2 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h2><p>有了上述推导，我们已经可以训练一个标准的 DDPM 了。但对于生成模型，还需要有一个采样生成的过程。这里将论文中的算法贴出来。有了上面的推导，它们已经很容易被理解了。</p>
-<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/image-20240505171239531.png" alt="image-20240505171239531" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/image-20240505171239531.png" alt="训练和采样步骤" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>在 Sampling 的步骤中，注意到 $x_{t-1}$ 的表达式后面还多出来一项随机项。这一项的作用就是引入随机性，因为网络只预测了均值，而非高斯分布。加入这项噪声后，相当于手动给了一个方差，可能能够增强模型的生成能力。当然，这些都只是空想，毕竟我还没有实践过。</p>
 
   </article>

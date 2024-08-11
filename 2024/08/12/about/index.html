@@ -15,7 +15,7 @@
 
 
 
-<title>ZCL&#39;BLOG</title>
+<title>about | ZCL&#39;BLOG</title>
 
 
 
@@ -507,84 +507,197 @@
   </div>
 </div>
   <main>
-    <div class="flex flex-col gap-0">
-  <div class="index-info-container pt-6 text-[var(--c-70)]">
-    <!-- Home page info, short text about me -->
-    <div class="flex flex-col items-center">
-      
-      <a href="/about">
-        <img class="rounded-3xl w-48 hover:scale-[1.04] transition-transform" src="/images/logo.svg"
-          alt="ZCL'BLOG" />
-        </a>
-      
-      <!-- Site title -->
-      <h1 class="
-        site-title
-        text-center
-        text-5xl
-        bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent
-        pb-4
-        pt-6
-        font-black
-        ">
-        ZCL&#39;BLOG
-      </h1>
-      <!-- Sub-title -->
-      <p class="
-        text-3xl font-extrabold text-center
-        bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent
-        text-[var(--c-80)]">
-        
-      </p>
-      <div class="flex flex-wrap items-center justify-center gap-4 my-6 font-bold text-lg">
-        <div class="flex flex-row items-center gap-1">
-          <iconify-icon width="24" icon="mingcute:building-1-fill"></iconify-icon>
-          <p>Wuhan, China</p>
-        </div>
-        <div class="flex flex-row items-center gap-1 group">
-          <iconify-icon class="transition-transform
-                group-hover:scale-125" width="24" icon="mingcute:idcard-fill"></iconify-icon>
-          <a href="/pdf/cv.pdf" class="group-hover:underline">
-            CV (Dec, 2022)
-          </a>
-        </div>
+    <!-- css -->
+
+<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
+
+  
+<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
+
+    <!-- toc -->
+    
+<section class="px-6 max-w-prose mx-auto md:px-0">
+  <!-- Post header before content -->
+  <header class="py-4">
+    <div class="flex flex-col gap-2 pt-4 md:pt-6">
+      <!-- Title -->
+      <div id="article-title" class="leading-snug">
+        <p class="text-3xl font-bold text-[var(--c-100)] mb-4">about</p>
       </div>
-      <!-- Description from config -->
-      <div class="description-container max-w-prose mx-auto grid grid-cols-1">
-        <div class="text-left p-8">
-          <p>
+      <!-- Meta data -->
+      <div>
+        <section class="
+          flex flex-col gap-x-2 gap-y-1 text-sm text-[var(--c-100)]">
+          <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <!-- Dates -->
+            <div class="flex items-center gap-1">
+              <iconify-icon width="18" icon="mingcute:add-circle-fill" ></iconify-icon>
+              Created: <time class="w-max">2024-08-12</time>
+            </div>
+            <div class="flex items-center gap-1">
+              <iconify-icon width="18" icon="mingcute:refresh-3-fill" ></iconify-icon>
+              Edited: <time class="w-max">2024-08-12</time>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-3">
+            <!-- Author -->
             
-          </p>
-        </div>
+
+            <!-- Word count -->
+            <span class="flex items-center gap-1">
+              <iconify-icon width="18" icon="mingcute:book-2-fill" ></iconify-icon>
+              <span>0 words, 1 min</span>
+            </span>
+            <!-- Categories -->
+            
+          </div>
+        </section>
       </div>
-      <!-- get content from index.md -->
-      <div class="post-content mt-4">
-      </div>
-    </div>
-  </div>
-
-  
-  <!-- 分割线 -->
-  <div class="flex flex-col items-center justify-center0">
-    <hr class="w-1/2 mb-10 h-[1px] bg-[var(--c-sep)] mr-1/2">
-    </hr>
-    <div class="flex flex-row items-center gap-2 text-[var(--c-50)]">
-      <iconify-icon width="28" icon="mingcute:star-fill"></iconify-icon>
-      <p class="text-center text-3xl">Featured Posts</p>
-    </div>
-  </div>
-
-  <!-- List of featured posts -->
-  <section class="px-2 py-8 max-w-prose mx-auto gap-4 grid grid-cols-1">
-  
-  <!-- Sort posts by date -->
-  
-  
-</section>
-
-
+      <!-- tags -->
+      <div>
+        
+<div class="flex flex-wrap gap-1">
   
 </div>
+      </div>
+    </div>
+  </header>
+  <!-- content -->
+  <article class="post-content prose m-auto dark:prose-invert">
+    
+  </article>
+
+  <!-- prev and next -->
+  <div class="flex justify-between mt-4 pt-4
+    border-t border-[var(--c-sep)] text-sm
+    gap-2 text-[var(--c-50)]
+  ">
+    <div>
+      
+    </div>
+    <div>
+      
+        <a href="/2024/05/06/%E4%BA%A4%E6%8D%A2%E4%BB%A3%E6%95%B0/"
+          class="
+            flex 
+            justify-center
+            hover:translate-x-1 
+            transition-transform
+            hover:text-[var(--c-100)]
+          "
+        >
+          交换代数笔记
+          <iconify-icon width="20" icon="mingcute:right-fill" data-inline="false"></iconify-icon>
+        </a>
+      
+    </div>
+  </div>
+
+  <!-- comment -->
+  <div class="article-comments mt-12">
+    
+
+  </div>
+</section>
+<!-- js inspect -->
+
+<script src="/lib/clipboard.min.js"></script>
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+  });
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+<script>
+  $(document).ready(() => {
+    const maraidConfig = {
+      theme: "default",
+      logLevel: 3,
+      flowchart: { curve: "linear" },
+      gantt: { axisFormat: "%m/%d/%Y" },
+      sequence: { actorMargin: 50 },
+    };
+    mermaid.initialize(maraidConfig);
+  });
+</script>
+
+
+
+<script src="/lib/fancybox/fancybox.umd.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+    $('.post-content').each(function(i){
+      $(this).find('img').each(function(){
+        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
+        var alt = this.alt;
+        var title = this.title;
+        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
+        if (title) $(this).after('<span class="fancybox-title">' + title + '</span>');
+        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
+      });
+      $(this).find('.fancybox').each(function(){
+        $(this).attr('rel', 'article' + i);
+      });
+    });
+
+    Fancybox.bind('[data-fancybox="gallery"]', {
+        // options
+    })
+  })
+</script>
+
+<!-- tocbot begin -->
+
+<script src="/lib/tocbot/tocbot.min.js"></script>
+
+<script>
+  $(document).ready(() => {
+      tocbot.init({
+        // Where to render the table of contents.
+        tocSelector: '.post-toc',
+        // Where to grab the headings to build the table of contents.
+        contentSelector: '.post-content',
+        // Which headings to grab inside of the contentSelector element.
+        headingSelector: 'h1, h2, h3',
+        // For headings inside relative or absolute positioned containers within content.
+        hasInnerContainers: true,
+    });
+  })
+</script>
+<!-- tocbot end -->
+
   </main>
   <footer class="flex flex-col mt-18 mb-12 items-center
   text-[var(--c-50)] text-sm">
