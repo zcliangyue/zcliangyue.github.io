@@ -285,7 +285,7 @@
       
       
       
-      <a href="/./index/index.md" class="
+      <a href="/./index" class="
                         flex flex-row items-center
                         gap-1
                         hover:underline
@@ -443,7 +443,7 @@
     
     
     
-    <a href="/./index/index.md" class="
+    <a href="/./index" class="
                 flex flex-row items-center
                 gap-2
                 h-12
@@ -484,160 +484,6 @@
           </p>
         </div>
       </div>
-    
-    <!-- The post -->
-    <div class="w-full">
-      <!-- One post item in a list -->
-<div class="
-    post-container
-    px-2 py-2
-    flex flex-col gap-3">
-    <div class="flex flex-row gap-4">
-        
-            <div class="flex flex-col gap-1">
-                <!-- Post title -->
-                <a href="/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/">
-                    <h2 class="
-                        text-[var(--c-80)]
-                        font-bold
-                        text-xl
-                        hover:text-[var(--c-theme)]
-                        transition-all
-                        hover:underline">
-                        MPU 论文阅读笔记
-                    </h2>
-                </a>
-            <!-- Post excerpt -->
-            
-                <div class="post-excerpt post-content text-[var(--c-60)] text-sm line-clamp-5 border-b-1 border-[var(--c-sep)]">
-                    <p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1811.11286v3.pdf">Patch-based Progressive 3D Point Set Upsampling</a></p>
-<h1 id="一、摘要及引言"><a href="#一、摘要及引言" class="headerlink" title="一、摘要及引言"></a>一、摘要及引言</h1><p>点云通常是稀疏、嘈杂且不完整的，这意味着上采样技术非常重要，但将图像中的超分辨率方法迁移到点云中并不容易。PU-Net 通过多尺度学习及特征扩展的方式来扩大点集，但无论输入的几何结构是大规模的还是细粒度的，PU-Net 都将使用同样的尺度来处理，以致于其重建结果往往缺乏细粒度的几何结构。</p>
-<p>论文提出了一种 patch-based 渐进式上采样网络，将一个 $16\times$ 上采样网络分成四个 $2\times$ 网络，其中每个子网络侧重于不同级别的细节。</p>
-<p>所有子网络都是完全基于 patch 的，并且输入 patch 的大小相对于当前的细节级别是自适应的。论文提出了一系列架构改进，包括用于逐点特征提取的新型密集连接、用于特征扩展的编码分配，以及用于层间特征传播的双边特征插值。这些都会在后面详细介绍。</p>                </div>
-            
-            </div>
-        </div>
-        <!-- Post Statistics -->
-        <div class="flex flex-wrap items-center gap-x-2 text-sm
-            text-[var(--c-70)]">
-            <span class="flex flex-row items-center gap-1 group">
-                <iconify-icon width="16"
-                    icon="mingcute:add-circle-fill"></iconify-icon>
-                <time class="w-max">
-                    2023-06-10
-                </time>
-            </span>
-            <span class="flex flex-row items-center gap-1 group">
-                <iconify-icon width="16"
-                    icon="mingcute:refresh-3-fill"></iconify-icon>
-                <time class="w-max">
-                    2023-09-17
-                </time>
-            </span>
-            <span class="flex flex-row items-center gap-1 group">
-                <iconify-icon width="16"
-                    icon="mingcute:book-2-fill"></iconify-icon>
-                <p class="w-max">
-                    3.4k words, 12 min
-                </p>
-            </span>
-            <!-- Categories -->
-            <span class="flex flex-row items-center gap-1 group">
-                
-            </span>
-        </div>
-        <!-- Tags -->
-        <div>
-            
-                
-<div class="flex flex-wrap gap-1">
-  
-    
-      <a href="/tags/%E7%82%B9%E4%BA%91/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        点云
-      </a>
-    
-      <a href="/tags/%E7%82%B9%E4%BA%91%E4%B8%8A%E9%87%87%E6%A0%B7/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        点云上采样
-      </a>
-    
-      <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        神经网络
-      </a>
-    
-      <a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        论文阅读笔记
-      </a>
-    
-  
-</div>
-            
-        </div>
-</div>
-    </div>
-  
-    
-    <!-- Large text showing the year in the background -->
     
     <!-- The post -->
     <div class="w-full">
