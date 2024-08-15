@@ -1,620 +1,126 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
+  
+  
+  <title>EC-Net 论文阅读笔记 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="论文：EC-Net: an Edge-aware Point set Consolidation Network 一、摘要及引言点云整合（point cloud consolidation）是将点云“按摩”到表面上的过程，去噪、补全、重采样等等都属于其一部分。目前数据驱动方法展现出了很好的性能，但它们忽略了 3D 对象的锐利特征。该论文提出了第一个用于边缘感知整合网络 EC-Net ，其在 Poi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EC-Net 论文阅读笔记">
+<meta property="og:url" content="http://example.com/2023/05/31/EC-Net/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="论文：EC-Net: an Edge-aware Point set Consolidation Network 一、摘要及引言点云整合（point cloud consolidation）是将点云“按摩”到表面上的过程，去噪、补全、重采样等等都属于其一部分。目前数据驱动方法展现出了很好的性能，但它们忽略了 3D 对象的锐利特征。该论文提出了第一个用于边缘感知整合网络 EC-Net ，其在 Poi">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2023/05/31/EC-Net/9914334e1a334b6aa2fb96ea8b3c64f7.png">
+<meta property="og:image" content="http://example.com/2023/05/31/EC-Net/2a1c179521514327bbf9b1b4f61402ab.png">
+<meta property="og:image" content="http://example.com/2023/05/31/EC-Net/f19afa3e9ca74fdc978749eeb712767f.png">
+<meta property="og:image" content="http://example.com/2023/05/31/EC-Net/537dcf63ed6d4f3f9c8a8729657f540c.png">
+<meta property="og:image" content="http://example.com/2023/05/31/EC-Net/image-20230526201933967.png">
+<meta property="og:image" content="http://example.com/2023/05/31/EC-Net/image-20230526202725949.png">
+<meta property="og:image" content="http://example.com/2023/05/31/EC-Net/d39191aed6af41fab68697431bc668b7.png">
+<meta property="article:published_time" content="2023-05-30T16:39:24.000Z">
+<meta property="article:modified_time" content="2024-08-15T10:36:16.118Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="点云">
+<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="论文阅读笔记">
+<meta property="article:tag" content="点云上采样">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/05/31/EC-Net/9914334e1a334b6aa2fb96ea8b3c64f7.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
 
+  
+  
+<link rel="stylesheet" href="/css/style.css">
 
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-  <meta name="author" content="SGGZCL">
-
-
-  <meta name="subtitle" content="张从朗">
-
-
-  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室一年级研究生，目前的研究方向是点云质量增强。">
-
-
-
-<title>EC-Net 论文阅读笔记 | Zhang Conglang</title>
-
-
-
-<link rel="icon" href="/favicon.ico">
-
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css"
-/>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/css/search.css">
-
-
-
-<script src="/lib/jquery.min.js"></script>
-
-
-<script src="/lib/iconify-icon.min.js"></script>
-
-
-<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-<script>
-  tailwind.config = {
-    darkMode: "class",
-  };
-</script>
-
-<script>
-  (function () {
-    const prefersDark =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
-    if (setting === "dark" || (prefersDark && setting !== "light"))
-      document.documentElement.classList.toggle("dark", true);
-    let isDark = document.documentElement.classList.contains("dark");
-  })();
-
-  $(document).ready(function () {
-    // init icon
-    const prefersDark =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark = document.documentElement.classList.contains("dark");
-    $("#theme-icon").attr("icon", isDark ? "ic:round-dark-mode" : "ic:round-light-mode");
-
-    function toggleGiscusTheme() {
-      const isDark = document.documentElement.classList.contains("dark");
-      const giscusFrame = document.querySelector("iframe.giscus-frame");
-      if (giscusFrame) {
-        giscusFrame.contentWindow.postMessage(
-          {
-            giscus: {
-              setConfig: {
-                theme: isDark ? "dark" : "light",
-              },
-            },
-          },
-          "https://giscus.app"
-        );
-      }
-    }
-
-
-    // toggle dark mode
-    function toggleDark() {
-      let isDark = document.documentElement.classList.contains("dark");
-      const setting = localStorage.getItem("hexo-color-scheme") || "auto";
-      isDark = !isDark;
-      document.documentElement.classList.toggle("dark", isDark);
-      $("#theme-icon").attr("icon", isDark ? "ic:round-dark-mode" : "ic:round-light-mode");
-      if (prefersDark === isDark) {
-        localStorage.setItem("hexo-color-scheme", "auto");
-      } else {
-        localStorage.setItem("hexo-color-scheme", isDark ? "dark" : "light");
-      }
-      toggleGiscusTheme();
-    }
-    $("#toggle-dark").click(toggleDark);
-
-    // listen dark mode change
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", (e) => {
-        const setting = localStorage.getItem("hexo-color-scheme") || "auto";
-        if (setting === "auto") {
-          document.documentElement.classList.toggle("dark", e.matches);
-          $("#theme-icon").attr(
-            "icon",
-            e.matches ? "ic:round-dark-mode" : "ic:round-light-mode"
-          );
-          toggleGiscusTheme();
-        }
-      });
-  });
-</script>
-
-
-
-
+  
+  
 <meta name="generator" content="Hexo 6.3.0"></head>
-<body 
-  class="
-    bg-[var(--c-0)]
-    text-[var(--c-80)]
-  ">
-  <!-- The navigation bar -->
-<header class="
-    flex flex-row items-center
-    w-full
-    pr-4
-    z-10
-    border-b-[1px]
-    border-b-[var(--c-border)]
-    dark:bg-[var(--c-0)]
-    dark:border-b-[var(--c-0)]
-    gap-2
-    h-[var(--h-header)]
-    text-[var(--c-80)]
-">
-  <!-- Left part -->
-  <div class="overflow-hidden h-full flex flex-row items-center">
-    <!-- Site Title on the top left -->
-    <a href="/" class="
-            whitespace-nowrap
-            text-2xl
-            text-[var(--c-theme)]
-            hover:text-[var(--c-theme)]
-            pl-4
-            font-black
-            bg-gradient-to-r from-cyan-500
-            to-blue-500 bg-clip-text text-transparent
-          ">
-      Zhang Conglang
-    </a>
-  </div>
-  <!-- Div for pushing items to both sides -->
-  <div class="flex-1"></div>
-  <!-- Right part -->
-  <div class="flex flex-row items-center z-20 h-full">
-    <!-- Page links -->
-    <div class="hidden sm:flex flex-row h-full">
-      
-      
-      
-      
-      
-      
-      <a href="/./archives" class="
-                        flex flex-row items-center
-                        gap-1
-                        hover:underline
-                        hover:bg-[var(--c-20)]
-                        hover:text-[var(--c-theme)]
-                        transition-all
-                        px-2
-                        py-1
-                        my-1
-                        rounded-lg
-                        group
-                    ">
-        
-        <iconify-icon class="group-hover:scale-125 transition-transform" icon="mingcute:inbox-fill" width="22">
-        </iconify-icon>
-        
-        
-        <p>Posts</p>
-        
-      </a>
-      
-      
-      
-      
-      
-      
-      <a href="/./publications" class="
-                        flex flex-row items-center
-                        gap-1
-                        hover:underline
-                        hover:bg-[var(--c-20)]
-                        hover:text-[var(--c-theme)]
-                        transition-all
-                        px-2
-                        py-1
-                        my-1
-                        rounded-lg
-                        group
-                    ">
-        
-        <iconify-icon class="group-hover:scale-125 transition-transform" icon="mingcute:science-fill" width="22">
-        </iconify-icon>
-        
-        
-        <p>Publications</p>
-        
-      </a>
-      
-      
-      
-      
-      
-      
-      <a href="/./about" class="
-                        flex flex-row items-center
-                        gap-1
-                        hover:underline
-                        hover:bg-[var(--c-20)]
-                        hover:text-[var(--c-theme)]
-                        transition-all
-                        px-2
-                        py-1
-                        my-1
-                        rounded-lg
-                        group
-                    ">
-        
-        <iconify-icon class="group-hover:scale-125 transition-transform" icon="mingcute:user-info-fill" width="22">
-        </iconify-icon>
-        
-        
-        <p>About</p>
-        
-      </a>
-      
-      
-      
-      
-      
-      
-      <a href="/./tags" class="
-                        flex flex-row items-center
-                        gap-1
-                        hover:underline
-                        hover:bg-[var(--c-20)]
-                        hover:text-[var(--c-theme)]
-                        transition-all
-                        px-2
-                        py-1
-                        my-1
-                        rounded-lg
-                        group
-                    ">
-        
-        <iconify-icon class="group-hover:scale-125 transition-transform" icon="mingcute:tag-fill" width="22">
-        </iconify-icon>
-        
-        
-        <p>Tags</p>
-        
-      </a>
-      
-      
-      
-      
-      
-      
-      <a href="/./index" class="
-                        flex flex-row items-center
-                        gap-1
-                        hover:underline
-                        hover:bg-[var(--c-20)]
-                        hover:text-[var(--c-theme)]
-                        transition-all
-                        px-2
-                        py-1
-                        my-1
-                        rounded-lg
-                        group
-                    ">
-        
-        <iconify-icon class="group-hover:scale-125 transition-transform" icon="mingcute:home-2-fill" width="22">
-        </iconify-icon>
-        
-        
-      </a>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
       
     </div>
-    <!-- Icons on the right -->
-    <div class="flex flex-row items-center">
-
-      <!-- TODO: Add search icon here -->
-
-      <!-- Dark/light toggle icon -->
-      <a class="flex group p-1" title="toggle theme" id="toggle-dark">
-        <iconify-icon class="transition-transform
-                    group-hover:rotate-[45deg]
-                    group-hover:scale-125
-                    group-hover:text-[var(--c-theme)]" width="24" id="theme-icon">
-        </iconify-icon>
-      </a>
-      <!-- Icon for dropout menu on small screens -->
-      <div class="flex p-1 mx-1 sm:hidden">
-        <a class="w-5 h-5" aria-hidden="true" id="open-menu">
-          <iconify-icon width="24" icon="mingcute:menu-fill" class="transition-transform hover:scale-125 hover:rotate-[5deg]">
-          </iconify-icon>
-        </a>
-        <a class="w-5 h-5 hidden" aria-hidden="true" id="close-menu">
-          <iconify-icon width="24" icon="mingcute:close-circle-fill" class="transition-transform hover:scale-125 hover:rotate-[80deg]">
-          </iconify-icon>
-        </a>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
       </div>
     </div>
   </div>
 </header>
 
-<!-- Dropdown menu on small screens -->
-<div id="menu-panel" class="
-        h-0
-        overflow-hidden
-        sm:hidden
-        w-full
-        z-10
-        rounded
-    ">
-  <div id="menu-content" class="
-        flex
-        flex-row
-        justify-center
-        items-center
-        font-bold
-        text-xl
-        border-b-[1px]
-        relative
-        z-20
-        border-[var(--c-sep)]
-        px-2
-        py-2
-        -translate-y-full
-        transition-transform
-        duration-200
-        ">
-    
-    
-    
-    <a href="/./archives" class="
-                flex flex-row items-center
-                gap-2
-                h-12
-                hover:underline
-                hover:bg-[var(--c-20)]
-                px-3
-                py-1
-                rounded-lg
-            ">
-      <iconify-icon icon="mingcute:inbox-fill" width="22">
-      </iconify-icon>
-      <p>
-        posts
-      </p>
-    </a>
-    
-    
-    
-    
-    <a href="/./publications" class="
-                flex flex-row items-center
-                gap-2
-                h-12
-                hover:underline
-                hover:bg-[var(--c-20)]
-                px-3
-                py-1
-                rounded-lg
-            ">
-      <iconify-icon icon="mingcute:science-fill" width="22">
-      </iconify-icon>
-      <p>
-        publications
-      </p>
-    </a>
-    
-    
-    
-    
-    <a href="/./about" class="
-                flex flex-row items-center
-                gap-2
-                h-12
-                hover:underline
-                hover:bg-[var(--c-20)]
-                px-3
-                py-1
-                rounded-lg
-            ">
-      <iconify-icon icon="mingcute:user-info-fill" width="22">
-      </iconify-icon>
-      <p>
-        about
-      </p>
-    </a>
-    
-    
-    
-    
-    <a href="/./tags" class="
-                flex flex-row items-center
-                gap-2
-                h-12
-                hover:underline
-                hover:bg-[var(--c-20)]
-                px-3
-                py-1
-                rounded-lg
-            ">
-      <iconify-icon icon="mingcute:tag-fill" width="22">
-      </iconify-icon>
-      <p>
-        tags
-      </p>
-    </a>
-    
-    
-    
-    
-    <a href="/./index" class="
-                flex flex-row items-center
-                gap-2
-                h-12
-                hover:underline
-                hover:bg-[var(--c-20)]
-                px-3
-                py-1
-                rounded-lg
-            ">
-      <iconify-icon icon="mingcute:home-2-fill" width="22">
-      </iconify-icon>
-      <p>
-        home
-      </p>
-    </a>
-    
+      <div class="outer">
+        <section id="main"><article id="post-EC-Net" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/05/31/EC-Net/" class="article-date">
+  <time class="dt-published" datetime="2023-05-30T16:39:24.000Z" itemprop="datePublished">2023-05-31</time>
+</a>
     
   </div>
-</div>
-  <main>
-    <!-- css -->
-
-<link rel="stylesheet" href="/lib/fancybox/fancybox.min.css">
-
-  
-<link rel="stylesheet" href="/lib/tocbot/tocbot.min.css">
-
-    <!-- toc -->
+  <div class="article-inner">
     
-  <!-- tocbot -->
-<nav class="post-toc toc text-sm w-40 relative top-32 right-4 opacity-70 hidden lg:block" style="position: fixed !important;"></nav>
-
-
-<section class="px-6 max-w-prose mx-auto md:px-0">
-  <!-- Post header before content -->
-  <header class="py-4">
-    <div class="flex flex-col gap-2 pt-4 md:pt-6">
-      <!-- Title -->
-      <div id="article-title" class="leading-snug">
-        <p class="text-3xl font-bold text-[var(--c-100)] mb-4">EC-Net 论文阅读笔记</p>
-      </div>
-      <!-- Meta data -->
-      <div>
-        <section class="
-          flex flex-col gap-x-2 gap-y-1 text-sm text-[var(--c-100)]">
-          <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <!-- Dates -->
-            <div class="flex items-center gap-1">
-              <iconify-icon width="18" icon="mingcute:add-circle-fill" ></iconify-icon>
-              Created: <time class="w-max">2023-05-31</time>
-            </div>
-            <div class="flex items-center gap-1">
-              <iconify-icon width="18" icon="mingcute:refresh-3-fill" ></iconify-icon>
-              Edited: <time class="w-max">2023-06-09</time>
-            </div>
-          </div>
-          <div class="flex flex-wrap items-center gap-x-3 gap-y-3">
-            <!-- Author -->
-            
-
-            <!-- Word count -->
-            <span class="flex items-center gap-1">
-              <iconify-icon width="18" icon="mingcute:book-2-fill" ></iconify-icon>
-              <span>3k words, 11 min</span>
-            </span>
-            <!-- Categories -->
-            
-          </div>
-        </section>
-      </div>
-      <!-- tags -->
-      <div>
+    
+      <header class="article-header">
         
-<div class="flex flex-wrap gap-1">
   
-    
-      <a href="/tags/%E7%82%B9%E4%BA%91/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        点云
-      </a>
-    
-      <a href="/tags/%E7%82%B9%E4%BA%91%E4%B8%8A%E9%87%87%E6%A0%B7/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        点云上采样
-      </a>
-    
-      <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        神经网络
-      </a>
-    
-      <a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" 
-        class="
-          tag
-          text-sm
-          rounded-full
-          px-[5px]
-          border-[1px]
-          border-[var(--c-theme)]
-          text-[var(--c-theme)]
-          bg-[var(--c-0)]
-          dark:bg-[var(--c-0)]
-          dark:drop-shadow-none
-          hover:bg-[var(--c-theme)]
-          hover:text-[var(--c-0)]
-          dark:hover:text-[var(--c-theme-2)]
-        ">
-        论文阅读笔记
-      </a>
-    
+    <h1 class="p-name article-title" itemprop="headline name">
+      EC-Net 论文阅读笔记
+    </h1>
   
-</div>
-      </div>
-    </div>
-  </header>
-  <!-- content -->
-  <article class="post-content prose m-auto dark:prose-invert">
-    <p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1807.06010.pdf">EC-Net: an Edge-aware Point set Consolidation Network</a></p>
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1807.06010.pdf">EC-Net: an Edge-aware Point set Consolidation Network</a></p>
 <h1 id="一、摘要及引言"><a href="#一、摘要及引言" class="headerlink" title="一、摘要及引言"></a>一、摘要及引言</h1><p>点云整合（point cloud consolidation）是将点云“按摩”到表面上的过程，去噪、补全、重采样等等都属于其一部分。目前数据驱动方法展现出了很好的性能，但它们忽略了 3D 对象的锐利特征。该论文提出了第一个用于边缘感知整合网络 EC-Net ，其在 PointNet 的启发下，通过将坐标转换为深层特征并进行特征扩展产生更多点。同时论文提出了一种仅适用于点云的 patch 提取方案，以便提取 patch 并在训练和测试阶段共同使用。</p>
 <span id="more"></span>
 <p>此外，为了使得网络具有<strong>边缘感知</strong>能力，论文将边缘和网格三角形信息同 patch 相关联，通过回归<strong>点到边缘的距离</strong>以及点坐标来训练网络。更重要的是，论文通过一种新颖的 edge-ware 联合损失函数，可以有效地比较输出点和基准 3D 网格。该损失函数鼓励输出点靠近底层表面和边缘，并更均匀地分布在表面上。</p>
 <h1 id="二、方法"><a href="#二、方法" class="headerlink" title="二、方法"></a>二、方法</h1><h2 id="训练数据准备"><a href="#训练数据准备" class="headerlink" title="训练数据准备"></a>训练数据准备</h2><p>论文从 ShapeNet 和其它在线存储库收集 3D 网格 ，包括简单的 3D 形状、机械零件和椅子等日常用品。并且采用了手动绘制折线的方式来标记网格上的锐利边缘，用于学习点到边缘的距离，如下图所示。</p>
-<p><img src="/2023/05/31/EC-Net/9914334e1a334b6aa2fb96ea8b3c64f7.png" alt="网格边缘标记" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="9914334e1a334b6aa2fb96ea8b3c64f7.png" alt="网格边缘标记" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;" /></p>
 <h3 id="虚拟扫描"><a href="#虚拟扫描" class="headerlink" title="虚拟扫描"></a>虚拟扫描</h3><p>为了从 3D 网格获取点云，论文采用了虚拟扫描的方式，具体来说。首先将网格归一化到 $\left[-1,+1\right]^3$ 单位距离空间里，并在物体周围水平均匀的布置 30 个虚拟相机（视角为 50°），相机距离物体中心两个单位距离，同时随机地扰动相机位置（向上或向下）。之后，通过渲染出网格对象的深度图并为深度值和像素位置添加量化噪声，最后反向投影每个像素得到点云。</p>
 <p>这种方式模拟了真实场景里的扫描仪，比一般的下采样方法更加贴合实际。其特点是存在线状的点分布（下图左），离相机越近的平面采样点越密集（下图右），同时具有随机误差。</p>
-<p><img src="/2023/05/31/EC-Net/2a1c179521514327bbf9b1b4f61402ab.png" alt="虚拟扫描" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="2a1c179521514327bbf9b1b4f61402ab.png" alt="虚拟扫描" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;" /></p>
 <h3 id="局部区域提取"><a href="#局部区域提取" class="headerlink" title="局部区域提取"></a>局部区域提取</h3><p>提取 patch 的依据是测地线距离，因为采用欧氏距离可能导致相邻点位于薄表面的两侧。具体的提取步骤如下：</p>
 <ul>
-<li><img src="/2023/05/31/EC-Net/f19afa3e9ca74fdc978749eeb712767f.png" alt="在这里插入图片描述" style="zoom:90%;float:right;padding-left:30pt">首先将每个点视为节点创建邻接图，图中每个点与其 $k$ 近邻点（$k=10$）相连，如右图所示。边权重设置为两点之间的欧氏距离；</li>
+<li><img src="f19afa3e9ca74fdc978749eeb712767f.png" alt="在这里插入图片描述" style="zoom:90%;float:right;padding-left:30pt" />首先将每个点视为节点创建邻接图，图中每个点与其 $k$ 近邻点（$k=10$）相连，如右图所示。边权重设置为两点之间的欧氏距离；</li>
 <li>随机选择 $m=100$ 个点作为 patch 的中心点。对于每个选定的点，通过 Dijkstra 算法找到 $2048$ 个在<strong>邻接图上</strong>最近的点；</li>
 <li>在 $2048$ 个点里随机选取 $\hat{N}=1024$ 个点，从而引入随机性；</li>
 <li>将点坐标归一化到单位球内，坐标重心为原点；</li>
@@ -622,14 +128,14 @@
 </ul>
 <h2 id="边缘感知的点集整合网络"><a href="#边缘感知的点集整合网络" class="headerlink" title="边缘感知的点集整合网络"></a>边缘感知的点集整合网络</h2><h3 id="特征嵌入及扩展"><a href="#特征嵌入及扩展" class="headerlink" title="特征嵌入及扩展"></a>特征嵌入及扩展</h3><p>该组件首先使用 PointNet++ 将每个点周围的局部信息映射到 $D$ 维特征向量中（论文实验取 $D=256$ ）。考虑到 patch 边缘点的局部信息不准确，论文只保留了 $N = \frac{\hat{N}}{2}$ 个最接近 patch 中心的点对应的特征向量，因此特征嵌入组件的输入为 $N\times 3$ 的张量。</p>
 <p>下图为特征嵌入部分的详细结构，其中在四个级别分别采用了 $0.1、0.2、0.4、0.6$ 的分组半径来提取局部特征，这四个层次对应的点样本数分别为 $N,\frac{N}{2},\frac{N}{4},\frac{N}{8}$ 。这里虽然写的是 conv 层，但其实就是 PointNet++ 中的 SA 层。其特征组合方式参考了 PU-Net 。</p>
-<p><img src="/2023/05/31/EC-Net/537dcf63ed6d4f3f9c8a8729657f540c.png" alt="在这里插入图片描述" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="537dcf63ed6d4f3f9c8a8729657f540c.png" alt="在这里插入图片描述" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;" /></p>
 <p>特征扩展部分和 PU-Net 一致，只不过在 PU-Net 中的 $1\times1$ 卷积，在这里也统一写成了卷积层。特征扩展部分的输出为 $rN\times128$ 的张量。</p>
-<p><img src="/2023/05/31/EC-Net/image-20230526201933967.png" alt="image-20230526201933967" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="image-20230526201933967.png" alt="image-20230526201933967" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;" /></p>
 <h3 id="边缘距离回归"><a href="#边缘距离回归" class="headerlink" title="边缘距离回归"></a>边缘距离回归</h3><p>这一组件将回归每个点到边缘的距离，从而进行边缘点识别。回归距离是点到最近的标记边缘的距离。具体来说，首先通过 MLP 从扩展特征中提取距离特征 $f_{dist}$ ，然后再通过另一个 MLP 回归点到边缘的距离（但是既然点是无序的，训练样本中的点到边缘距离如何排列？或者随机排列？）。</p>
-<p><img src="/2023/05/31/EC-Net/image-20230526202725949.png" alt="image-20230526202725949" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p><img src="image-20230526202725949.png" alt="image-20230526202725949" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;" /></p>
 <h3 id="坐标回归"><a href="#坐标回归" class="headerlink" title="坐标回归"></a>坐标回归</h3><p>基于边缘距离回归组件中的 $f_{dist}$ 特征，利用两个 MLP 回归点坐标。在这里论文采用了只回归<strong>残差坐标</strong>的方式，也就是上采样点相对当前点的偏移值，这样预测值会比较小，有利于网络学习。另外，论文提到除了最后用于回归的 MLP 层，其余所有卷积和 MLP 层后面都接的是 RELU 激活函数。</p>
 <h3 id="边缘点识别"><a href="#边缘点识别" class="headerlink" title="边缘点识别"></a>边缘点识别</h3><p>记 $d_i$ 为输出点 $x_i$ 到边缘的距离，则边缘点集为 $\mathcal{S}_{\Delta_d}=\{x_i \}_{d_i&lt;\Delta_d}$ 。该组件在训练和测试阶段都会执行。</p>
-<h2 id="边缘感知的联合损失函数"><a href="#边缘感知的联合损失函数" class="headerlink" title="边缘感知的联合损失函数"></a>边缘感知的联合损失函数</h2><p><img src="/2023/05/31/EC-Net/d39191aed6af41fab68697431bc668b7.png" alt="EC-Net架构图" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
+<h2 id="边缘感知的联合损失函数"><a href="#边缘感知的联合损失函数" class="headerlink" title="边缘感知的联合损失函数"></a>边缘感知的联合损失函数</h2><p><img src="d39191aed6af41fab68697431bc668b7.png" alt="EC-Net架构图" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;" /></p>
 <p>损失函数的设计主要基于以下目标：1）靠近底层物体表面；2）靠近标记边缘；3）均匀分布</p>
 <h3 id="表面损失（Surface-Loss）"><a href="#表面损失（Surface-Loss）" class="headerlink" title="表面损失（Surface Loss）"></a>表面损失（Surface Loss）</h3><p>表面损失定义为从每个输出点 $x_i$ 到与 patch 关联的所有网格三角形 $T$ 的最短距离：</p>
 <script type="math/tex; mode=display">
@@ -675,285 +181,151 @@ L_{regr} = \frac{1}{\widetilde{N}}\sum_{1\leq i \leq \widetilde{N}}\left[\mathca
 <li>patch 点数固定，导致随着点云密度变化，其大小发生显著改变，难以适应不同规模的结构</li>
 </ul>
 
-  </article>
-
-  <!-- prev and next -->
-  <div class="flex justify-between mt-4 pt-4
-    border-t border-[var(--c-sep)] text-sm
-    gap-2 text-[var(--c-50)]
-  ">
-    <div>
-      
-        <a href="/2023/06/08/DGCNN/"
-          class="
-            transition-all
-            flex justify-center
-            hover:-translate-x-1
-            hover:text-[var(--c-80)]
-          ">
-          <iconify-icon width="20" icon="mingcute:left-fill" data-inline="false">
-          </iconify-icon>
-          DGCNN 论文阅读笔记
-        </a>
       
     </div>
-    <div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2023/05/31/EC-Net/" data-id="clzvdfd380006k8jp59a078wg" data-title="EC-Net 论文阅读笔记" class="article-share-link"><span class="fa fa-share">Share</span></a>
       
-        <a href="/2023/05/23/PU-Net/"
-          class="
-            flex 
-            justify-center
-            hover:translate-x-1 
-            transition-transform
-            hover:text-[var(--c-100)]
-          "
-        >
-          PU-Net 论文阅读笔记
-          <iconify-icon width="20" icon="mingcute:right-fill" data-inline="false"></iconify-icon>
-        </a>
       
-    </div>
-  </div>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%82%B9%E4%BA%91/" rel="tag">点云</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%82%B9%E4%BA%91%E4%B8%8A%E9%87%87%E6%A0%B7/" rel="tag">点云上采样</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" rel="tag">论文阅读笔记</a></li></ul>
 
-  <!-- comment -->
-  <div class="article-comments mt-12">
-    
-<script
-  src="https://giscus.app/client.js"
-  data-repo="zcliangyue/zcliangyue.github.io"
-  data-repo-id="R_kgDOJlpveg"
-  data-category="Announcements"
-  data-category-id="DIC_kwDOJlpves4ChkxB"
-  data-mapping="pathname"
-  data-strict="0"
-  data-reactions-enabled="1"
-  data-emit-metadata="0"
-  data-input-position="bottom"
-  data-theme="preferred_color_scheme"
-  data-lang="zh-CN"
-  crossorigin="anonymous"
-  async
-></script>
-<script>
-  window.onload = function () {
-    console.log("giscus loaded");
-    const isDark = document.documentElement.classList.contains("dark");
-    const giscusFrame = document.querySelector("iframe.giscus-frame");
-    giscusFrame.contentWindow.postMessage(
-      {
-        giscus: {
-          setConfig: {
-            theme: isDark ? "dark" : "light",
-          },
-        },
-      },
-      "https://giscus.app"
-    );
-  };
-</script>
-
-
-  </div>
-</section>
-<!-- js inspect -->
-
-<script src="/lib/clipboard.min.js"></script>
-
-
-<script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    "HTML-CSS": {
-        preferredFont: "TeX",
-        availableFonts: ["STIX","TeX"],
-        linebreaks: { automatic:true },
-        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
-    },
-    tex2jax: {
-        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
-        processEscapes: true,
-        ignoreClass: "tex2jax_ignore|dno",
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        equationNumbers: { autoNumber: "AMS" },
-        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
-        Macros: { href: "{}" }
-    },
-    messageStyle: "none"
-  });
-</script>
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-      var all = MathJax.Hub.getAllJax(), i;
-      for (i=0; i < all.length; i += 1) {
-          all[i].SourceElement().parentNode.className += ' has-jax';
-      }
-  });
-</script>
-
-
-
-<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-<script>
-  $(document).ready(() => {
-    const maraidConfig = {
-      theme: "default",
-      logLevel: 3,
-      flowchart: { curve: "linear" },
-      gantt: { axisFormat: "%m/%d/%Y" },
-      sequence: { actorMargin: 50 },
-    };
-    mermaid.initialize(maraidConfig);
-  });
-</script>
-
-
-
-<script src="/lib/fancybox/fancybox.umd.min.js"></script>
-
-<script>
-  $(document).ready(() => {
-    $('.post-content').each(function(i){
-      $(this).find('img').each(function(){
-        if ($(this).parent().hasClass('fancybox') || $(this).parent().is('a')) return;
-        var alt = this.alt;
-        var title = this.title;
-        if (alt) $(this).after('<span class="fancybox-alt">' + alt + '</span>');
-        if (title) $(this).after('<span class="fancybox-title">' + title + '</span>');
-        $(this).wrap('<a class="fancybox-img" href="' + this.src + '" data-fancybox=\"gallery\" data-caption="' + alt + '"></a>')
-      });
-      $(this).find('.fancybox').each(function(){
-        $(this).attr('rel', 'article' + i);
-      });
-    });
-
-    Fancybox.bind('[data-fancybox="gallery"]', {
-        // options
-    })
-  })
-</script>
-
-<!-- tocbot begin -->
-
-<script src="/lib/tocbot/tocbot.min.js"></script>
-
-<script>
-  $(document).ready(() => {
-      tocbot.init({
-        // Where to render the table of contents.
-        tocSelector: '.post-toc',
-        // Where to grab the headings to build the table of contents.
-        contentSelector: '.post-content',
-        // Which headings to grab inside of the contentSelector element.
-        headingSelector: 'h1, h2, h3',
-        // For headings inside relative or absolute positioned containers within content.
-        hasInnerContainers: true,
-    });
-  })
-</script>
-<!-- tocbot end -->
-
-  </main>
-  <footer class="flex flex-col mt-18 mb-12 items-center
-  text-[var(--c-50)] text-sm">
-  <div class="flex flex-row items-center my-12">
-    
-    
-        
-        
-            
-            
-        
-        <a class="
-            hover:text-[var(--c-theme)]
-            hover:bg-[var(--c-20)]
-            rounded-lg
-            p-2
-            my-1
-            flex flex-row items-center
-            group" title="Github" target="_blank" rel="noopener" href="https://www.github.com/zcliangyue">
-            <iconify-icon width="28" icon="mingcute:github-fill"></iconify-icon>
-        </a>
-    
-
-  </div>
-  <!-- busuanzi -->
-  <div class="mb-6">
-    
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<!-- Busuanzi Analytics -->
-<div class="flex flex-col items-center mb-2">
-  <div class="flex flex-row items-center">
-    <iconify-icon width="16" icon="ic:round-person" width="18"></iconify-icon>
-    <span class="mr-1">访客 Visitors: </span>
-    <span id="busuanzi_value_site_uv"></span>
-  </div>
-  <div class="flex flex-row items-center">
-    <iconify-icon width="16" icon="carbon:view-filled" width="18"></iconify-icon>
-    <span class="mx-1">浏览量 Page Views:</span>
-    <span id="busuanzi_value_site_pv"></span>
-  </div>
-</div>
-<!-- End Busuanzi Analytics -->
-
-
-  </div>
-  <!-- copyright -->
-  <div class="flex flex-row items-center gap-2">
-    <a class="hover:underline"
-      target="_blank"
-      href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
-    >
-      CC BY-NC-SA 4.0
-    </a>
-    <span>© 2022-2024</span>
-    <a class="hover:underline"
-    href="https://github.com/chen-yingfa" 
-    target="_blank" 
-    rel="noopener noreferrer">陈英发</a>
-  </div>
-  <!-- powered by -->
-  <div class="flex items-center gap-1">
-    <span>Powered by</span>
-    <a class="hover:underline" 
-    href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
-    <span>&</span>
-    <a href="https://github.com/chen-yingfa/hexo-theme-fengye" 
-    class="hover:underline"
-    target="_blank"
-      rel="noopener noreferrer"
-      >
-      枫叶 Fengye
-    </a>
-  </div>
-
-</footer>
-
-  <div class="
-    back-to-top
-    fixed right-6
-    z-1024
-    -bottom-20
-    rounded-lg
-    font-bold
-    py-1 px-2
-    text-[var(--c-80)]
-    bg-[var(--c-20)]
-    cursor-pointer
-    text-center
-    drop-shadow-md
-  ">
-    <span class="flex justify-center items-center text-sm">
-      <span id="scrollpercent"><span>0</span> %</span>
-      <iconify-icon width="18" icon="mingcute:arrow-to-up-fill" id="go-top"></iconify-icon>
-    </span>
+    </footer>
   </div>
   
-<script src="/js/main.js"></script>
+    
+<nav id="article-nav">
+  
+    <a href="/2023/06/08/DGCNN/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          DGCNN 论文阅读笔记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/05/23/PU-Net/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">PU-Net 论文阅读笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
 
 
-  <div class="fixed top-0 bottom-0 left-0 right-0 pointer-events-none print:hidden" id="maple"></div>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Diffusion-Model/" rel="tag">Diffusion Model</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GAN/" rel="tag">GAN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/" rel="tag">个人简历</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%A6%E7%AC%94%E8%AE%B0/" rel="tag">数学笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE/" rel="tag">激光雷达</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%82%B9%E4%BA%91/" rel="tag">点云</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%82%B9%E4%BA%91%E4%B8%8A%E9%87%87%E6%A0%B7/" rel="tag">点云上采样</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/" rel="tag">生成式模型</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A0%94%E7%A9%B6%E7%8E%B0%E7%8A%B6%E8%B0%83%E7%A0%94/" rel="tag">研究现状调研</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">神经网络</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" rel="tag">论文阅读笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E7%AC%94/" rel="tag">随笔</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9F%B3%E4%B9%90%E7%AC%94%E8%AE%B0/" rel="tag">音乐笔记</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Diffusion-Model/" style="font-size: 10px;">Diffusion Model</a> <a href="/tags/GAN/" style="font-size: 12.5px;">GAN</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E7%AE%80%E5%8E%86/" style="font-size: 10px;">个人简历</a> <a href="/tags/%E6%95%B0%E5%AD%A6%E7%AC%94%E8%AE%B0/" style="font-size: 12.5px;">数学笔记</a> <a href="/tags/%E6%BF%80%E5%85%89%E9%9B%B7%E8%BE%BE/" style="font-size: 10px;">激光雷达</a> <a href="/tags/%E7%82%B9%E4%BA%91/" style="font-size: 17.5px;">点云</a> <a href="/tags/%E7%82%B9%E4%BA%91%E4%B8%8A%E9%87%87%E6%A0%B7/" style="font-size: 15px;">点云上采样</a> <a href="/tags/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">生成式模型</a> <a href="/tags/%E7%A0%94%E7%A9%B6%E7%8E%B0%E7%8A%B6%E8%B0%83%E7%A0%94/" style="font-size: 10px;">研究现状调研</a> <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" style="font-size: 20px;">神经网络</a> <a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" style="font-size: 20px;">论文阅读笔记</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 10px;">随笔</a> <a href="/tags/%E9%9F%B3%E4%B9%90%E7%AC%94%E8%AE%B0/" style="font-size: 10px;">音乐笔记</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/05/">May 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/03/">March 2024</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/12/">December 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/09/">September 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/06/">June 2023</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/05/">May 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/05/06/%E4%BA%A4%E6%8D%A2%E4%BB%A3%E6%95%B0/">交换代数笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2024/05/05/%E7%94%9F%E6%88%90%E5%BC%8F%E6%A8%A1%E5%9E%8B/">VAE 和 DDPM ：一些数学公式推导</a>
+          </li>
+        
+          <li>
+            <a href="/2024/03/15/PU-GCN/">PU-GCN 阅读笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2023/12/14/%E6%8A%BD%E8%B1%A1%E4%BB%A3%E6%95%B0/">抽象代数笔记（更新中）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/12/14/%E5%92%8C%E5%BC%A6%E7%90%86%E8%AE%BA/">和弦理论笔记（更新中）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
         tex2jax: {
@@ -972,5 +344,4 @@ L_{regr} = \frac{1}{\widetilde{N}}\sum_{1\leq i \leq \widetilde{N}}\left[\mathca
 
 <!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
 </body>
-
 </html>
