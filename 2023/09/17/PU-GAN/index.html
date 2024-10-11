@@ -15,7 +15,7 @@
   <meta name="subtitle" content="张从朗">
 
 
-  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室一年级研究生，目前的研究方向是点云质量增强。">
+  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室2024级研究生，目前的研究方向是点云生成和质量增强。">
 
 
 
@@ -648,7 +648,7 @@
 \\
 \text{and }\  \mathcal{L}_{\text{gan}}(D)&=\frac{1}{2}\left[D(Q)^2+(D(\hat{Q})-1)^2\right]
 \end{aligned}</script><h3 id="均匀损失（Uniform-Loss）"><a href="#均匀损失（Uniform-Loss）" class="headerlink" title="均匀损失（Uniform Loss）"></a>均匀损失（Uniform Loss）</h3><p>单独使用对抗网络难以使网络收敛，也很难生成均匀的点集。因此需要一个统一的损失来评估生成的 $\mathcal{Q}$ ，从而提高生成器的生成能力。PU-Net 使用 NUC 指标来评估点集表面的均匀性，主要思路是在物体表面放置大小相同的圆盘并统计圆盘内的点数变化差异。但这样做忽略了圆盘内点的局部混乱。</p>
-<p>论文的方法如下。首先对 patch 进行最远点采样，得到 $M$ 个种子点，并使用球查询半径 $r_d$ 获取一系列局部点子集，记作 $S_j, j=1,2,\dots,M$ 。这里的 $r_d$ 取较小的值，使得 $S_j$ 中的点大致位于一个小局部圆盘上，面积为 $\pi r_d^2$ 。另一方面，通过测地线距离形成 patch 并标准化到单位球体当中，此时面积为 $\sim\pi 1^2$ 。因此 $S_j$ 中点的百分比应为 $p=(\pi r_d^2)/(\pi1^2)= r_d^2$ 。需要注意，此时的 patch 是标准化的，因此 $r_d&lt;1$ 。得到 $\hat{S_j}$ 中的期望点数为 $\hat{n}=rN\times p$ 。PU-GAN 遵循卡方模型来度量 $|S_j|$ 的偏差：</p>
+<p>论文的方法如下。首先对 patch 进行最远点采样，得到 $M$ 个种子点，并使用球查询半径 $r_d$ 获取一系列局部点子集，记作 $S_j,\ j=1,2,\dots,M$ 。这里的 $r_d$ 取较小的值，使得 $S_j$ 中的点大致位于一个小局部圆盘上，面积为 $\pi r_d^2$ 。另一方面，通过测地线距离形成 patch 并标准化到单位球体当中，此时面积为 $\sim\pi 1^2$ 。因此 $S_j$ 中点的百分比应为 $p=(\pi r_d^2)/(\pi1^2)= r_d^2$ 。需要注意，此时的 patch 是标准化的，因此 $r_d&lt;1$ 。得到 $\hat{S_j}$ 中的期望点数为 $\hat{n}=rN\times p$ 。PU-GAN 遵循卡方模型来度量 $|S_j|$ 的偏差：</p>
 <script type="math/tex; mode=display">
 U_{\text{imbalance}}(S_j)=\frac{(|S_j|-\hat{n})^2}{\hat{n}}</script><p>为了计算局部的点混乱，对于 $S_j$ 中的每个点，找到其最近邻点的距离，记第 $k$ 个最近点的距离为 $d_{j,k}$ 。如果点是均匀分布的，那么假设 $S_j$ 完全平坦且点成六边形分布，则预期的点到邻近点距离 $\hat{d}$ 应为 $\sqrt{\frac{2\pi r_d^2}{|S_j|\sqrt{3}}}$ 。这个计算是比较粗糙的，它假设了点数等于三角形数，那么三角形面积为 $\frac{\sqrt{3}}{2}\hat{d}^2=\frac{\pi r_d^2}{|S_j|}$ ，即可推得。同样地，遵循卡方模型来度量 $d_{j,k}$ 的偏差：</p>
 <script type="math/tex; mode=display">
@@ -956,9 +956,7 @@ U_{\text{clutter}}(S_j)=\sum_{k=1}^{|S_j|}\frac{(d_{j,k}-\hat{d})^2}{\hat{d}}</s
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

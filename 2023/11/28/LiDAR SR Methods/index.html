@@ -15,7 +15,7 @@
   <meta name="subtitle" content="张从朗">
 
 
-  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室一年级研究生，目前的研究方向是点云质量增强。">
+  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室2024级研究生，目前的研究方向是点云生成和质量增强。">
 
 
 
@@ -656,9 +656,9 @@ d  &=\sqrt{x^2+y^2+z^2}
 \end{aligned}
 \end{cases}</script><p>此时在 $\varphi-\theta$ 平面上，点的分布是规则的，这有利于后续的栅格化和上采样。使用这种投影的上采样方法通常总结为基于格网的方法。</p>
 <p>需要注意的是，有的激光雷达点云在垂直方向上并不均匀分布，例如 <a target="_blank" rel="noopener" href="https://hesaiweb2019.blob.core.chinacloudapi.cn/uploads/Pandar64_产品手册_640-zh-230510.pdf">Pandar64</a> 将 $3/4$ 的线束集中在了 $(-6°,+2°)$ ，而垂直视场角为 $(-25°,+15°)$ ，但这样的激光雷达目前还不多见。</p>
-<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>对于点云 $P$ ，可将其记作一系列扫描线的集合，即 $P=\{L_i \, |i=1,2,\dots,N_P\}$ ，其中</p>
+<h2 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h2><p>对于点云 $P$ ，可将其记作一系列扫描线的集合，即 $P={L_i \, |i=1,2,\dots,N_P}$ ，其中</p>
 <script type="math/tex; mode=display">
-L_i=\left\{(x,y,z)\in P \, \middle|\arctan\left(z\big/\sqrt{x^2+y^2}\right)=\varphi_i \right\},</script><p>表示第 $i$ 条扫描线，我们希望预测点云 $Q=\{L_i \, |i=1,2,\dots,N_Q\}$ ，满足 $N_Q&gt;N_P$ ，且保有 $P$ 的几何特征和扫描线结构。同时我们希望点云 $Q$ 在同样的下游算法上表现出优于 $P$ 的性能。</p>
+L_i=\left\{(x,y,z)\in P \, \middle|\arctan\left(z\big/\sqrt{x^2+y^2}\right)=\varphi_i \right\},</script><p>表示第 $i$ 条扫描线，我们希望预测点云 $Q={L_i \, |i=1,2,\dots,N_Q}$ ，满足 $N_Q&gt;N_P$ ，且保有 $P$ 的几何特征和扫描线结构。同时我们希望点云 $Q$ 在同样的下游算法上表现出优于 $P$ 的性能。</p>
 <h1 id="研究现状"><a href="#研究现状" class="headerlink" title="研究现状"></a>研究现状</h1><h2 id="CNN-based-synthesis-of-realistic-high-resolution-LiDAR-data"><a href="#CNN-based-synthesis-of-realistic-high-resolution-LiDAR-data" class="headerlink" title="CNN-based synthesis of realistic high-resolution LiDAR data"></a><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1907.00787">CNN-based synthesis of realistic high-resolution LiDAR data</a></h2><h3 id="上采样"><a href="#上采样" class="headerlink" title="上采样"></a>上采样</h3><p>下图展示了网络的总体框架。对于低分辨率图像，其特征提取步骤通过一系列残差块执行，上采样则通过转置卷积（文中称分数跨步卷积）实现。在第一层和最后一层使用了 $9\times 9$ 的卷积，中间残差块中都是 $3\times 3$ 。</p>
 <p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231031175129278.png" alt="image-20231031175129278" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="修正的逐点损失函数"><a href="#修正的逐点损失函数" class="headerlink" title="修正的逐点损失函数"></a>修正的逐点损失函数</h3><p>论文考虑到图像中大量存在的缺失点，将 $\mathcal{L}_1、\mathcal{L}_2$ 损失修正为只对比非缺失点，记作集合 $V\subset I$ ，即：</p>
@@ -789,7 +789,7 @@ s=f_{cell}(z,[x,c])</script><p>其中 $c=[c_h,c_w]$ ，表示查询像素的大�
 <blockquote>
 <p>不同距离的物体的尺度表现出显着的差异。为了更好地适应不同的尺度并获得更灵活的感受野，我们设计了膨胀残差块（DRB），它将膨胀卷积插入到正常残差块中。</p>
 </blockquote>
-<p>应用三个具有不同扩张率 $\{1,2,3\}$ 的 $3\times3$ 卷积来提取具有不同感受野的特征。三个扩张卷积的输出被连接起来，然后是一个 1 × 1 卷积，以融合具有不同感受野的特征。残差连接用于添加融合特征和输入特征。</p>
+<p>应用三个具有不同扩张率 ${1,2,3}$ 的 $3\times3$ 卷积来提取具有不同感受野的特征。三个扩张卷积的输出被连接起来，然后是一个 1 × 1 卷积，以融合具有不同感受野的特征。残差连接用于添加融合特征和输入特征。</p>
 <p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231102161906330.png" alt="image-20231102161906330" style="zoom:50%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>但是作者这里没有说上采样层的结构。最终预测一个 $C+1$ 维的特征图，最后一维作为掩码。两个掩码进行 SoftMax 得到权重。</p>
 <h3 id="评价指标-5"><a href="#评价指标-5" class="headerlink" title="评价指标"></a>评价指标</h3><p>EMD、CD、MAE、RMSE、IoU、Precision、Recall、F1。</p>
@@ -806,7 +806,7 @@ s=f_{cell}(z,[x,c])</script><p>其中 $c=[c_h,c_w]$ ，表示查询像素的大�
 <h3 id="结论-1"><a href="#结论-1" class="headerlink" title="结论"></a>结论</h3><p>MC-Dropout 或其它删除不确定点的操作有利于 SLAM 的结果更稳定。</p>
 <h1 id="TULIP-Transformer-for-Upsampling-of-LiDAR-Point-Clouds"><a href="#TULIP-Transformer-for-Upsampling-of-LiDAR-Point-Clouds" class="headerlink" title="TULIP: Transformer for Upsampling of LiDAR Point Clouds"></a><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2312.06733.pdf">TULIP: Transformer for Upsampling of LiDAR Point Clouds</a></h1><p>暂时没有开源。其中的实验和结论值得学习。</p>
 <h2 id="方法-3"><a href="#方法-3" class="headerlink" title="方法"></a>方法</h2><p>网络建立在 Swin-Unet 基础上，其中主要使用了 Swin Transformer 块。</p>
-<p><img src="/image-20231213141040063.png" alt="image-20231213141040063" style="zoom:50%;"></p>
+<p><img src="/2023/11/28/LiDAR%20SR%20Methods/image-20231213141040063.png" alt="image-20231213141040063" style="zoom:50%;"></p>
 <h3 id="SWIN-Transformer"><a href="#SWIN-Transformer" class="headerlink" title="SWIN-Transformer"></a>SWIN-Transformer</h3><h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>目前主要的问题包括：</p>
 <ol>
 <li>现有方法将高分辨率点云下采样，然后进行监督训练，但这意味着无法准确地上采样到更高的分辨率。而使用虚拟数据的方法很难泛化到复杂的真实数据；</li>
@@ -1108,9 +1108,7 @@ s=f_{cell}(z,[x,c])</script><p>其中 $c=[c_h,c_w]$ ，表示查询像素的大�
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

@@ -15,7 +15,7 @@
   <meta name="subtitle" content="张从朗">
 
 
-  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室一年级研究生，目前的研究方向是点云质量增强。">
+  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室2024级研究生，目前的研究方向是点云生成和质量增强。">
 
 
 
@@ -497,7 +497,7 @@
             </div>
             <div class="flex items-center gap-1">
               <iconify-icon width="18" icon="mingcute:refresh-3-fill" ></iconify-icon>
-              Edited: <time class="w-max">2024-08-15</time>
+              Edited: <time class="w-max">2024-10-11</time>
             </div>
           </div>
           <div class="flex flex-wrap items-center gap-x-3 gap-y-3">
@@ -608,9 +608,9 @@
 <span id="more"></span>
 <h1 id="二、相关工作"><a href="#二、相关工作" class="headerlink" title="二、相关工作"></a>二、相关工作</h1><p>论文中将点云上采样的方法主要分为两类：<strong>基于优化</strong>（optimization-based）的方法和<strong>基于深度学习</strong>（deep-learning-based）的方法。</p>
 <h2 id="基于优化的方法"><a href="#基于优化的方法" class="headerlink" title="基于优化的方法"></a>基于优化的方法</h2><h3 id="移动最小二乘法（Moving-Least-Squares-MLS）"><a href="#移动最小二乘法（Moving-Least-Squares-MLS）" class="headerlink" title="移动最小二乘法（Moving Least Squares, MLS）"></a>移动最小二乘法（Moving Least Squares, MLS）</h3><p>参考论文：Computing and Rendering Point Set Surfaces</p>
-<p>通过已有点的<strong>局部</strong>信息估计平滑表面，并将其<strong>投影</strong>到表面上，可以实现点云的平滑，同时因为描述了表面结构，可以实现上采样和下采样。假设从表面 $S$ 上获取到点 $p_i \in \mathbb{R}^3,i\in \{1,2,\dots,N \}$ ，目标是将 $S$ 附近的点 $r$ 投影到近似表达 $p_i$ 的二维表面 $S_P$ 上。</p>
+<p>通过已有点的<strong>局部</strong>信息估计平滑表面，并将其<strong>投影</strong>到表面上，可以实现点云的平滑，同时因为描述了表面结构，可以实现上采样和下采样。假设从表面 $S$ 上获取到点 $p_i \in \mathbb{R}^3,i\in {1,2,\dots,N }$ ，目标是将 $S$ 附近的点 $r$ 投影到近似表达 $p_i$ 的二维表面 $S_P$ 上。</p>
 <p><img src="/2023/05/23/PU-Net/1bf0783fb26a47a8900a482c8de667b0.png" alt="在这里插入图片描述" style="zoom:40%;display: block; margin-left: auto; margin-right: auto;"></p>
-<p>首先找到 $r$ 的局部参考域（Local Reference Domain） $H$ ，$H$ 是一个平面，可以通过其单位法向量 $n$ 以及原点到平面的距离 $D$ 共同定义，即 $H = \{x|\left&lt; n,x \right&gt; - D = 0,x\in\mathbb{R}^3  \}$ 。参考域 $H$ 通过<strong>最小化加权距离平方和</strong>得到：</p>
+<p>首先找到 $r$ 的局部参考域（Local Reference Domain） $H$ ，$H$ 是一个平面，可以通过其单位法向量 $n$ 以及原点到平面的距离 $D$ 共同定义，即 $H = {x|\left&lt; n,x \right&gt; - D = 0,x\in\mathbb{R}^3  }$ 。参考域 $H$ 通过<strong>最小化加权距离平方和</strong>得到：</p>
 <script type="math/tex; mode=display">
 \sum_{i=1}^{N}(\left< n,p_i \right>-D)^2\theta\left(\| p_i - q \|\right)</script><p>其中 $\theta$ 是一个平滑的单调递减函数，在整个空间上都是正的，如 $\theta(d)=e^{\frac{d^2}{h^2}}$ 。考虑到点到平面距离同样可以转换到 $q$ 点上：$(\left&lt; n,p_i \right&gt;-D)^2 = (\left&lt; n,p_i-q \right&gt;)^2$ ，将 $q$ 点坐标写作 $r+tn$ ，则式子改写为：</p>
 <script type="math/tex; mode=display">
@@ -623,12 +623,12 @@
 \mathscr{P}(r)=q + g(0,0)n = r+(t+g(0,0))n</script><p>该算法涉及到两次最小二乘，其中第一次的相对复杂一些，可能需要一些假设或技巧来求解，这里不展开。</p>
 <h3 id="局部最佳投影（Local-Optimal-Projection-LOP）"><a href="#局部最佳投影（Local-Optimal-Projection-LOP）" class="headerlink" title="局部最佳投影（Local Optimal Projection, LOP）"></a>局部最佳投影（Local Optimal Projection, LOP）</h3><p>参考论文：Parameterization-free Projection for Geometry Reconstruction</p>
 <p>MLS 方法假设局部平面可以很好地近似局部几何形状，并不能适用于复杂形状。因此设计一个新的不使用局部方向信息（参考平面或法线）的算子来解决这一问题，也就是 LOP 算子。</p>
-<p>问题仍然是一个投影问题：给定数据点集 $P = \{p_j\}_{j\in J}\subset \mathbb{R}^3$ ，将任意点集 $X^{(0)}=\{x^{(0)}_i\}_{i\in I}\subset \mathbb{R}^3$ 投影到 $P$ 上，投影点集为 $Q = \{q_i\}_{i\in I}$ 。</p>
+<p>问题仍然是一个投影问题：给定数据点集 $P = {p_j}_{j\in J}\subset \mathbb{R}^3$ ，将任意点集 $X^{(0)}={x^{(0)}_i}_{i\in I}\subset \mathbb{R}^3$ 投影到 $P$ 上，投影点集为 $Q = {q_i}_{i\in I}$ 。</p>
 <p>为了使投影后点逼近 $P$ 的几何形状，且考虑到距离越远的点作用越弱，定义代价函数 $E_1$ 表达式为：</p>
 <script type="math/tex; mode=display">
 E_1(X,P,Q)=\sum_{i\in I}\sum_{j\in J}\|x_i-p_j\|\theta(\|q_i-p_j\|)</script><p>同时为了避免投影后点太靠近彼此，定义代价函数 $E_2$ 表达式为：</p>
 <script type="math/tex; mode=display">
-E_2(X,Q)=\sum_{i'\in I}\lambda_{i'}\sum_{i\in I \setminus \{i'\}}\eta(\|x_{i'}-q_i \|)\theta(\|q_{i'}-q_i \|)\label{6}</script><p>其中 $\eta(r)$ 同样是一个递减函数，对彼此接近的 $q_{i}$ 进行惩罚，使得投影后分布均匀。通常为 $\eta(r)=1/3r^3$ 。 $\{\lambda_i\}_{i\in I}$ 是一个平衡项，用 $\Lambda$ 表示。若 $\Lambda$ 较大，则以形状不近似的代价去追求分布均匀；若 $\Lambda$ 较小，则以分布不均的代价去追求形状近似。论文在后续对参数的选取做了比较复杂的证明，但实在是看不懂。</p>
+E_2(X,Q)=\sum_{i'\in I}\lambda_{i'}\sum_{i\in I \setminus \{i'\}}\eta(\|x_{i'}-q_i \|)\theta(\|q_{i'}-q_i \|)\label{6}</script><p>其中 $\eta(r)$ 同样是一个递减函数，对彼此接近的 $q_{i}$ 进行惩罚，使得投影后分布均匀。通常为 $\eta(r)=1/3r^3$ 。 ${\lambda_i}_{i\in I}$ 是一个平衡项，用 $\Lambda$ 表示。若 $\Lambda$ 较大，则以形状不近似的代价去追求分布均匀；若 $\Lambda$ 较小，则以分布不均的代价去追求形状近似。论文在后续对参数的选取做了比较复杂的证明，但实在是看不懂。</p>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>MLS 和 LOP 是较为常用的基于优化的方法，但它们假设物体表面为光滑流形，对边缘的还原较差。也有基于边缘感知的方法，但依赖于好的参数；总的来说，基于优化的方法都不是数据驱动的，严重依赖先验知识。</p>
 <h2 id="基于深度学习的方法"><a href="#基于深度学习的方法" class="headerlink" title="基于深度学习的方法"></a>基于深度学习的方法</h2><p>论文：此前没有专注于点云上采样的神经网络。</p>
 <h1 id="三、网络架构"><a href="#三、网络架构" class="headerlink" title="三、网络架构"></a>三、网络架构</h1><h2 id="局部区域生成（Patch-Extraction）"><a href="#局部区域生成（Patch-Extraction）" class="headerlink" title="局部区域生成（Patch Extraction）"></a>局部区域生成（Patch Extraction）</h2><p>考虑到上采样需要利用物体的局部几何信息，论文采用了 patch-based 的方式，也就是从物体点云中收集各种形状的局部区域来训练网络。</p>
@@ -1004,9 +1004,7 @@ NUC &= \sqrt{\frac{1}{K*D}\sum_{k=1}^K\sum_{i=1}^D\left(\frac{n_i^k}{N^k*p}-avg\
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

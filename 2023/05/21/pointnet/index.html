@@ -15,7 +15,7 @@
   <meta name="subtitle" content="张从朗">
 
 
-  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室一年级研究生，目前的研究方向是点云质量增强。">
+  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室2024级研究生，目前的研究方向是点云生成和质量增强。">
 
 
 
@@ -595,7 +595,7 @@
 <li>Feature-based DNNs：通过提取传统形状特征将 3D 数据转换为向量，再利用全连接网络对形状分类，但受到特征本身表达能力的限制；</li>
 </ul>
 <p>这些方法都不能够直接处理无序点集，而是在尝试将点云转换为序列形式，以便用熟悉的卷积网络来操作，但同时面临计算复杂度等问题。</p>
-<h1 id="三、问题陈述"><a href="#三、问题陈述" class="headerlink" title="三、问题陈述"></a>三、问题陈述</h1><p>定义点云为一组 3D 点 $\{ P_i|i=1,\dots,n \}$ ，其中 $P_i$ 是包含 $(x,y,z)$ 和额外特征通道（如颜色、法线等）的向量，在论文中仅适用 $(x,y,z)$ 坐标。对于分类问题，输入点云可能是单体，也可能是从场景中预先分割得到。PointNet++ 为 $k$ 个候选类别输出 $k$ 个分数；对于分割问题，任务可能是从单体中分割出不同的结构，也可能是从三维场景中分割出不同的物体。若共有 $n$ 个点，$m$ 个类，则输出 $n\times m$ 个分数，表示每个点属于每个类的概率，从而进行分割。</p>
+<h1 id="三、问题陈述"><a href="#三、问题陈述" class="headerlink" title="三、问题陈述"></a>三、问题陈述</h1><p>定义点云为一组 3D 点 ${ P_i|i=1,\dots,n }$ ，其中 $P_i$ 是包含 $(x,y,z)$ 和额外特征通道（如颜色、法线等）的向量，在论文中仅适用 $(x,y,z)$ 坐标。对于分类问题，输入点云可能是单体，也可能是从场景中预先分割得到。PointNet++ 为 $k$ 个候选类别输出 $k$ 个分数；对于分割问题，任务可能是从单体中分割出不同的结构，也可能是从三维场景中分割出不同的物体。若共有 $n$ 个点，$m$ 个类，则输出 $n\times m$ 个分数，表示每个点属于每个类的概率，从而进行分割。</p>
 <h1 id="四、具体方法"><a href="#四、具体方法" class="headerlink" title="四、具体方法"></a>四、具体方法</h1><h2 id="mathbb-R-n-空间中点集的性质"><a href="#mathbb-R-n-空间中点集的性质" class="headerlink" title="$\mathbb{R} ^n$ 空间中点集的性质"></a>$\mathbb{R} ^n$ 空间中点集的性质</h2><p>我们的输入是来自欧几里德空间的点的子集。它具有三个主要属性： </p>
 <ul>
 <li><strong>无序性</strong>。与图像中的像素阵列或体积网格中的体素阵列不同，点云是一组没有特定顺序的点。换句话说，一个使用 N 个 3D 点集的网络需要对 N ! 种输入点排列具有不变性；</li>
@@ -643,19 +643,6 @@ L_{reg}=\| I-AA^T \|^2_F</script><p>其中 $A$ 是由迷你网络预测得到的
       
     </div>
     <div>
-      
-        <a href="/2023/05/21/%E4%BB%8E%E8%BF%99%E9%87%8C%E5%BC%80%E5%A7%8B/"
-          class="
-            flex 
-            justify-center
-            hover:translate-x-1 
-            transition-transform
-            hover:text-[var(--c-100)]
-          "
-        >
-          从这里开始
-          <iconify-icon width="20" icon="mingcute:right-fill" data-inline="false"></iconify-icon>
-        </a>
       
     </div>
   </div>
@@ -913,9 +900,7 @@ L_{reg}=\| I-AA^T \|^2_F</script><p>其中 $A$ 是由迷你网络预测得到的
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

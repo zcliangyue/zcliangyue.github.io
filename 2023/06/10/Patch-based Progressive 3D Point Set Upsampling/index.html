@@ -15,7 +15,7 @@
   <meta name="subtitle" content="张从朗">
 
 
-  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室一年级研究生，目前的研究方向是点云质量增强。">
+  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室2024级研究生，目前的研究方向是点云生成和质量增强。">
 
 
 
@@ -618,7 +618,7 @@
 <p>由于需要对每个点做 KNN ，设总点数为 $N$ ，patch 大小为 $p_{num}$ ，其计算复杂度可以大约估算：</p>
 <script type="math/tex; mode=display">
 O=p_{num}^2\times \frac{N}{p_{num} }= N\times p_{num}</script><p>因此随着 patch 大小缩减，计算复杂度也会降低。</p>
-<h3 id="多步端到端训练（Multi-step-end-to-end-training）"><a href="#多步端到端训练（Multi-step-end-to-end-training）" class="headerlink" title="多步端到端训练（Multi-step end-to-end training）"></a>多步端到端训练（Multi-step end-to-end training）</h3><p>网络通过 $L$ 步将点集上采样 $2^L$ 倍，包括子网络单元 $\{U_1,U_2,\dots,U_L\}$ 。论文通过<strong>逐步激活</strong>每个单元的方式来训练这一系列上采样单元。具体地，除了第一层网络，每一层网络的训练都包含两步：对于层次 $\hat{L}$ ，首先固定前面 $U_1$ 到 $U_{\hat{L}-1}$ 每一层的参数，只对 $U_{\hat{L}}$ 层训练；然后释放固定单元，对所有单元同时训练。</p>
+<h3 id="多步端到端训练（Multi-step-end-to-end-training）"><a href="#多步端到端训练（Multi-step-end-to-end-training）" class="headerlink" title="多步端到端训练（Multi-step end-to-end training）"></a>多步端到端训练（Multi-step end-to-end training）</h3><p>网络通过 $L$ 步将点集上采样 $2^L$ 倍，包括子网络单元 ${U_1,U_2,\dots,U_L}$ 。论文通过<strong>逐步激活</strong>每个单元的方式来训练这一系列上采样单元。具体地，除了第一层网络，每一层网络的训练都包含两步：对于层次 $\hat{L}$ ，首先固定前面 $U_1$ 到 $U_{\hat{L}-1}$ 每一层的参数，只对 $U_{\hat{L}}$ 层训练；然后释放固定单元，对所有单元同时训练。</p>
 <p>这种渐进式的训练方法是为了避免当前层产生过大的梯度（gradient turbulence），导致前面的单元参数被破坏。 </p>
 <h2 id="上采样网络单元"><a href="#上采样网络单元" class="headerlink" title="上采样网络单元"></a>上采样网络单元</h2><p>分别用 $T,P,Q$ 表示基准模型、预测 patch 和 参考 patch ，$\hat{L},\ell$ 表示目标的细节级别和一个中间级别。简单来说，上采样网络单元 $U_{\ell}$ 首先接收来自于点集 $P_{\ell-1}$  的 patch ，然后提取深度特征并扩展特征数量，将特征通道数压缩到 $d$ 维坐标 $P_{\ell}$ 。下面做详细说明。</p>
 <h3 id="通过层内密集连接提取特征"><a href="#通过层内密集连接提取特征" class="headerlink" title="通过层内密集连接提取特征"></a>通过层内密集连接提取特征</h3><p>在 PointNet++ 之后，大多数网络都采用对输入点集进行分层下采样的方式来提取多尺度信息，并采用 skip-connections 来连接多级特征。然而由于在下采样过程中采用了泊松盘采样或者最远点采样，导致点的位置发生变化，因此在特征连接的时候，需要进行点与点之间的对应搜索，导致计算代价增加。</p>
@@ -949,9 +949,7 @@ O=p_{num}^2\times \frac{N}{p_{num} }= N\times p_{num}</script><p>因此随着 pa
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

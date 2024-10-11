@@ -15,7 +15,7 @@
   <meta name="subtitle" content="张从朗">
 
 
-  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室一年级研究生，目前的研究方向是点云质量增强。">
+  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室2024级研究生，目前的研究方向是点云生成和质量增强。">
 
 
 
@@ -588,13 +588,13 @@
 <h1 id="一、摘要及引言"><a href="#一、摘要及引言" class="headerlink" title="一、摘要及引言"></a>一、摘要及引言</h1><p>PointNet 是直接处理点集的开创性工作，其基本思想是学习每个点的空间编码，然后将所有单个点特征聚合为全局点云特征。但 PointNet 只对单个点编码，无法捕获<strong>局部特征</strong>。因此引入了分层神经网络 PointNet++ ，通过以分层方式处理点集的方法来获取不同尺度下的点集特征。</p>
 <span id="more"></span>
 <h1 id="二、问题陈述"><a href="#二、问题陈述" class="headerlink" title="二、问题陈述"></a>二、问题陈述</h1><p>假设 $\mathcal{X} = (M, d)$ 是一个离散度量空间，其度量继承自欧氏空间 $\mathbb{R}^n$，其中 $M \subseteq \mathbb{R}^n$ 是点集，$d$ 是距离度量。此外，环境欧氏空间中 $M$ 的密度可能并非处处一致。我们感兴趣的是学习将 $\mathcal{X}$ 作为输入（连同每个点的附加特征）的集合函数 $f$ 并产生语义兴趣重新分级 $\mathcal{X}$ 的信息。和 PointNet 一样，这样的 $f$ 可以是将标签分配给 $\mathcal{X}$ 的分类函数，也可以是将标签分配给 $M$ 的每个成员的分割函数。</p>
-<h1 id="三、方法"><a href="#三、方法" class="headerlink" title="三、方法"></a>三、方法</h1><h2 id="PointNet-回顾"><a href="#PointNet-回顾" class="headerlink" title="PointNet 回顾"></a>PointNet 回顾</h2><p>对于无序点集 $\{x_1,\dots,x_n\}$ ，定义集合函数 $f:\mathcal{X}\rightarrow\mathbb{R}$ 将点集映射为向量：</p>
+<h1 id="三、方法"><a href="#三、方法" class="headerlink" title="三、方法"></a>三、方法</h1><h2 id="PointNet-回顾"><a href="#PointNet-回顾" class="headerlink" title="PointNet 回顾"></a>PointNet 回顾</h2><p>对于无序点集 ${x_1,\dots,x_n}$ ，定义集合函数 $f:\mathcal{X}\rightarrow\mathbb{R}$ 将点集映射为向量：</p>
 <script type="math/tex; mode=display">
 f(x_1,\dots,x_n)=\gamma\left( \underset{i=1,\dots,n}{\max}\{h(x_i)\} \right)</script><p>其中 $\gamma$ 和 $h$ 通常为多层感知器。PointNet 论文中已经证明 $f$ 可以逼近任何一个连续集合函数，且对输入点排列不变。但 PointNet 缺乏捕捉到不同尺度的本地特征的能力。</p>
 <h2 id="分层点集特征学习"><a href="#分层点集特征学习" class="headerlink" title="分层点集特征学习"></a>分层点集特征学习</h2><p>PointNet++ 的层次结构由许多 SA 层（Set Abstraction Levels）组成。SA 层由三个关键层组成：<strong>采样（Sampling）层</strong>、<strong>组合（Grouping）层</strong>和 <strong>PointNet 层</strong>。</p>
 <p>抽象层次的输入矩阵大小为 $N\times(d+C)$ ，表示 $N$ 个具有 $d$ 维坐标和 $C$ 维点特征的点；输出矩阵大小为 $N’\times(d+C’)$ ，表示 $N’$ 个具有 $d$ 维坐标和 $C’$ 维点特征（以总结局部上下文）的<strong>子采样点</strong>。 </p>
 <p><img src="/2023/05/23/PointNet++/1.png" alt="architecture" style="zoom:70%;padding-top:20pt;display: block; margin-left: auto; margin-right: auto;"></p>
-<h3 id="采样层"><a href="#采样层" class="headerlink" title="采样层"></a>采样层</h3><p>给定输入点 $\{x_1,x_2,\dots,x_n\}$ ，利用<strong>迭代最远点采样</strong>（FPS）来选择点的子集 $\{x_{i_1},x_{i_2},\dots,x_{i_m}\}$ ，使得 $x_{i_j}$ 是剩余点中距离点集 $\{x_{i_1},\dots,x_{i_{j-1}}\}$ 最远的点。论文原话虽然凝练但是略微抽象，这里详细阐述一下 FPS 算法的步骤：</p>
+<h3 id="采样层"><a href="#采样层" class="headerlink" title="采样层"></a>采样层</h3><p>给定输入点 ${x_1,x_2,\dots,x_n}$ ，利用<strong>迭代最远点采样</strong>（FPS）来选择点的子集 ${x_{i_1},x_{i_2},\dots,x_{i_m}}$ ，使得 $x_{i_j}$ 是剩余点中距离点集 ${x_{i_1},\dots,x_{i_{j-1}}}$ 最远的点。论文原话虽然凝练但是略微抽象，这里详细阐述一下 FPS 算法的步骤：</p>
 <ol>
 <li>选定第 $i$ 个点为初始点，记作 $x_{i_1}$ ，此时候选集为 $x_{i_1}$ ；</li>
 <li>定义点 $x_k$ 到点集 $X$ 的距离为 $\min(\left|x_k-x \right|_2)(x\in X)$ ，即到点集中所有点距离的最小值；</li>
@@ -615,7 +615,7 @@ x_i^{(j)}=x_i^{(j)}-\hat{x}^{(j)},\mathrm{for}\ i=1,2\dots,K\ \mathrm{and}\ j=1,
 <h3 id="多尺度组合（Multi-scale-Grouping，MSG）"><a href="#多尺度组合（Multi-scale-Grouping，MSG）" class="headerlink" title="多尺度组合（Multi-scale Grouping，MSG）"></a>多尺度组合（Multi-scale Grouping，MSG）</h3><p><img src="/2023/05/23/PointNet++/3.png" alt="MRG示意图" style="zoom:50%;float:right;padding-left:30pt">如右图所示，在每个采样点上，用 PointNet 提取不同尺度的特征并将其组合形成多尺度特征。同时为了给网络提供不同密度的输入，采用 random input dropout 方法，随机选取 dropout 概率 $\theta\in\left[0,p\right] (p\le 1)$ ，以概率 $\theta$ 丢弃部分输入点，从而提供了稀疏性和不均匀性（随机性)。</p>
 <h3 id="多分辨率组合（Multi-resolution-Grouping，MRG）"><a href="#多分辨率组合（Multi-resolution-Grouping，MRG）" class="headerlink" title="多分辨率组合（Multi-resolution Grouping，MRG）"></a>多分辨率组合（Multi-resolution Grouping，MRG）</h3><p><img src="/2023/05/23/PointNet++/2.png" alt="在这里插入图片描述" style="zoom:45%;float:right;padding: 0 20pt">考虑到 MSG 方法计算代价较大，提出一种替代方法：MRG，如图（右)所示。对于每个局部区域的特征 $L_i$ ，都由两个特征组成：左边特征通过 SA 层得到，右边特征则通过对区域内所有点云利用 PointNet 获取特征（相当于在 SA 层中嵌套了一个 SA 层？）。</p>
 <p>当局部区域密度较低时，第一个向量往往不如第二个可靠，这时可以提高第二个向量的权重。相反地，局部区域密度较高时，第一个向量提供了更精细的细节特征。</p>
-<h2 id="用于点分割的特征传递"><a href="#用于点分割的特征传递" class="headerlink" title="用于点分割的特征传递"></a>用于点分割的特征传递</h2><p>SA 层对原始点集进行了下采样，然而在分割任务重我们希望获得所有原始点的点特征（即输入输出矩阵的行数应相等）。一种办法是在每个 SA 层中将所有点都采样为中心点（即去掉了 Sampling 层），但这样会导致计算代价非常大。因此论文给出了另一种方法：<strong>特征传播（FP）层</strong>（Feature Propagation level）。设 $N_l , N_{l-1}$ 是第 $l$ 个 SA 层输出和输入的点集大小（$N_l\le N_{l-1}$），FP 层通过在 $N_{l-1}$ 个点的坐标处插入 $N_l$ 个点的特征值 $f$ 来实现上采样。具体的插值方法，论文选择了基于 kNN 的反距离加权平均：</p>
+<h2 id="用于点分割的特征传递"><a href="#用于点分割的特征传递" class="headerlink" title="用于点分割的特征传递"></a>用于点分割的特征传递</h2><p>SA 层对原始点集进行了下采样，然而在分割任务重我们希望获得所有原始点的点特征（即输入输出矩阵的行数应相等）。一种办法是在每个 SA 层中将所有点都采样为中心点（即去掉了 Sampling 层），但这样会导致计算代价非常大。因此论文给出了另一种方法：<strong>特征传播（FP）层</strong>（Feature Propagation level）。设 $N_l\ ,\ N_{l-1}$ 是第 $l$ 个 SA 层输出和输入的点集大小（$N_l\le N_{l-1}$），FP 层通过在 $N_{l-1}$ 个点的坐标处插入 $N_l$ 个点的特征值 $f$ 来实现上采样。具体的插值方法，论文选择了基于 kNN 的反距离加权平均：</p>
 <script type="math/tex; mode=display">
 f^{(j)}(x)=\frac{\sum_{i=1}^kw_i(x)f_i^{(j)}}{\sum_{i=1}^kw_i(x)}\ \ \textrm{where}\ w_i(x)=\frac{1}{d(x,x_j)^p},\ j=1,\dots,C</script><p>然后将插值得到的特征和来自 SA 层的 $N_{l-1}$ 个特征连接（skip link）起来，并传递给 unit pointnet 。unit pointnet 论文中没有更多介绍，只说是类似于 $1\times 1$ 卷积核。由此来看，unit pointnet 应该就是没有池化操作的 pointnet ，因此只是重组了每个点的特征向量，并不会改变点的个数。</p>
 <p>重复通过与 SA 层个数相同的 FP 层，即可将输出矩阵行数恢复为 $N$ ，并且特征长度重组为 $k$ ，即类别个数，从而达到分割的目的。</p>
@@ -919,9 +919,7 @@ f^{(j)}(x)=\frac{\sum_{i=1}^kw_i(x)f_i^{(j)}}{\sum_{i=1}^kw_i(x)}\ \ \textrm{whe
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

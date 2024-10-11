@@ -15,7 +15,7 @@
   <meta name="subtitle" content="张从朗">
 
 
-  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室一年级研究生，目前的研究方向是点云质量增强。">
+  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室2024级研究生，目前的研究方向是点云生成和质量增强。">
 
 
 
@@ -594,13 +594,13 @@
 <h1 id="二、方法"><a href="#二、方法" class="headerlink" title="二、方法"></a>二、方法</h1><h2 id="图卷积神经网络（Graphic-Convolutional-Neural-Networks，GCN）"><a href="#图卷积神经网络（Graphic-Convolutional-Neural-Networks，GCN）" class="headerlink" title="图卷积神经网络（Graphic Convolutional Neural Networks，GCN）"></a>图卷积神经网络（Graphic Convolutional Neural Networks，GCN）</h2><p>由于文章借鉴了图卷积神经网络，因此简单了解了一下图卷积的原理。与 CNN 相比，GCN 主要应用于<strong>图数据</strong>。也就是节点和边组成的图形。当然图像也是一种特殊的图形，它具有规整的结构。而在特征嵌入方面，两者都是局部连接，并且卷积核权重处处共享。因此 GCN 与 CNN 思想上是基本一致的，只不过应用场景不同。相比之下，GCN 所处理的数据结构会更复杂。</p>
 <p><img src="/2023/06/08/DGCNN/605d901a470d47739b7ee58670f91c82.jpg" style="zoom:60%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h2 id="边卷积（Edge-Convolution）"><a href="#边卷积（Edge-Convolution）" class="headerlink" title="边卷积（Edge Convolution）"></a>边卷积（Edge Convolution）</h2><h3 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h3><p>利用点云能够生成的最简单的图，大概是体素连通性分割里的体素邻接图。但论文所使用的方法有所区别于 GCN，因为它会在每一层根据新的特征序列，重新计算节点的邻接关系。不同于使用空间距离构建的图，这样做意味着图会<strong>动态更新</strong>，即每个点的 $k$ 近邻点会在不同层之间发生变化。这使得<strong>非局部</strong>（non-local）信息能够得到扩散。下面阐述 EdgeConv 具体架构。</p>
-<p>将数量为 $n$ 的 $F$ 维点云记作 $\mathbf{X}=\left\{\mathbf{x}_1, \ldots, \mathbf{x}_n\right\} \subseteq \mathbb{R}^F$ ，令 $F=3$ ，则每个点包含三维坐标 $\mathbf{x}=(x_i,y_i,z_i)$ ，也可以包含颜色、法线等附加特征。因此 $F$ 更一般的含义是点特征。</p>
-<p>引入一个有向图 $\mathcal{G}=(\mathcal{V}, \mathcal{E})$ 来表示局部点云结构，其中 $\mathcal{V}=\{1, \ldots, n\}$ , $ \mathcal{E} \subseteq \mathcal{V} \times \mathcal{V}$ ，分别表示节点和边，最简单的 $\mathcal{G}$ 是 $k$ 近邻图。图中包含了自环（self-loop），即每个节点也会指向自己。论文定义了以 $\mathbf{x}_i,\mathbf{x}_j$ 为端点的边缘的特征：</p>
+<p>将数量为 $n$ 的 $F$ 维点云记作 $\mathbf{X}=\left{\mathbf{x}_1, \ldots, \mathbf{x}_n\right} \subseteq \mathbb{R}^F$ ，令 $F=3$ ，则每个点包含三维坐标 $\mathbf{x}=(x_i,y_i,z_i)$ ，也可以包含颜色、法线等附加特征。因此 $F$ 更一般的含义是点特征。</p>
+<p>引入一个有向图 $\mathcal{G}=(\mathcal{V}, \mathcal{E})$ 来表示局部点云结构，其中 $\mathcal{V}={1, \ldots, n}$ , $ \mathcal{E} \subseteq \mathcal{V} \times \mathcal{V}$ ，分别表示节点和边，最简单的 $\mathcal{G}$ 是 $k$ 近邻图。图中包含了自环（self-loop），即每个节点也会指向自己。论文定义了以 $\mathbf{x}_i,\mathbf{x}_j$ 为端点的边缘的特征：</p>
 <script type="math/tex; mode=display">
 \boldsymbol{e}_{i j}=h_{\Theta}\left(\mathbf{x}_i, \mathbf{x}_j\right)</script><p>其中 $h_{\boldsymbol{\Theta}}: \mathbb{R}^F \times \mathbb{R}^F \rightarrow \mathbb{R}^{F^{\prime}}$ 是一个非线性函数，$\Theta$ 为一组可学习优化的参数。</p>
 <p> 最后，将边缘特征定义为由顶点出发的所有边特征的聚合，聚合方式为对称函数（如求和或者池化），论文里记作一个<del>令人费解的</del>正方形：</p>
 <script type="math/tex; mode=display">
-\mathbf{x}_i^{\prime}=\underset{j:(i, j) \in \mathcal{E}}{\square} h_{\Theta}\left(\mathbf{x}_i, \mathbf{x}_j\right)</script><p>类比于图像卷积， $\mathbf{x}_i$ 为中心像点，$\{\mathbf{x}_j:(i,j)\in\mathcal{E}\}$ 为其邻域内像点。总之，给定一个 $F$ 维的点云，EdgeConv 将其转换为点数不变的 $F’$ 维点云。</p>
+\mathbf{x}_i^{\prime}=\underset{j:(i, j) \in \mathcal{E}}{\square} h_{\Theta}\left(\mathbf{x}_i, \mathbf{x}_j\right)</script><p>类比于图像卷积， $\mathbf{x}_i$ 为中心像点，${\mathbf{x}_j:(i,j)\in\mathcal{E}}$ 为其邻域内像点。总之，给定一个 $F$ 维的点云，EdgeConv 将其转换为点数不变的 $F’$ 维点云。</p>
 <p><img src="/2023/06/08/DGCNN/image-20230608223623247.png" alt="image-20230608223623247" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="函数的选择"><a href="#函数的选择" class="headerlink" title="函数的选择"></a>函数的选择</h3><p>在 EdgeConv 中主要涉及到两个函数的选取：$h$ 和 $\square$ 。若 $\mathbf{x}_1,\dots,\mathbf{x}_n$ 是规则网格上的图像像素，而图 $\mathcal{G}$ 中表示了每个像素周围固定大小的块的连通性，同时选取边缘函数为 $\Theta_m\cdot\mathbf{x}_j$ ，聚合操作为求和函数，就得到了标准的卷积操作：</p>
 <script type="math/tex; mode=display">
@@ -936,9 +936,7 @@ e'_{ijm} &=\operatorname{ReLU}(\theta_m\cdot(\mathbf{x}_j+T-(\mathbf{x}_i+T))+\b
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>

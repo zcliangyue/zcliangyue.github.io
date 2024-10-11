@@ -15,7 +15,7 @@
   <meta name="subtitle" content="张从朗">
 
 
-  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室一年级研究生，目前的研究方向是点云质量增强。">
+  <meta name="description" content="武汉大学测绘遥感信息工程国家重点实验室2024级研究生，目前的研究方向是点云生成和质量增强。">
 
 
 
@@ -628,7 +628,7 @@
 <h3 id="边缘距离回归"><a href="#边缘距离回归" class="headerlink" title="边缘距离回归"></a>边缘距离回归</h3><p>这一组件将回归每个点到边缘的距离，从而进行边缘点识别。回归距离是点到最近的标记边缘的距离。具体来说，首先通过 MLP 从扩展特征中提取距离特征 $f_{dist}$ ，然后再通过另一个 MLP 回归点到边缘的距离（但是既然点是无序的，训练样本中的点到边缘距离如何排列？或者随机排列？）。</p>
 <p><img src="/2023/05/31/EC-Net/image-20230526202725949.png" alt="image-20230526202725949" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
 <h3 id="坐标回归"><a href="#坐标回归" class="headerlink" title="坐标回归"></a>坐标回归</h3><p>基于边缘距离回归组件中的 $f_{dist}$ 特征，利用两个 MLP 回归点坐标。在这里论文采用了只回归<strong>残差坐标</strong>的方式，也就是上采样点相对当前点的偏移值，这样预测值会比较小，有利于网络学习。另外，论文提到除了最后用于回归的 MLP 层，其余所有卷积和 MLP 层后面都接的是 RELU 激活函数。</p>
-<h3 id="边缘点识别"><a href="#边缘点识别" class="headerlink" title="边缘点识别"></a>边缘点识别</h3><p>记 $d_i$ 为输出点 $x_i$ 到边缘的距离，则边缘点集为 $\mathcal{S}_{\Delta_d}=\{x_i \}_{d_i&lt;\Delta_d}$ 。该组件在训练和测试阶段都会执行。</p>
+<h3 id="边缘点识别"><a href="#边缘点识别" class="headerlink" title="边缘点识别"></a>边缘点识别</h3><p>记 $d_i$ 为输出点 $x_i$ 到边缘的距离，则边缘点集为 $\mathcal{S}_{\Delta_d}={x_i }_{d_i&lt;\Delta_d}$ 。该组件在训练和测试阶段都会执行。</p>
 <h2 id="边缘感知的联合损失函数"><a href="#边缘感知的联合损失函数" class="headerlink" title="边缘感知的联合损失函数"></a>边缘感知的联合损失函数</h2><p><img src="/2023/05/31/EC-Net/d39191aed6af41fab68697431bc668b7.png" alt="EC-Net架构图" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
 <p>损失函数的设计主要基于以下目标：1）靠近底层物体表面；2）靠近标记边缘；3）均匀分布</p>
 <h3 id="表面损失（Surface-Loss）"><a href="#表面损失（Surface-Loss）" class="headerlink" title="表面损失（Surface Loss）"></a>表面损失（Surface Loss）</h3><p>表面损失定义为从每个输出点 $x_i$ 到与 patch 关联的所有网格三角形 $T$ 的最短距离：</p>
@@ -968,9 +968,7 @@ L_{regr} = \frac{1}{\widetilde{N}}\sum_{1\leq i \leq \widetilde{N}}\left[\mathca
             all[i].SourceElement().parentNode.className += ' has-jax';
     });
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
-
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 
 </html>
