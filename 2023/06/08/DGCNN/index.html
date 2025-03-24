@@ -28,7 +28,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://zcliangyue.github.io/img/DGCNN.jpg">
 <meta property="article:published_time" content="2023-06-08T15:51:00.000Z">
-<meta property="article:modified_time" content="2024-10-13T14:10:41.814Z">
+<meta property="article:modified_time" content="2024-10-28T08:22:12.877Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="点云">
 <meta property="article:tag" content="神经网络">
@@ -304,7 +304,7 @@
 <h1>二、方法</h1>
 <h2 id="图卷积神经网络（Graphic-Convolutional-Neural-Networks，GCN）">图卷积神经网络（Graphic Convolutional Neural Networks，GCN）</h2>
 <p>由于文章借鉴了图卷积神经网络，因此简单了解了一下图卷积的原理。与 CNN 相比，GCN 主要应用于<strong>图数据</strong>。也就是节点和边组成的图形。当然图像也是一种特殊的图形，它具有规整的结构。而在特征嵌入方面，两者都是局部连接，并且卷积核权重处处共享。因此 GCN 与 CNN 思想上是基本一致的，只不过应用场景不同。相比之下，GCN 所处理的数据结构会更复杂。</p>
-<img src="/2023/06/08/DGCNN/../../themes/fluid/source/img/DGCNN.jpg" srcset="/img/loading.gif" lazyload style="zoom:60%;display: block; margin-left: auto; margin-right: auto;">
+<img src="/2023/06/08/DGCNN/605d901a470d47739b7ee58670f91c82.jpg" srcset="/img/loading.gif" lazyload style="zoom:60%;display: block; margin-left: auto; margin-right: auto;">
 <h2 id="边卷积（Edge-Convolution）">边卷积（Edge Convolution）</h2>
 <h3 id="基本原理">基本原理</h3>
 <p>利用点云能够生成的最简单的图，大概是体素连通性分割里的体素邻接图。但论文所使用的方法有所区别于 GCN，因为它会在每一层根据新的特征序列，重新计算节点的邻接关系。不同于使用空间距离构建的图，这样做意味着图会<strong>动态更新</strong>，即每个点的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span> 近邻点会在不同层之间发生变化。这使得<strong>非局部</strong>（non-local）信息能够得到扩散。下面阐述 EdgeConv 具体架构。</p>
@@ -416,7 +416,7 @@ e&#x27;_{ijm} &amp;=\operatorname{ReLU}(\theta_m\cdot(\mathbf{x}_j+T-(\mathbf{x}
       
         <div class="license-meta-item license-meta-date">
           <div>Updated on</div>
-          <div>October 13, 2024</div>
+          <div>October 28, 2024</div>
         </div>
       
       
