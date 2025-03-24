@@ -19,12 +19,12 @@
   <meta name="author" content="SGGZCL">
   <meta name="keywords" content="">
   
-    <meta name="description" content="这篇笔记从单纯复形开始，经过同调群、贝蒂数以及过滤等概念，给出了持久同调性的概念和计算方法。其中的主要内容基于ETH的课堂笔记 TDA24&#x2F;Script.pdf ，同时添加了一些结论的证明过程（如有关欧拉-庞加莱公式的证明）和对原文中不甚清晰的部分的进一步说明，这使得它可能是目前最简明的有关持久同调的中文笔记。 完全理解这些内容需要一些抽象代数（同态基本定理）和拓扑学（同胚、度量空间）的基础，但他">
+    <meta name="description" content="这篇笔记从单纯复形开始，经过同调群、贝蒂数以及过滤等概念，给出了持久同调性的概念和计算方法。其中的主要内容基于ETH的课堂笔记 TDA24&#x2F;Script.pdf ，同时添加了一些结论的证明过程（如有关欧拉-庞加莱公式的证明）和对原文中不甚清晰的部分的进一步说明，这使得它可能是目前最简明的有关持久同调的中文笔记。 完全理解这些内容需要一些抽象代数（同态基本定理）和拓扑学（同胚、度量空间）的基础">
 <meta property="og:type" content="article">
 <meta property="og:title" content="持久同调性简介">
 <meta property="og:url" content="http://zcliangyue.github.io/2024/10/16/%E6%8C%81%E4%B9%85%E5%90%8C%E8%B0%83%E6%80%A7%E7%AE%80%E4%BB%8B/index.html">
 <meta property="og:site_name" content="Zhang Conglang">
-<meta property="og:description" content="这篇笔记从单纯复形开始，经过同调群、贝蒂数以及过滤等概念，给出了持久同调性的概念和计算方法。其中的主要内容基于ETH的课堂笔记 TDA24&#x2F;Script.pdf ，同时添加了一些结论的证明过程（如有关欧拉-庞加莱公式的证明）和对原文中不甚清晰的部分的进一步说明，这使得它可能是目前最简明的有关持久同调的中文笔记。 完全理解这些内容需要一些抽象代数（同态基本定理）和拓扑学（同胚、度量空间）的基础，但他">
+<meta property="og:description" content="这篇笔记从单纯复形开始，经过同调群、贝蒂数以及过滤等概念，给出了持久同调性的概念和计算方法。其中的主要内容基于ETH的课堂笔记 TDA24&#x2F;Script.pdf ，同时添加了一些结论的证明过程（如有关欧拉-庞加莱公式的证明）和对原文中不甚清晰的部分的进一步说明，这使得它可能是目前最简明的有关持久同调的中文笔记。 完全理解这些内容需要一些抽象代数（同态基本定理）和拓扑学（同胚、度量空间）的基础">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://zcliangyue.github.io/img/filtration.png">
 <meta property="article:published_time" content="2024-10-16T11:00:00.000Z">
@@ -50,8 +50,6 @@
   <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
 
 
 
@@ -292,13 +290,15 @@
             
               <div class="markdown-body">
                 
-                <p>这篇笔记从单纯复形开始，经过同调群、贝蒂数以及过滤等概念，给出了持久同调性的概念和计算方法。其中的主要内容基于ETH的课堂笔记 <a target="_blank" rel="noopener" href="https://ti.inf.ethz.ch/ew/courses/TDA24/Script.pdf">TDA24/Script.pdf</a> ，同时添加了一些结论的证明过程（如有关欧拉-庞加莱公式的证明）和对原文中不甚清晰的部分的进一步说明，这使得它可能是目前最简明的有关持久同调的中文笔记。</p>
+                <p>这篇笔记从单纯复形开始，经过同调群、贝蒂数以及过滤等概念，给出了持久同调性的概念和计算方法。其中的主要内容基于ETH的课堂笔记
+<a target="_blank" rel="noopener" href="https://ti.inf.ethz.ch/ew/courses/TDA24/Script.pdf">TDA24/Script.pdf</a>
+，同时添加了一些结论的证明过程（如有关欧拉-庞加莱公式的证明）和对原文中不甚清晰的部分的进一步说明，这使得它可能是目前最简明的有关持久同调的中文笔记。</p>
 <p>完全理解这些内容需要一些抽象代数（同态基本定理）和拓扑学（同胚、度量空间）的基础，但他们不会花费太久的时间。如果不是有志于专业的数学，拓扑数据分析（TDA）不需要全面地掌握某一学科，这使得我们可以快速地理解和使用它。</p>
 <p>TDA对于我来说是一个完全陌生的领域，并且我没有接受过任何指导或训练，因此笔记中可能包含不准确的地方（尤其是其中的练习）。但我相信这是一个好的开始。</p>
 <span id="more"></span>
 <div>
-  <iframe src="/pdfjs/web/viewer.html?file=/pdf/持久同调性简介.pdf" width="100%" height="1000px" frameborder="0"></iframe>
-</div> 
+<p><iframe src="/pdfjs/web/viewer.html?file=/pdf/持久同调性简介.pdf" width="100%" height="1000px" frameborder="0"></iframe></p>
+</div>
 
                 
               </div>
@@ -447,6 +447,7 @@
 
   
   
+
 
 
 
@@ -640,6 +641,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 

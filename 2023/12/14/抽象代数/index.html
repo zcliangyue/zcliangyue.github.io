@@ -50,8 +50,6 @@
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/KaTeX/0.16.2/katex.min.css" />
-
 
 
 <!-- 主题依赖的图标库，不要自行修改 -->
@@ -294,8 +292,8 @@
                 <p>抽象代数笔记，仅供个人参考。</p>
 <span id="more"></span>
 <div>
-  <iframe src="/pdfjs/web/viewer.html?file=/pdf/抽象代数.pdf" width="100%" height="1000px" frameborder="0"></iframe>
-</div> 
+<p><iframe src="/pdfjs/web/viewer.html?file=/pdf/抽象代数.pdf" width="100%" height="1000px" frameborder="0"></iframe></p>
+</div>
 
                 
               </div>
@@ -370,9 +368,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/03/15/PU-GCN/" title="PU-GCN 阅读笔记">
+                      <a href="/2023/12/14/%E5%92%8C%E5%BC%A6%E7%90%86%E8%AE%BA/" title="和弦理论笔记（更新中）">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">PU-GCN 阅读笔记</span>
+                        <span class="hidden-mobile">和弦理论笔记（更新中）</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -380,8 +378,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2023/12/14/%E5%92%8C%E5%BC%A6%E7%90%86%E8%AE%BA/" title="和弦理论笔记（更新中）">
-                        <span class="hidden-mobile">和弦理论笔记（更新中）</span>
+                      <a href="/2023/11/28/LiDAR%20SR%20Methods/" title="激光雷达点云上采样调研">
+                        <span class="hidden-mobile">激光雷达点云上采样调研</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -442,6 +440,7 @@
 
   
   
+
 
 
 
@@ -635,6 +634,49 @@
 
 
   <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
 
   <script  src="/js/local-search.js" ></script>
 
