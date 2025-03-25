@@ -824,7 +824,8 @@ patch 。这使得网络可以端到端地训练；</li>
         if (!window.MathJax) {
           window.MathJax = {
             tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
+              inlineMath: { '[+]': [['$', '$']] },
+	      tags: 'ams',
             },
             loader : {
               load: ['ui/lazy']

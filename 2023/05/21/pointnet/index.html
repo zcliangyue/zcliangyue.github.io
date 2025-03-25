@@ -719,7 +719,8 @@ T-net 来预测旋转矩阵。</p>
         if (!window.MathJax) {
           window.MathJax = {
             tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
+              inlineMath: { '[+]': [['$', '$']] },
+	      tags: 'ams',
             },
             loader : {
               load: ['ui/lazy']
