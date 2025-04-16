@@ -28,7 +28,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://zcliangyue.github.io/img/flow.png">
 <meta property="article:published_time" content="2025-04-16T14:00:00.000Z">
-<meta property="article:modified_time" content="2025-04-16T14:07:07.980Z">
+<meta property="article:modified_time" content="2025-04-16T14:09:48.944Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="神经网络">
 <meta property="article:tag" content="生成模型">
@@ -321,7 +321,7 @@ x_{t_2},\cdots,x_1\)</span> ，它们是连续变化的，因此 <span class="ma
 \]</span> 这是一个常微分方程。只要我们拥有速度，我们就无需关心 <span class="math inline">\(\psi_t\)</span>
 到底是什么，只需要通过一步步的数值模拟去恢复即可，就像 Diffusion
 做的那样。同时，这个过程本质也是在求解一个ODE，所以有可供使用的数值模拟方法。</p>
-<p><img src="/2025/04/16/flow/image-20250416204120149.png" srcset="/img/loading.gif" lazyload alt="image-20250416204120149" style="zoom:30%;"></p>
+<p><img src="/2025/04/16/flow/image-20250416204120149.png" srcset="/img/loading.gif" lazyload alt="概率路径" style="zoom:30%;"></p>
 <h1 id="训练目标">训练目标</h1>
 <p>首先，我们并没有所谓速度的真值，它仍然需要定义，而定义它的关键在于
 <span class="math inline">\(x_t\)</span>
