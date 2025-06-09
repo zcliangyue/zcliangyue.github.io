@@ -1,0 +1,790 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/whu.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="SGGZCL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在公司实习的第一件任务就是部署多机多卡训练。因为原始代码已经提供了对分布式训练的支持，我在这个过程中仅仅是梳理了一些相关的常识，并踩了各种各样的坑，把机器层面的问题报给相关维护人员。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式训练实践笔记">
+<meta property="og:url" content="http://zcliangyue.github.io/2025/06/06/distributed%20training/index.html">
+<meta property="og:site_name" content="Zhang Conglang">
+<meta property="og:description" content="在公司实习的第一件任务就是部署多机多卡训练。因为原始代码已经提供了对分布式训练的支持，我在这个过程中仅仅是梳理了一些相关的常识，并踩了各种各样的坑，把机器层面的问题报给相关维护人员。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://zcliangyue.github.io/img/distributed.png">
+<meta property="article:published_time" content="2025-06-06T06:00:00.000Z">
+<meta property="article:modified_time" content="2025-06-09T12:17:54.225Z">
+<meta property="article:author" content="SGGZCL">
+<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="分布式训练">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://zcliangyue.github.io/img/distributed.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>分布式训练实践笔记 - Zhang Conglang</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zcliangyue.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ZCL&#39;BLOG</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>Categories</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/7.0.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="分布式训练实践笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-06-06 14:00" pubdate>
+          June 6, 2025 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.1k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          18 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">分布式训练实践笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在公司实习的第一件任务就是部署多机多卡训练。因为原始代码已经提供了对分布式训练的支持，我在这个过程中仅仅是梳理了一些相关的常识，并踩了各种各样的坑，把机器层面的问题报给相关维护人员。</p>
+<span id="more"></span>
+<h1 id="分布式训练简介">分布式训练简介</h1>
+<p><img src="/2025/06/06/distributed%20training/distri.png" srcset="/img/loading.gif" lazyload style="zoom:50%;"></p>
+<p>对于分布式训练的简单概念，可以直接参考 ColossalAI 的<a target="_blank" rel="noopener" href="https://ox1xq40d2or.feishu.cn/docx/Iy82dJqN5opAzPxy9x3cO0x5nwh#share-RNJXdu5spogU6pxGz80ceog5n4g">文档</a>
+。简单来说，由于单张 GPU 的显存不够，无法训练较大的模型，并且由于 batch
+size 小，训练效率也大打折扣。通过将多个 GPU
+连接起来，我们可以通过不同的分布式训练技巧来实现：</p>
+<ul>
+<li>每张 GPU 上更小的显存占用；</li>
+<li>总体更大的吞吐量。</li>
+</ul>
+<p>简单来说，可以将并行方法分为数据并行和模型并行两类。其中数据并行将模型加载到所有
+GPU 上，然后将输入的 batch 分给不同
+GPU，分别进行梯度计算后汇总更新。数据并行能够实现更大的 batch
+size，但很难节省每张 GPU
+的显存。因此当模型大到一定程度的时候，无法仅依赖数据并行。而模型并行则涉及到更多复杂的方法，它可以拆分张量、模型组件和
+token 序列等等，可以缓解单张 GPU 显存不足的问题。</p>
+<h1 id="集群多机训练部署">集群多机训练部署</h1>
+<p>公司使用 SLURM 系统管理集群，SLURM 主要用于调度集群中的计算资源，包括
+CPU、GPU 和内存等等。SLURM 系统的好处是任务提交后就不用管了，不需要 tmux
+之类的来保留终端。所有的信息会输出在一个 .out
+的日志文件中。另一方面，其他使用集群的人也可以查看到所有正在进行的任务（squeue）、节点的状态（sinfo
+-N）等等。</p>
+<p>SLURM
+另一个好处是，他可以指定节点去提交任务。在运行多机任务的时候，需要同时向多台节点提交任务，如果一个一个去提交，显然很麻烦。</p>
+<h2 id="训练脚本">训练脚本</h2>
+<p>首先，我们需要一个支持多机多卡并行的代码。MagicDriveDiT 使用
+ColossalAI 提供的接口来实现数据并行和序列并行（Sequence
+Parallel）。序列并行是模型并行的一种，可以将一个 batch
+进一步划分，节省每张 GPU
+的显存占用，但会导致速度变慢将近一倍。只有在显存确实不足的时候使用。</p>
+<p><code>SLURM</code> 脚本主要可以分为几个部分。在文件头部，声明
+<code>SLURM</code> 系统相关的环境变量，例如 CPU
+线程数，每个节点的任务数，每个节点的 GPU 数量，节点名称等等。</p>
+<h3 id="资源分配">资源分配</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash  # 表示将由解释器 /bin/bash 来执行该脚本</span><br><span class="hljs-comment">#SBATCH --account=huawei # 指定作业所属的用户（默认就是提交时候的用户）</span><br><span class="hljs-comment">#SBATCH --cpus-per-task=64 # 每个任务分配的 CPU 核心数量</span><br><span class="hljs-comment">#SBATCH --gres=gpu:8 # 每个节点请求 8 个 GPU。gres 表示通用资源（Generic RESources）</span><br><span class="hljs-comment">#SBATCH --job-name=magicdrive # 任务名称</span><br><span class="hljs-comment">#SBATCH --nodelist=node110,node111 # 指定作业运行节点</span><br><span class="hljs-comment">#SBATCH --nodes=2 # 请求两个节点</span><br><span class="hljs-comment">#SBATCH --ntasks-per-node=1 # 每个节点只运行 1 个任务（通常用于多机分布式训练）</span><br><span class="hljs-comment">#SBATCH --open-mode=append # SLURM 输出文件是追加模式写入（默认是覆盖）。</span><br><span class="hljs-comment">#SBATCH --partition=gpu_A6000 # 选择名为 gpu_A6000 的分区，表示运行在集群中搭载 gpu_A6000 的节点</span><br><span class="hljs-comment">#SBATCH --signal=USR2@120 # 用于在任务结束前 120 返回监听信号，可以触发某个函数</span><br><span class="hljs-comment">#SBATCH --time=20160 # 最大运行时间 20160 分钟</span><br></code></pre></td></tr></table></figure>
+<p>这些配置用于 SLURM 变量，主要的功能是分配计算资源。</p>
+<h3 id="环境配置">环境配置</h3>
+<p>在此之后，我们需要配置系统环境变量，例如
+<code>CUDA</code>、<code>CONDA</code>等：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># CUDA=11.8</span><br><span class="hljs-built_in">export</span> PATH=/starmap/nas/cuda/cuda-11.8/bin:<span class="hljs-variable">$PATH</span>                                                         <span class="hljs-built_in">export</span> LD_LIBRARY_PATH=/starmap/nas/cuda/cuda-11.8/lib64  <br><span class="hljs-built_in">export</span> CUDA_HOME=/starmap/nas/cuda/cuda-11.8<br></code></pre></td></tr></table></figure>
+<p>这里需要注意，<code>PATH</code> 使用追加的方式添加路径，而
+<code>LD_LIBRARY_PATH</code> 和 <code>CUDA_HOME</code>
+需要采用覆盖的方式，否则一些库在调用 <code>CUDA</code>
+路径的时候会出现错误。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># conda env</span><br><span class="hljs-built_in">source</span> /starmap/nas/anaconda3/etc/profile.d/conda.sh<br>conda activate magicdrivedit<br></code></pre></td></tr></table></figure>
+<p>在 master
+终端提交任务时，会自动在所有节点上激活同样的环境。但设置一个 conda
+激活的命令，就不需要在 master 节点上打开环境了。</p>
+<p>然后加上一些可能需要的环境变量，用于定义线程数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> OMP_NUM_THREADS=8<br><span class="hljs-built_in">export</span> SUBMITIT_EXECUTOR=slurm <span class="hljs-comment"># 用 submitit 管理</span><br><span class="hljs-built_in">export</span> PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True <span class="hljs-comment"># 减少显存碎片</span><br></code></pre></td></tr></table></figure>
+<p>这里的 <code>OMP_NUM_THREADS</code> 表示程序在使用
+<code>OpenMP</code>
+并行计算时，每个进程使用的线程数，这个参数很关键。<code>OpenMP</code>
+用于在多核 CPU
+上并行加速计算任务，比如矩阵乘法、张量操作等。许多底层科学计算库（如
+<code>NumPy</code>、<code>MKL</code>、<code>OpenBLAS</code>、<code>PyTorch</code>、<code>TensorFlow</code>）内部都用到了
+<code>OpenMP</code> 或类似技术进行加速。</p>
+<p>关于如何设置该参数：首先，我们在每个节点上启用了 8 张 GPU，64 个 CPU
+线程。而通常来说，一个 GPU
+对应于一个进程，这样更容易推广到多机多卡通讯。这个会在后面通过
+<code>torchrun</code> 的 <code>--nproc_per_node=8</code>
+进行设置。所以每个进程可以分配到 8 个线程，那么应当设置
+<code>OMP_NUM_THREADS</code> 为 8，以最大化利用其并行计算能力。</p>
+<h3 id="nccl-配置">NCCL 配置</h3>
+<p>多机通讯的方法很多，主要通过各种网络协议实现。我们的集群采用的是
+InfiniBand。InfiniBand (IB)
+是一种高性能的计算机网络通信标准，主要用于高吞吐量和低延迟的数据互连。它与以太网等网络技术并列，但InfiniBand更注重于大规模、低延迟的数据传输，常用于服务器之间的互连和存储系统之间的互连。</p>
+<p>启用 InfiniBand 需要设置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> NCCL_IB_DISABLE=0<br></code></pre></td></tr></table></figure>
+<p>反之则设为 0。设为 0 通常更容易跑通，因为没有用到 NCCL。NCCL
+是由NVIDIA开发的一个高效的并行通讯库，主要用于多GPU和分布式计算环境中的集体通信操作。它属于高性能并行计算库，特别是在深度学习、机器学习以及高性能计算（HPC）中非常常见。</p>
+<p>多机之间的主要问题是机器找不到正确的网卡，导致通讯失败。所以需要禁用掉无关的网卡：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># ==== 网络接口过滤 ====</span><br><span class="hljs-built_in">export</span> NCCL_SOCKET_IFNAME=^lo,docker0          <span class="hljs-comment"># 排除本地环回和 Docker 虚拟网卡</span><br></code></pre></td></tr></table></figure>
+<p>此外，还需要正确地配置网络，尤其是参数 <code>NCCL_IB_GID_INDEX</code>
+和
+<code>NCCL_IB_HCA</code>。具体的情况，需要根据机器自身配置来决定。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash"> ==== NCCL 通用设置 ====<br><span class="hljs-built_in">export</span> NCCL_DEBUG=WARN                         <span class="hljs-comment"># 更高等级可设为 INFO 或 VERSION</span><br><span class="hljs-built_in">export</span> NCCL_ASYNC_ERROR_HANDLING=1             <span class="hljs-comment"># 启用 NCCL 异步错误处理，提高健壮性</span><br><span class="hljs-built_in">export</span> NCCL_LAUNCH_MODE=GROUP                  <span class="hljs-comment"># 减少通信延迟，推荐设置</span><br><br><span class="hljs-comment"># ==== IB/RoCE 网络优化 ====</span><br><span class="hljs-built_in">export</span> NCCL_IB_HCA=mlx5_0                      <span class="hljs-comment"># 设置使用的网卡（你机器上有 mlx5_0 和 mlx5_1）</span><br><span class="hljs-built_in">export</span> NCCL_IB_GID_INDEX=0                     <span class="hljs-comment"># 使用 IB/RoCE v1</span><br><span class="hljs-built_in">export</span> NCCL_IB_TC=106                          <span class="hljs-comment"># 优先级设置，提升带宽服务质量</span><br><span class="hljs-built_in">export</span> NCCL_IB_TIMEOUT=22                      <span class="hljs-comment"># 提高稳定性，避免大规模训练超时</span><br><br><span class="hljs-comment"># ==== GDR（GPU Direct RDMA） ====</span><br><span class="hljs-built_in">export</span> NCCL_NET_GDR_LEVEL=2                    <span class="hljs-comment"># 强制使用 GPUDirect，如支持则显著提速</span><br><br><span class="hljs-comment"># ==== Ring 设置 ====</span><br><span class="hljs-built_in">export</span> NCCL_MIN_NRINGS=4                       <span class="hljs-comment"># 建议设置为 4（NCCL 会自动适配实际拓扑）</span><br></code></pre></td></tr></table></figure>
+<h3 id="获取节点信息">获取节点信息</h3>
+<p>找到头节点、头节点的 IP
+地址、尾节点以及节点列表等信息，在后续提交任务时可以自动化地复用变量。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">NODELIST=$(scontrol show hostname <span class="hljs-variable">$SLURM_JOB_NODELIST</span>)<br>MASTER_NODE=$(<span class="hljs-built_in">head</span> -n 1 &lt;&lt;&lt; <span class="hljs-string">&quot;<span class="hljs-variable">$NODELIST</span>&quot;</span>)<br>MASTER_ADDR=$(<span class="hljs-built_in">tail</span> -n 1 &lt;&lt;&lt; <span class="hljs-string">&quot;<span class="hljs-variable">$NODELIST</span>&quot;</span>)<br>LAST_NODE=$(<span class="hljs-built_in">tail</span> -n 1 &lt;&lt;&lt; <span class="hljs-string">&quot;<span class="hljs-variable">$NODELIST</span>&quot;</span>)<br>NODE_NUM=($(<span class="hljs-built_in">echo</span> <span class="hljs-variable">$NODELIST</span> | <span class="hljs-built_in">tr</span> <span class="hljs-string">&quot; &quot;</span> <span class="hljs-string">&quot;\n&quot;</span> | <span class="hljs-built_in">wc</span> -l))<br>NODE_COUNT=0<br></code></pre></td></tr></table></figure>
+<h3 id="打印信息">打印信息</h3>
+<p>将重要的信息打印在文件中，便于后续查看实验配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;NODE_NUM=<span class="hljs-variable">$NODE_NUM</span>&quot;</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;NODELIST:&quot;</span><br><span class="hljs-built_in">echo</span> <span class="hljs-variable">$NODELIST</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;MASTER NODE=<span class="hljs-variable">$MASTER_NODE</span>, LAST_NODE=<span class="hljs-variable">$LAST_NODE</span>&quot;</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;MASTER ADDRESS=<span class="hljs-variable">$MASTER_ADDR</span>&quot;</span><br></code></pre></td></tr></table></figure>
+<h3 id="运行脚本">运行脚本</h3>
+<p>最后，我们需要在 NODE_LIST 中每个节点都提交任务。通过一个 for
+循环实现：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">for</span> NODE <span class="hljs-keyword">in</span> <span class="hljs-variable">$NODE_LIST</span>; <span class="hljs-keyword">do</span><br>	<span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;run on <span class="hljs-variable">$NODE</span>, node_rank=<span class="hljs-variable">$NODE_COUNT</span>&quot;</span><br>	<span class="hljs-keyword">if</span> [ <span class="hljs-string">&quot;<span class="hljs-variable">$NODE</span>&quot;</span> = <span class="hljs-string">&quot;<span class="hljs-variable">$LAST_NODE</span>&quot;</span> ];<span class="hljs-keyword">then</span><br>		srun --nodes=1 --ntask=1 -2 <span class="hljs-variable">$NODE</span> torchrun --nproc-per-node=8 --nnodes=<span class="hljs-variable">$NODE_NUM</span> \<br>			--node_rank=<span class="hljs-variable">$NODE_COUNT</span> --master_addr=<span class="hljs-variable">$MASTER_ADDR</span> --master_port=34567 \<br>			train.py<br>	<span class="hljs-keyword">else</span><br>		srun --nodes=1 --ntask=1 -2 <span class="hljs-variable">$NODE</span> torchrun --nproc-per-node=8 --nnodes=<span class="hljs-variable">$NODE_NUM</span> \<br>			--node_rank=<span class="hljs-variable">$NODE_COUNT</span> --master_addr=<span class="hljs-variable">$MASTER_ADDR</span> --master_port=34567 \<br>			train.py &amp;<br>	<span class="hljs-keyword">fi</span><br>	((NODE_COUNT++))<br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+<p>这里主要做的就是遍历节点列表，若不是尾节点，则悬挂任务（结尾为
+<code>&amp;</code>），并将 <code>NODE_COUNT</code>
+加一；若为尾节点，则提交任务（结尾没有
+<code>&amp;</code>）。这样就可以将四个任务同时提交，建立互相之间的通信。那些用一行代码实现多节点的命令，我暂时没有成功过。</p>
+<h2 id="提交任务">提交任务</h2>
+<p>最后用 sbatch 提交任务即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sbatch train.sh<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="print-no-link">#神经网络</a>
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%AD%E7%BB%83/" class="print-no-link">#分布式训练</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>分布式训练实践笔记</div>
+      <div>http://zcliangyue.github.io/2025/06/06/distributed training/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>SGGZCL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 6, 2025</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Updated on</div>
+          <div>June 9, 2025</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2025/04/16/flow/" title="流匹配：最优雅的损失函数">
+                        <span class="hidden-mobile">流匹配：最优雅的损失函数</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] },
+	      tags: 'ams',
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
