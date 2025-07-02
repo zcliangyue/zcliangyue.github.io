@@ -19,20 +19,20 @@
   <meta name="author" content="SGGZCL">
   <meta name="keywords" content="">
   
-    <meta name="description" content="论文：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation 一、摘要 点云是一类重要的几何数据结构。由于其形式不规则，大多数研究人员将其转换为规则的 3D 体素网格或图像集合来处理。然而这会使数据不必要地庞大。该论文设计了一种直接作用于点云数据的新型神经网络 PointNet，它很好地遵从了输入点的">
+    <meta name="description" content="论文：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation 一、摘要 点云是一类重要的几何数据结构。由于其形式不规则，大多数研究人员将其转换为规则的 3D 体素网格或图像集合来处理。然而这会使数据不必要地庞大。该论文设计了一种直接作用于点云数据的新型神经网络 PointNet，它很好地遵">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PointNet 论文阅读笔记">
 <meta property="og:url" content="http://zcliangyue.github.io/2023/05/21/pointnet/index.html">
 <meta property="og:site_name" content="Zhang Conglang">
-<meta property="og:description" content="论文：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation 一、摘要 点云是一类重要的几何数据结构。由于其形式不规则，大多数研究人员将其转换为规则的 3D 体素网格或图像集合来处理。然而这会使数据不必要地庞大。该论文设计了一种直接作用于点云数据的新型神经网络 PointNet，它很好地遵从了输入点的">
+<meta property="og:description" content="论文：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation 一、摘要 点云是一类重要的几何数据结构。由于其形式不规则，大多数研究人员将其转换为规则的 3D 体素网格或图像集合来处理。然而这会使数据不必要地庞大。该论文设计了一种直接作用于点云数据的新型神经网络 PointNet，它很好地遵">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://zcliangyue.github.io/img/pointnet.jpg">
 <meta property="article:published_time" content="2023-05-21T14:35:37.000Z">
 <meta property="article:modified_time" content="2024-10-28T08:24:05.714Z">
 <meta property="article:author" content="SGGZCL">
+<meta property="article:tag" content="点云">
 <meta property="article:tag" content="神经网络">
 <meta property="article:tag" content="论文阅读笔记">
-<meta property="article:tag" content="点云">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://zcliangyue.github.io/img/pointnet.jpg">
   
@@ -291,55 +291,90 @@
             
               <div class="markdown-body">
                 
-                <p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1612.00593.pdf">PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation</a></p>
-<h1>一、摘要</h1>
-<p>点云是一类重要的几何数据结构。由于其形式不规则，大多数研究人员将其转换为规则的 3D 体素网格或图像集合来处理。然而这会使数据不必要地庞大。该论文设计了一种<strong>直接作用于点云数据</strong>的新型神经网络 PointNet，它很好地遵从了输入点的<strong>排列不变性</strong>，并为从对象分类、部分分割到场景语义解析等应用场景提供统一的架构。PointNet 虽然简单，但展现出了很好的效果。</p>
+                <p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1612.00593.pdf">PointNet: Deep
+Learning on Point Sets for 3D Classification and Segmentation</a></p>
+<h1 id="一摘要">一、摘要</h1>
+<p>点云是一类重要的几何数据结构。由于其形式不规则，大多数研究人员将其转换为规则的
+3D
+体素网格或图像集合来处理。然而这会使数据不必要地庞大。该论文设计了一种<strong>直接作用于点云数据</strong>的新型神经网络
+PointNet，它很好地遵从了输入点的<strong>排列不变性</strong>，并为从对象分类、部分分割到场景语义解析等应用场景提供统一的架构。PointNet
+虽然简单，但展现出了很好的效果。</p>
 <span id="more"></span>
-<h1>二、相关工作</h1>
+<h1 id="二相关工作">二、相关工作</h1>
 <p>3D 深度学习方面，在此论文之前有很多形式出现：</p>
 <ul>
-<li>Volumetric CNNs：最早将 3D 卷积神经网络应用于体素化点云，但由于数据稀疏性和 3D 卷积的计算成本，受到分辨率的限制；</li>
-<li>Multiview CNNs：多视图 CNN 将 3D 点云或形状渲染成 2D 图像，然后应用 2D CNN 对其进行分类。然而将这种方法扩展到场景理解过其它 3D 任务并非易事；</li>
-<li>Spectral CNNs：这种卷积网络在网格点云的频率域上进行，但仅适用于具有规则结构的网格，难以应用于更加复杂和不规则的形状；</li>
-<li>Feature-based DNNs：通过提取传统形状特征将 3D 数据转换为向量，再利用全连接网络对形状分类，但受到特征本身表达能力的限制；</li>
+<li>Volumetric CNNs：最早将 3D
+卷积神经网络应用于体素化点云，但由于数据稀疏性和 3D
+卷积的计算成本，受到分辨率的限制；</li>
+<li>Multiview CNNs：多视图 CNN 将 3D 点云或形状渲染成 2D 图像，然后应用
+2D CNN 对其进行分类。然而将这种方法扩展到场景理解过其它 3D
+任务并非易事；</li>
+<li>Spectral
+CNNs：这种卷积网络在网格点云的频率域上进行，但仅适用于具有规则结构的网格，难以应用于更加复杂和不规则的形状；</li>
+<li>Feature-based DNNs：通过提取传统形状特征将 3D
+数据转换为向量，再利用全连接网络对形状分类，但受到特征本身表达能力的限制；</li>
 </ul>
 <p>这些方法都不能够直接处理无序点集，而是在尝试将点云转换为序列形式，以便用熟悉的卷积网络来操作，但同时面临计算复杂度等问题。</p>
-<h1>三、问题陈述</h1>
-<p>定义点云为一组 3D 点 ${ P_i|i=1,\dots,n }$ ，其中 $P_i$ 是包含 $(x,y,z)$ 和额外特征通道（如颜色、法线等）的向量，在论文中仅适用 $(x,y,z)$ 坐标。对于分类问题，输入点云可能是单体，也可能是从场景中预先分割得到。PointNet++ 为 $k$ 个候选类别输出 $k$ 个分数；对于分割问题，任务可能是从单体中分割出不同的结构，也可能是从三维场景中分割出不同的物体。若共有 $n$ 个点，$m$ 个类，则输出 $n\times m$ 个分数，表示每个点属于每个类的概率，从而进行分割。</p>
-<h1>四、具体方法</h1>
-<h2 id="mathbb-R-n-空间中点集的性质">$\mathbb{R} ^n$ 空间中点集的性质</h2>
+<h1 id="三问题陈述">三、问题陈述</h1>
+<p>定义点云为一组 3D 点 <span class="math inline">\(\{ P_i|i=1,\dots,n
+\}\)</span> ，其中 <span class="math inline">\(P_i\)</span> 是包含 <span class="math inline">\((x,y,z)\)</span>
+和额外特征通道（如颜色、法线等）的向量，在论文中仅适用 <span class="math inline">\((x,y,z)\)</span>
+坐标。对于分类问题，输入点云可能是单体，也可能是从场景中预先分割得到。PointNet++
+为 <span class="math inline">\(k\)</span> 个候选类别输出 <span class="math inline">\(k\)</span>
+个分数；对于分割问题，任务可能是从单体中分割出不同的结构，也可能是从三维场景中分割出不同的物体。若共有
+<span class="math inline">\(n\)</span> 个点，<span class="math inline">\(m\)</span> 个类，则输出 <span class="math inline">\(n\times m\)</span>
+个分数，表示每个点属于每个类的概率，从而进行分割。</p>
+<h1 id="四具体方法">四、具体方法</h1>
+<h2 id="mathbbr-n-空间中点集的性质"><span class="math inline">\(\mathbb{R} ^n\)</span> 空间中点集的性质</h2>
 <p>我们的输入是来自欧几里德空间的点的子集。它具有三个主要属性：</p>
 <ul>
-<li><strong>无序性</strong>。与图像中的像素阵列或体积网格中的体素阵列不同，点云是一组没有特定顺序的点。换句话说，一个使用 N 个 3D 点集的网络需要对 N ! 种输入点排列具有不变性；</li>
+<li><strong>无序性</strong>。与图像中的像素阵列或体积网格中的体素阵列不同，点云是一组没有特定顺序的点。换句话说，一个使用
+N 个 3D 点集的网络需要对 N ! 种输入点排列具有不变性；</li>
 <li><strong>点之间的关联性</strong>。这些点来自具有距离度量的空间。这意味着点不是孤立的，相邻的点形成一个有意义的子集。因此，该模型需要能够从附近的点捕获局部结构，以及局部结构之间的组合相互作用；</li>
 <li><strong>变换下的不变性</strong>。作为一个几何对象，点集的学习表示应该对某些变换是不变的，如旋转和平移。</li>
 </ul>
-<h2 id="PointNet-架构">PointNet 架构</h2>
+<h2 id="pointnet-架构">PointNet 架构</h2>
 <p>网络具有三个关键模块：作为对称函数的最大池化层，用于聚合来自所有点的信息、局部和全局信息组合结构，以及两个对齐输入点和点特征的联合对齐网络。下面的单独段落中将讨论这些设计选择背后的原因。</p>
 <h3 id="无序输入的对称函数">无序输入的对称函数</h3>
 <p>为了解决无序性问题，论文给出了三种策略：</p>
-<ol>
+<ol type="1">
 <li>引入一种规范的排序方式，但稳定的排序方式难以确定，且易受噪声的影响；</li>
-<li>把点云看作一个序列信号，并通过随机排列的方式训练 RNN 以驱使输出结果相同，但这种方法随着点云数量增长失去可行性；</li>
-<li>利用对称函数聚合来自每个点的信息。所谓聚合信息，即将 $n$ 个向量作为输入而产生一个对输入顺序不变的新向量。例如 $1+2+3 = 2+3 +1$ 。显然这种方法是较为合适的。</li>
+<li>把点云看作一个序列信号，并通过随机排列的方式训练 RNN
+以驱使输出结果相同，但这种方法随着点云数量增长失去可行性；</li>
+<li>利用对称函数聚合来自每个点的信息。所谓聚合信息，即将 <span class="math inline">\(n\)</span>
+个向量作为输入而产生一个对输入顺序不变的新向量。例如 <span class="math inline">\(1+2+3 = 2+3 +1\)</span>
+。显然这种方法是较为合适的。</li>
 </ol>
-<p>定义函数 $h:\mathbb{R} ^N \rightarrow \mathbb{R} ^K$ ，用于对每个点进行处理；定义对称函数 $g:\underbrace{\mathbb{R} ^K\times\cdots\times\mathbb{R} ^K}_{n}\rightarrow\mathbb{R} $ ，聚合处理结果；则由输入到输出的一般函数 $f:2^{\mathbb{R} ^N}\rightarrow\mathbb{R} $ 定义为：<br>
-$$<br>
-f({x_1,\dots,x_n}) \approx g(h(x_1),\dots ,h(x_n))<br>
-$$<br>
-在实践中，论文采用多层感知器（MLP）来近似 $h$，利用最大池化函数来近似 $g$ 函数。</p>
+<p>定义函数 <span class="math inline">\(h:\mathbb{R} ^N \rightarrow
+\mathbb{R} ^K\)</span> ，用于对每个点进行处理；定义对称函数 $g:_{n} $
+，聚合处理结果；则由输入到输出的一般函数 $f:2^{ ^N} $ 定义为：<br>
+<span class="math display">\[
+f(\{x_1,\dots,x_n\}) \approx g(h(x_1),\dots ,h(x_n))
+\]</span> 在实践中，论文采用多层感知器（MLP）来近似 <span class="math inline">\(h\)</span>，利用最大池化函数来近似 <span class="math inline">\(g\)</span> 函数。</p>
 <h3 id="本地和全局信息聚合">本地和全局信息聚合</h3>
-<p><img src="/2023/05/21/pointnet/architecture.jpg" srcset="/img/loading.gif" lazyload alt="architecture"></p>
-<p>对于分割任务，需要结合本地信息和局部信息。论文采用了简单高效的办法：将学习得到的全局特征和局部特征直接连接在一起，如上图所示。然后再重新提取每个点的特征，从而使得每个点的特征同时包含局部和全局信息。再利用新的组合特征训练几个 MLP ，即可实现每个点的类别判断，也就是分割；若要对单体点云进行识别分类，则直接利用全局特征训练。</p>
+<figure>
+<img src="/2023/05/21/pointnet/architecture.jpg" srcset="/img/loading.gif" lazyload alt="architecture">
+<figcaption aria-hidden="true">architecture</figcaption>
+</figure>
+<p>对于分割任务，需要结合本地信息和局部信息。论文采用了简单高效的办法：将学习得到的全局特征和局部特征直接连接在一起，如上图所示。然后再重新提取每个点的特征，从而使得每个点的特征同时包含局部和全局信息。再利用新的组合特征训练几个
+MLP
+，即可实现每个点的类别判断，也就是分割；若要对单体点云进行识别分类，则直接利用全局特征训练。</p>
 <h3 id="联合对齐网络">联合对齐网络</h3>
-<p>为了使特征具有旋转平移不变性，论文引入了一种迷你网络 T-net 来直接预测仿射变换矩阵，并将该变换直接应用于原始输入。同样地，特征也需要引入旋转不变性，因此对点特征也可以训练一个对齐网络。</p>
-<p>关于 T-net 的结构，其相当于小型的 PointNet，利用最大池化得到全局特征，再利用 MLP 得到 $3\times 3$ 的转换矩阵。由于特征空间维数较大，增大了优化的难度，因此在 softmax 训练损失的基础上，添加了一个正则化项，用来将特征变换矩阵约束为近似<strong>正交矩阵</strong>：<br>
-$$<br>
-L_{reg}=| I-AA^T |^2_F<br>
-$$<br>
-其中 $A$ 是由迷你网络预测得到的旋转矩阵。正则项使得优化更稳定，性能更优。</p>
-<h1>五、总结</h1>
-<p>为了直接针对点集进行处理，pointnet 的主要思想就是通过池化来解决无序性，通过 MLP 来扩大和缩放特征尺寸。同时为了引入旋转不变性，将点云坐标（或特征）对齐，使用了 T-net 来预测旋转矩阵。</p>
+<p>为了使特征具有旋转平移不变性，论文引入了一种迷你网络 T-net
+来直接预测仿射变换矩阵，并将该变换直接应用于原始输入。同样地，特征也需要引入旋转不变性，因此对点特征也可以训练一个对齐网络。</p>
+<p>关于 T-net 的结构，其相当于小型的
+PointNet，利用最大池化得到全局特征，再利用 MLP 得到 <span class="math inline">\(3\times 3\)</span>
+的转换矩阵。由于特征空间维数较大，增大了优化的难度，因此在 softmax
+训练损失的基础上，添加了一个正则化项，用来将特征变换矩阵约束为近似<strong>正交矩阵</strong>：
+<span class="math display">\[
+L_{reg}=\| I-AA^T \|^2_F
+\]</span> 其中 <span class="math inline">\(A\)</span>
+是由迷你网络预测得到的旋转矩阵。正则项使得优化更稳定，性能更优。</p>
+<h1 id="五总结">五、总结</h1>
+<p>为了直接针对点集进行处理，pointnet
+的主要思想就是通过池化来解决无序性，通过 MLP
+来扩大和缩放特征尺寸。同时为了引入旋转不变性，将点云坐标（或特征）对齐，使用了
+T-net 来预测旋转矩阵。</p>
 
                 
               </div>
@@ -352,11 +387,11 @@ $$<br>
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
+        <a href="/tags/%E7%82%B9%E4%BA%91/" class="print-no-link">#点云</a>
+      
         <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="print-no-link">#神经网络</a>
       
         <a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" class="print-no-link">#论文阅读笔记</a>
-      
-        <a href="/tags/%E7%82%B9%E4%BA%91/" class="print-no-link">#点云</a>
       
     </div>
   
@@ -684,8 +719,7 @@ $$<br>
         if (!window.MathJax) {
           window.MathJax = {
             tex    : {
-              inlineMath: { '[+]': [['$', '$']] },
-	      tags: 'ams',
+              inlineMath: { '[+]': [['$', '$']] }
             },
             loader : {
               load: ['ui/lazy']
