@@ -12,14 +12,14 @@ subnav:
   # weibo: "#"
   # rss: "#"
   # zhihu: "#"
-  qq: http://wpa.qq.com/msgrd?v=3&uin=2075969484&site=qq&menu=yes
-  weixin: "#"
+  qq: 2075969484
+  weixin: ZCLiangyue
   #jianshu: "#"
   #douban: "#"
   #segmentfault: "#"
   #bilibili: "#"
   #acfun: "#"
-  mail: http://2075969484@qq.com
+  mail: 2020302142094@whu.edu.cn
   #facebook: "#"
   #google: "#"
   #twitter: "#"
@@ -99,6 +99,16 @@ gitment_oauth:
   client_id: ''           #client ID
   client_secret: ''       #client secret
 
+#评论
+#Valine评论系统(https://valine.js.org)
+valine:
+  appid: UiRPS4dN8MG3Dis0wlK2flnN-gzGzoHsz
+  appkey: c9RaHQVkIj20i2MuyOAt5LA7
+  verify: false #验证码
+  notify: false #评论回复提醒
+  avatar: mm #评论列表头像样式：https://valine.js.org/avatar
+  placeholder: #评论框占位符
+
 # 样式定制 - 一般不需要修改，除非有很强的定制欲望…
 style:
   # 头像上面的背景颜色
@@ -123,6 +133,7 @@ smart_menu:
 
 friends:
   武汉大学官网: https://www.whu.edu.cn/
-  武汉大学测绘学院官网: http://main.sgg.whu.edu.cn/
+  武汉大学测国重官网: https://liesmars.whu.edu.cn/
+  课题组主页: https://3s.whu.edu.cn/ybs/index.htm
 
-aboutme: 在武测躺平
+aboutme: 读武大测绘，品百味人生

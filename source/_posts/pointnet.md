@@ -1,21 +1,21 @@
 ---
-title: pointnet 论文阅读笔记
+title: PointNet 论文阅读笔记
 date: 2023-05-21 22:35:37
 tags:
 - 点云 
-- 点云上采样 
 - 神经网络
 - 论文阅读笔记
 mathjax: ture
 toc: true
 typora-root-url: ./pointnet
+index_img: /img/pointnet.jpg
 ---
 
-论文：PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation
+论文：[PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation](https://arxiv.org/pdf/1612.00593.pdf)
 
 # 一、摘要
 
-点云是一类重要的几何数据结构。由于其格式不规则，大多数研究人员将此类数据转换为规则的 3D 体素网格或图像集合。然而，这会使数据不必要地庞大并导致问题。在本文中，我们设计了一种直接作用于点云的新型神经网络，它很好地遵从了输入点的排列不变性。我们的网络名为 PointNet，为从对象分类、部分分割到场景语义解析的应用程序提供统一的架构。PointNet 虽然简单，但非常高效和有效。从经验上看，它表现出与现有技术相当甚至更好的强大性能。我们从理论上分析了网络学到了什么以及为什么网络在输入扰动和损坏方面是稳健的。
+点云是一类重要的几何数据结构。由于其形式不规则，大多数研究人员将其转换为规则的 3D 体素网格或图像集合来处理。然而这会使数据不必要地庞大。该论文设计了一种**直接作用于点云数据**的新型神经网络 PointNet，它很好地遵从了输入点的**排列不变性**，并为从对象分类、部分分割到场景语义解析等应用场景提供统一的架构。PointNet 虽然简单，但展现出了很好的效果。
 
 <!--more-->
 

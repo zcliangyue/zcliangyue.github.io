@@ -5,8 +5,8 @@
   <% if (page.total > 1){ %>
     <nav id="page-nav">
       <%- paginator({
-        prev_text: '&laquo; Prev',
-        next_text: 'Next &raquo;'
+        prev_text: '上一页',
+        next_text: '下一页'
       }) %>
     </nav>
   <% } %>
@@ -34,10 +34,27 @@
     <% if (page.total > 1){ %>
     <nav id="page-nav">
       <%- paginator({
-        prev_text: '&laquo; Prev',
-        next_text: 'Next &raquo;'
+        prev_text: '上一页',
+        next_text: '下一页'
       }) %>
     </nav>
   <% } %>
 
+<% } %>
+
+
+<% if (!index){ %>
+   <% if (theme.valine && theme.valine.appid && theme.valine.appkey){ %>
+       <section id="comments" class="comments">
+         <style>
+           .comments{margin:30px;padding:10px;background:#fff}
+           @media screen and (max-width:800px){.comments{margin:auto;padding:10px;background:#fff}}
+         </style>
+         <%- partial('post/valine', {
+           key: post.slug,
+           title: post.title,
+           url: config.url+url_for(post.path)
+           }) %>
+     </section>
+   <% } %>
 <% } %>

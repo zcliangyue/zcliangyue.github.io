@@ -1,0 +1,14 @@
+---
+description: 修改本 Hexo 博客后执行 clean / generate / server 验证
+alwaysApply: true
+---
+
+# Hexo 修改后的本地验证
+
+在本仓库完成与站点内容、主题、脚本、配置相关的修改后，在仓库根目录依次执行：
+
+1. `npx hexo clean`（缩写 `hexo cl`）
+2. `npx hexo generate`（缩写 `hexo g`）
+3. `npx hexo server`（缩写 `hexo s`）
+
+`hexo s` 为常驻进程；若已有 dev server 在跑，在 `clean` + `generate` 之后应**重启**该进程，避免仍指向旧的 `public` 缓存行为。

@@ -1,0 +1,41 @@
+# About 页论文列表，由 {% publications %} 渲染为与原先一致的表格布局。
+# authors 里用 **姓名** 表示加粗；同等贡献等脚注可用普通 ASCII *（数据不经 Markdown，不会当斜体解析）；image 用 about 同目录资源包里的文件名（配合 hexo-asset-image）。
+- image: DwD.png
+  title: "Driving with DINO: Vision Foundation Features as a Unified Bridge for Sim-to-Real Generation in Autonomous Driving"
+  authors: "Xuyang Chen*, **Conglang Zhang***, Chuanheng Fu*, Zihao Yang, Kaixuan Zhou†, Yizhi Zhang, Jianan He, Yanfeng Zhang, Mingwei Sun, Zengmao Wang, Zhen Dong, Xiaoxiao Long, Liqiu Meng"
+  venue: Arxiv 2026
+  links:
+    - { text: Paper, url: "https://arxiv.org/abs/2602.06159", icon: pdf }
+    - { text: Project Page, url: "https://albertchen98.github.io/DwD-project/", icon: earth }
+
+- image: DreamFragment.png
+  title: "DreamFragment: Instance-Aware Text-to-3D Generation Compositional Multi-Object Scenes with Complex Interactions"
+  authors: "Zihao Yang*, Chaofan Luo*, **Conglang Zhang**, Xun Yang, Xuyang Chen†"
+  venue: ICASSP 2026 (Oral)
+  links:
+    - { text: Blog, url: "https://azurerossi.github.io/blog/2026/03/03/DreamFragment/", icon: pdf }
+    - { text: Project Page, url: "https://anonymous.4open.science/w/DreamFragment3D/", icon: earth }
+
+- image: adaviewplanner.png
+  title: "AdaViewPlanner: Adapting Video Diffusion Models for Viewpoint Planning in 4D Scenes"
+  authors: "Yu Li, Menghan Xia, Gongye Liu, Jianhong Bai, Xintao Wang, **Conglang Zhang**, Yuxuan Lin, Ruihang Chu, Pengfei Wan, Yujiu Yang†"
+  venue: ICLR 2026
+  links:
+    - { text: Paper, url: "https://arxiv.org/abs/2510.10670", icon: pdf }
+    - { text: Project Page, url: "https://yuli0103.github.io/AdaViewPlanner/", icon: earth }
+
+- image: win_teaser.png
+  title: "WIN: Variable-View Implicit LiDAR Upsampling Network"
+  authors: "**Conglang Zhang**, Chen Long †, Hang Xu, Wenxiao Zhang, Zhen Dong, Bisheng Yang"
+  venue: "TITS 2025 (IF:8.4)"
+  links:
+    - { text: Paper, url: "https://ieeexplore.ieee.org/document/11130589", icon: pdf }
+    - { text: Code, url: "https://github.com/WHU-USI3DV/WIN", icon: code }
+
+- image: whu-synth-teaser.png
+  title: "WHU-Synthetic: A Synthetic Perception Dataset for 3D Multi-task Model Research"
+  authors: "Jiahao Zhou*, Chen Long*, Yue Xie, Jialiang Wang, **Conglang Zhang**, Boheng Li, Haiping Wang, Zhe Chen†, Zhen Dong"
+  venue: "TGRS 2025 (IF:8.6)"
+  links:
+    - { text: Paper, url: "https://ieeexplore.ieee.org/document/10879799", icon: pdf }
+    - { text: Code, url: "https://github.com/WHU-USI3DV/WHU-Synthetic", icon: code }

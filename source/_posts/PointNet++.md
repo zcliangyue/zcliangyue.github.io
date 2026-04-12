@@ -3,18 +3,18 @@ title: PointNet++ 论文阅读笔记
 date: 2023-05-23 14:08:41
 tags:
 - 点云
-- 点云上采样
 - 神经网络
 - 论文阅读笔记
 mathjax: true
 typora-root-url: ./PointNet++
+index_img: /img/pointnet++.png
 ---
 
-论文：PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space
+论文：[PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space](https://arxiv.org/pdf/1706.02413.pdf)
 
 # 一、摘要及引言
 
-Pointnet 是直接处理点集的开创性工作，其基本思想是学习每个点的空间编码，然后将所有单个点特征聚合为全局点云特征。但 pointnet 无法捕获局部特征，而是只对单个点编码。因此引入了分层神经网络 pointnet++ ，以分层方式处理点集，以获取不同尺度下的点集特征。
+PointNet 是直接处理点集的开创性工作，其基本思想是学习每个点的空间编码，然后将所有单个点特征聚合为全局点云特征。但 PointNet 只对单个点编码，无法捕获**局部特征**。因此引入了分层神经网络 PointNet++ ，通过以分层方式处理点集的方法来获取不同尺度下的点集特征。
 
 <!--more-->
 
@@ -45,7 +45,7 @@ PointNet++ 的层次结构由许多 SA 层（Set Abstraction Levels）组成。S
 给定输入点 $\{x_1,x_2,\dots,x_n\}$ ，利用**迭代最远点采样**（FPS）来选择点的子集 $\{x_{i_1},x_{i_2},\dots,x_{i_m}\}$ ，使得 $x_{i_j}$ 是剩余点中距离点集 $\{x_{i_1},\dots,x_{i_{j-1}}\}$ 最远的点。论文原话虽然凝练但是略微抽象，这里详细阐述一下 FPS 算法的步骤：
 
 1. 选定第 $i$ 个点为初始点，记作 $x_{i_1}$ ，此时候选集为 $x_{i_1}$ ；
-2. 定义点 $x_k$ 到点集 $X$ 的距离为 $\min(\|x_k-x \|_2)(x\in X)$ ，即到点集中所有点距离的最小值；
+2. 定义点 $x_k$ 到点集 $X$ 的距离为 $\min(\left\|x_k-x \right\|_2)(x\in X)$ ，即到点集中所有点距离的最小值；
 3. 找到剩余点中距离候选集最远的点，纳入到候选集中；
 4. 重复步骤 3，直到点数达到设定值。
 
