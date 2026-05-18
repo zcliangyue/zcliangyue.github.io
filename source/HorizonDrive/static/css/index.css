@@ -1570,6 +1570,31 @@ main#main-content .hero.publication-hero .publication-resource-links > a.supp-gi
   margin: 0 auto;
 }
 
+/* China diverse-scenes carousel: align width with the minute-level grid below */
+#sec-more-e2e {
+  --nusc-pair-gap: clamp(6px, 1.15vw, 11px);
+}
+
+#sec-more-e2e > .hero-body {
+  padding-left: var(--nusc-pair-gap);
+  padding-right: var(--nusc-pair-gap);
+}
+
+#sec-more-e2e > .hero-body > .container {
+  max-width: none;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#sec-more-e2e .video-carousel {
+  max-width: none;
+  width: 100%;
+  margin: 0;
+}
+
 /* Minute-level grid: same horizontal extent as nuScenes pair carousel above */
 #sec-minute-level-video {
   --nusc-pair-gap: clamp(6px, 1.15vw, 11px);
@@ -1601,6 +1626,29 @@ main#main-content .hero.publication-hero .publication-resource-links > a.supp-gi
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   background: #0f172a;
+}
+
+.video-stack {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.video-stack video {
+  width: 100%;
+  display: block;
+  background: #0f172a;
+}
+
+.video-stack--tight {
+  overflow: hidden;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  line-height: 0;
+}
+
+.video-stack--tight video {
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .video-carousel {
@@ -1781,6 +1829,3 @@ main#main-content .hero.publication-hero .publication-resource-links > a.supp-gi
 .metric-table-wrap .table td {
   vertical-align: middle;
 }
-
-
-

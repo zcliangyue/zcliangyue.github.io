@@ -11,7 +11,7 @@
 
   <!-- Critical CSS -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/index.css?v=hd202627">
+  <link rel="stylesheet" href="static/css/index.css?v=hd20260519-spacing1">
 
   <!-- Non-critical CSS - load asynchronously -->
   <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -26,7 +26,7 @@
 
   <!-- Defer non-critical JavaScript -->
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script defer src="static/js/index.js?v=hd202621"></script>
+  <script defer src="static/js/index.js?v=hd20260519-autoplay1"></script>
 </head>
 
 <body>
@@ -193,7 +193,6 @@
     </div>
   </section>
 
-
 <div id="video-sections-wrapper">
 
   <!-- ============ Section A: long-horizon video comparison on nuScenes ============ -->
@@ -347,9 +346,15 @@
           Closed-Loop Driving Simulation
         </h2>
 
-        <div class="video-single" role="region" aria-label="Closed-loop driving simulation, three scenes stacked">
-          <video controls muted loop playsinline preload="metadata">
-            <source src="paper_videos_final/e2e_close_loop/closed_loop_stacked.mp4" type="video/mp4">
+        <div class="video-stack video-stack--tight" data-video-sync="closed-loop" role="region" aria-label="Closed-loop driving simulation, three scenes stacked">
+          <video class="video-sync-master" controls muted loop playsinline preload="metadata">
+            <source src="paper_videos_final/e2e_close_loop/hrn_GA20230001_clip_DZ871__20240924_110537_449-20240924_110636_049_pred_v3.mp4" type="video/mp4">
+          </video>
+          <video muted loop playsinline preload="metadata">
+            <source src="paper_videos_final/e2e_close_loop/hrn_GA20230001_clip_DZ878__20240702_092600_449-20240702_092659_048_pred_v3.mp4" type="video/mp4">
+          </video>
+          <video muted loop playsinline preload="metadata">
+            <source src="paper_videos_final/e2e_close_loop/hrn_GA20230001_clip_DZ878__20240706_235008_449-20240706_235107_049_pred_v3.mp4" type="video/mp4">
           </video>
         </div>
 
@@ -439,6 +444,33 @@
           </table>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Citation ============ -->
+  <section class="hero is-small is-light" id="sec-citation" aria-labelledby="citation-heading">
+    <div class="hero-body">
+      <div class="container is-max-widescreen">
+        <div class="bibtex-header">
+          <h2 id="citation-heading" class="title is-3 mb-0">Citation</h2>
+          <button class="copy-bibtex-btn" type="button" onclick="copyBibTeX()" aria-label="Copy BibTeX citation">
+            <span class="icon"><i class="fas fa-copy"></i></span>
+            <span class="copy-text">Copy</span>
+          </button>
+        </div>
+        <p class="content has-text-grey mb-4">
+          If you find our work useful, please cite it as:
+        </p>
+        <pre><code id="bibtex-code">@misc{zhang2026horizondriveselfcorrectiveautoregressiveworld,
+  title={HorizonDrive: Self-Corrective Autoregressive World Model for Long-horizon Driving Simulation},
+  author={Zhang, Conglang and Zhan, Yifan and Wang, Qingjie and Ouyang, Zhanpeng and Li, Yu and Yang, Zihao and Guo, Xiaoyang and Ren, Weiqiang and Zhang, Qian and Dong, Zhen and Zheng, Yinqiang and Yin, Wei and Chen, Zhengqing},
+  year={2026},
+  eprint={2605.11596},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2605.11596},
+}</code></pre>
       </div>
     </div>
   </section>

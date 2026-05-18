@@ -170,18 +170,61 @@ function setupScrollReveal() {
     });
 }
 
-// Video autoplay when in view (play only, no pause, avoids conflicts)
+// Video autoplay when each video block scrolls into view.
 function setupVideoAutoplay() {
-    const videos = document.querySelectorAll('video[autoplay]');
+    const videoBlocks = document.querySelectorAll('.publication-hero-bg, .video-carousel, .video-single, .video-stack');
+    if (videoBlocks.length === 0) return;
+
+    function getActiveCarouselVideos(carousel) {
+        const slides = Array.from(carousel.querySelectorAll('.video-carousel-slide'));
+        const dots = Array.from(carousel.querySelectorAll('.video-carousel-dot'));
+        let activeIndex = dots.findIndex(dot => dot.classList.contains('active'));
+        if (activeIndex < 0) activeIndex = 0;
+        const activeSlide = slides[activeIndex];
+        return activeSlide ? Array.from(activeSlide.querySelectorAll('video')) : [];
+    }
+
+    function getPlayableVideos(block) {
+        if (block.classList.contains('video-carousel')) {
+            return getActiveCarouselVideos(block);
+        }
+
+        const syncMaster = block.querySelector('.video-sync-master');
+        if (syncMaster) return [syncMaster];
+
+        return Array.from(block.querySelectorAll('video'));
+    }
+
+    function getAllVideos(block) {
+        return Array.from(block.querySelectorAll('video'));
+    }
+
+    function playBlock(block) {
+        getPlayableVideos(block).forEach(video => {
+            video.play().catch(() => {});
+        });
+    }
+
+    function pauseBlock(block) {
+        getAllVideos(block).forEach(video => {
+            if (!video.paused) video.pause();
+        });
+    }
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.play().catch(() => {});
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.2) {
+                playBlock(entry.target);
+            } else {
+                pauseBlock(entry.target);
             }
         });
-    }, { threshold: 0.1 });
+    }, {
+        rootMargin: '-8% 0px -8% 0px',
+        threshold: [0, 0.2, 0.5]
+    });
 
-    videos.forEach(video => observer.observe(video));
+    videoBlocks.forEach(block => observer.observe(block));
 }
 
 // Sync BEV video height to match paired Video height
@@ -313,13 +356,54 @@ function setupNuscenesPairedVideos() {
     });
 }
 
+function setupSyncedVideoStacks() {
+    document.querySelectorAll('[data-video-sync]').forEach(function (stack) {
+        var videos = Array.prototype.slice.call(stack.querySelectorAll('video'));
+        var master = stack.querySelector('.video-sync-master') || videos[0];
+        var followers = videos.filter(function (video) { return video !== master; });
+        var syncing = false;
+
+        if (!master || followers.length === 0) return;
+
+        function syncTimes(force) {
+            followers.forEach(function (video) {
+                if (force || Math.abs(video.currentTime - master.currentTime) > 0.2) {
+                    video.currentTime = master.currentTime;
+                }
+            });
+        }
+
+        master.addEventListener('play', function () {
+            if (syncing) return;
+            syncing = true;
+            syncTimes(true);
+            followers.forEach(function (video) {
+                video.play().catch(function () {});
+            });
+            syncing = false;
+        });
+
+        master.addEventListener('pause', function () {
+            if (syncing) return;
+            followers.forEach(function (video) { video.pause(); });
+        });
+
+        master.addEventListener('seeking', function () { syncTimes(true); });
+        master.addEventListener('ratechange', function () {
+            followers.forEach(function (video) { video.playbackRate = master.playbackRate; });
+        });
+        master.addEventListener('timeupdate', function () { syncTimes(false); });
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     setupIconEffects();
     setupTiltEffect();
     setupCountUp();
     setupScrollReveal();
-    setupVideoAutoplay();
     setupPlanningHeights();
     setupVideoCarousels();
     setupNuscenesPairedVideos();
+    setupSyncedVideoStacks();
+    setupVideoAutoplay();
 });
