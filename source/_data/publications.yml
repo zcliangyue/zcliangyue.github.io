@@ -1,5 +1,13 @@
 # About 页论文列表，由 {% publications %} 渲染为与原先一致的表格布局。
 # authors 里用 **姓名** 表示加粗；同等贡献等脚注可用普通 ASCII *（数据不经 Markdown，不会当斜体解析）；image 用 about 同目录资源包里的文件名（配合 hexo-asset-image）。
+- image: HorizonDrive.png
+  title: "HorizonDrive: Self-Corrective Autoregressive World Model for Long-horizon Driving Simulation"
+  authors: "**Conglang Zhang***, Yifan Zhan*, Qingjie Wang, Zhanpeng Ouyang, Yu Li, Zihao Yang, Xiaoyang Guo, Weiqiang Ren, Qian Zhang, Zhen Dong, Yinqiang Zheng, Wei Yin, Zhengqing Chen†"
+  venue: Arxiv 2026
+  links:
+    - { text: Paper, url: "https://arxiv.org/abs/2605.11596", icon: pdf }
+    - { text: Project Page, url: "/HorizonDrive/", icon: earth }
+
 - image: DwD.png
   title: "Driving with DINO: Vision Foundation Features as a Unified Bridge for Sim-to-Real Generation in Autonomous Driving"
   authors: "Xuyang Chen*, **Conglang Zhang***, Chuanheng Fu*, Zihao Yang, Kaixuan Zhou†, Yizhi Zhang, Jianan He, Yanfeng Zhang, Mingwei Sun, Zengmao Wang, Zhen Dong, Xiaoxiao Long, Liqiu Meng"

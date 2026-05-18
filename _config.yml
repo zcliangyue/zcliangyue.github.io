@@ -3,9 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Zhang Conglang
+title: ZCL's Blog
 subtitle: 张从朗
-description: 武汉大学测绘遥感信息工程国家重点实验室2024级研究生，目前的研究方向是点云生成和质量增强。
+description: >-
+  My name is Conglang Zhang, My research interests primarily center on
+  world models and video generation. I am currently a research intern at Horizon Robotics, focusing
+  on generative close-loop simulation.
 keywords:
 author: SGGZCL
 language: en
@@ -31,6 +34,7 @@ i18n_dir: :lang
 skip_render:
  - 'index.md'  
  - 'pdfjs/**/*'
+ - 'HorizonDrive/**/*'
 
 # Writing
 new_post_name: :title.md # File name of new posts
@@ -97,6 +101,8 @@ pagination_dir: page
 ## include:/exclude: options only apply to the 'source/' folder
 include:
 exclude:
+  # 不要用 Hexo 页面包一层 Fluid；项目页只用 source/HorizonDrive/index.html（见 skip_render）
+  - 'HorizonDrive/**/*.md'
 ignore:
 
 # Extensions

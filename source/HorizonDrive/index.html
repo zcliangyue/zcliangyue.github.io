@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="title" content="HorizonDrive">
+  <meta name="description" content="Supplementary videos for HorizonDrive — self-corrective autoregressive world model for long-horizon driving simulation (NeurIPS 2026 / arXiv).">
+
+  <title>HorizonDrive</title>
+
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css?v=hd202627">
+
+  <!-- Non-critical CSS - load asynchronously -->
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  </noscript>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/index.js?v=hd202621"></script>
+</head>
+
+<body>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+<main id="main-content">
+
+  <!-- ============ Hero ============ -->
+  <section class="hero publication-hero">
+    <div class="publication-hero-bg" aria-hidden="true">
+      <video autoplay muted loop playsinline preload="auto" disablepictureinpicture>
+        <source src="static/videos/hero-bg.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+
+            <h1 class="title is-1 publication-name">HorizonDrive</h1>
+            <p class="publication-subtitle">
+              Self-Corrective Autoregressive World Model for Long-horizon Driving Simulation
+            </p>
+
+            <div class="publication-authors content has-text-centered is-size-6" style="max-width: 56rem; margin-left: auto; margin-right: auto;">
+              <p class="mb-3" style="line-height: 1.65;">
+                <strong>Conglang Zhang</strong><sup>1,*</sup>&ensp;
+                <strong>Yifan Zhan</strong><sup>2,*</sup>&ensp;
+                <strong>Qingjie Wang</strong><sup>3</sup>&ensp;
+                <strong>Zhanpeng Ouyang</strong><sup>3</sup>&ensp;
+                <strong>Yu Li</strong><sup>4</sup><br>
+                <strong>Zihao Yang</strong><sup>5</sup>&ensp;
+                <strong>Xiaoyang Guo</strong><sup>6</sup>&ensp;
+                <strong>Weiqiang Ren</strong><sup>3</sup>&ensp;
+                <strong>Qian Zhang</strong><sup>3</sup>&ensp;
+                <strong>Zhen Dong</strong><sup>1</sup><br>
+                <strong>Yinqiang Zheng</strong><sup>2</sup>&ensp;
+                <strong>Wei Yin</strong><sup>3,‡</sup>&ensp;
+                <strong>Zhengqing Chen</strong><sup>3,†</sup>
+              </p>
+              <p class="is-size-7 mb-3" style="line-height: 1.6;">
+                <sup>1</sup>&nbsp;Wuhan University &emsp;
+                <sup>2</sup>&nbsp;The University of Tokyo &emsp;
+                <sup>3</sup>&nbsp;Horizon Robotics &emsp;
+                <sup>4</sup>&nbsp;Tsinghua University<br>
+                <sup>5</sup>&nbsp;University of Science and Technology of China &emsp;
+                <sup>6</sup>&nbsp;The Chinese University of Hong Kong
+              </p>
+              <p class="is-size-7 mb-0">
+                <sup>*</sup>&nbsp;Equal contribution &emsp;
+                <sup>‡</sup>&nbsp;Project lead &emsp;
+                <sup>†</sup>&nbsp;Corresponding author
+              </p>
+            </div>
+
+            <div class="publication-resource-links is-flex is-justify-content-center is-flex-wrap-wrap">
+              <a href="https://arxiv.org/abs/2605.11596"
+                 class="supp-arxiv-link"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="HorizonDrive paper on arXiv (2605.11596)">
+                <img class="supp-arxiv-icon" src="static/images/arxiv.svg" width="22" height="22" alt="" decoding="async" />
+                <span>arXiv</span>
+                <span class="supp-arxiv-id">2605.11596</span>
+              </a>
+              <a href="https://github.com/zcliangyue/HorizonDrive"
+                 class="supp-github-link"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="HorizonDrive on GitHub">
+                <img class="supp-github-icon" src="static/images/github.svg" width="22" height="22" alt="" decoding="async" />
+                <span>GitHub</span>
+                <span class="supp-github-id">HorizonDrive</span>
+              </a>
+            </div>
+
+            <!-- Hero section nav (anchor buttons) — disabled: too cluttered
+            <div class="publication-links section-nav-links" style="margin-top:1.25rem;">
+              <span class="link-block">
+                <a href="#sec-method-overview"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Method overview">
+                  <span class="icon"><i class="fas fa-project-diagram"></i></span>
+                  <span>Method Overview</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#sec-streaming-nusc"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Long-Horizon Video Comparison on nuScenes (streaming baselines)">
+                  <span class="icon"><i class="fas fa-stream"></i></span>
+                  <span>Long-Horizon Video Comparison on nuScenes</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#sec-more-e2e"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Scaling to diverse driving scenes in China (e2e vs. streaming baselines)">
+                  <span class="icon"><i class="fas fa-road"></i></span>
+                  <span>Scaling to Diverse Driving Scenes in China</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#sec-minute-level-video"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Minute-level video generation">
+                  <span class="icon"><i class="fas fa-clock"></i></span>
+                  <span>Minute-Level Video Generation</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#sec-closed-loop"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Closed-loop driving simulation results">
+                  <span class="icon"><i class="fas fa-sync-alt"></i></span>
+                  <span>Closed-Loop Driving Simulation</span>
+                </a>
+              </span>
+            </div>
+            -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Abstract ============ -->
+  <section class="hero is-small supp-abstract-panel" id="sec-abstract" aria-labelledby="abstract-heading">
+    <div class="hero-body">
+      <div class="container is-max-fullhd">
+        <div class="content has-text-justified hero-abstract-block supp-abstract-inner">
+          <h2 id="abstract-heading" class="title is-3 has-text-centered publication-abstract-heading">Abstract</h2>
+          <p class="hero-abstract-text mb-0">
+            Closed-loop driving simulation requires real-time interaction beyond short offline clips, pushing current driving world models toward autoregressive (AR) rollout. Existing AR distillation approaches typically rely on frame sinks or student-side degradation training. The former transfers poorly to driving due to fast ego-motion and rapid scene changes, while the latter remains bounded by the teacher's single-pass output length and thus provides only a limited supervision horizon. A natural question is: can the teacher itself be extended via AR rollout to provide unbounded-horizon supervision at bounded memory cost? The key difficulty is that a standard teacher drifts under its own predictions, contaminating the supervision it provides. <strong>Our key insight is to make the teacher rollout-capable, ensuring reliable supervision from its own AR rollouts.</strong> This is instantiated as HorizonDrive, an anti-drifting training-and-distillation framework for AR driving simulation. First, scheduled rollout recovery (SRR) trains the base model to reconstruct ground-truth future clips from prediction-corrupted histories, yielding a teacher that remains stable across long AR rollouts. Second, the rollout-capable teacher is extended via AR rollout, providing long-horizon distribution-matching supervision under bounded memory, while a short-window student aligns to it with teacher rollout DMD (TRD) for efficient real-time deployment. HorizonDrive natively supports minute-scale AR rollout under bounded memory; on nuScenes, HorizonDrive reduces FID by 52% and FVD by 37%, and lowers ARE and DTW by 21% and 9% relative to the strongest long-horizon streaming baselines, while remaining competitive with single-pass driving video generators.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Method overview (pipeline figure) ============ -->
+  <section class="hero is-small supp-method-overview-panel" id="sec-method-overview" aria-labelledby="method-overview-heading">
+    <div class="hero-body">
+      <div class="container is-max-widescreen">
+        <h2 id="method-overview-heading" class="title is-3 has-text-centered">Method Overview</h2>
+        <div class="method-overview-figure-wrap">
+          <img class="method-overview-figure-img"
+               src="static/images/pipeline.png"
+               width="2000"
+               height="570"
+               decoding="async"
+               loading="lazy"
+               alt="Overview of the HorizonDrive method pipeline." />
+        </div>
+        <p class="method-overview-caption content has-text-justified">
+          Overview of HorizonDrive framework. We first train a conditional driving world model, then improve its autoregressive stability through scheduled rollout recovery, and finally distill long-horizon teacher rollouts into a few-step, short-chunk student via teacher-rollout DMD.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+<div id="video-sections-wrapper">
+
+  <!-- ============ Section A: long-horizon video comparison on nuScenes ============ -->
+  <section class="hero is-small" id="sec-streaming-nusc">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3 has-text-centered">
+          Long-Horizon Video Comparison on nuScenes
+        </h2>
+
+        <div class="video-carousel video-carousel--nuscenes-pairs" data-carousel="streaming-nusc">
+          <div class="video-carousel-track">
+            <div class="video-carousel-slides">
+
+              <div class="video-carousel-slide video-carousel-slide--pair">
+                <div class="video-pair-cell">
+                  <video controls muted loop playsinline preload="metadata">
+                    <source src="paper_videos_final/nuscenes_forcing/16_f9475d1f1f96401c81ce511a93578a96_compare.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <div class="video-pair-cell">
+                  <video controls muted loop playsinline preload="metadata">
+                    <source src="paper_videos_final/nuscenes_forcing/28_339ead96177c4e338fde8235c188cfaa_compare.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+
+              <div class="video-carousel-slide video-carousel-slide--pair">
+                <div class="video-pair-cell">
+                  <video controls muted loop playsinline preload="metadata">
+                    <source src="paper_videos_final/nuscenes_forcing/50_4e26b42796024b45a9a852738e3701bb_compare.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <div class="video-pair-cell">
+                  <video controls muted loop playsinline preload="metadata">
+                    <source src="paper_videos_final/nuscenes_forcing/66_e493c6923a0a4d5fb78b75dcc0ffc5ab_compare.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+
+              <div class="video-carousel-slide video-carousel-slide--pair">
+                <div class="video-pair-cell video-pair-cell--single">
+                  <video autoplay controls muted loop playsinline preload="metadata">
+                    <source src="paper_videos_final/nuscenes_forcing/100_4e04d32a9949430287c14d49851f6f55_compare.mp4" type="video/mp4">
+                  </video>
+                </div>
+              </div>
+
+            </div>
+
+            <button class="video-carousel-arrow prev" aria-label="Previous page">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="video-carousel-arrow next" aria-label="Next page">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          <div class="video-carousel-dots" role="tablist"></div>
+          <div class="video-carousel-counter"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ Section D: e2e scaling / generalization (diverse scenes in China) ============ -->
+  <section class="hero is-small" id="sec-more-e2e">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3 has-text-centered">
+          Scaling to Diverse Driving Scenes in China
+        </h2>
+
+        <div class="video-carousel" data-carousel="more-e2e">
+          <div class="video-carousel-track">
+            <div class="video-carousel-slides">
+
+              <div class="video-carousel-slide">
+                <video controls muted loop playsinline preload="metadata">
+                  <source src="paper_videos_final/e2e_forcing/scale_grid_01.mp4" type="video/mp4">
+                </video>
+              </div>
+
+              <div class="video-carousel-slide">
+                <video controls muted loop playsinline preload="metadata">
+                  <source src="paper_videos_final/e2e_forcing/scale_grid_02.mp4" type="video/mp4">
+                </video>
+              </div>
+
+              <div class="video-carousel-slide">
+                <video controls muted loop playsinline preload="metadata">
+                  <source src="paper_videos_final/e2e_forcing/scale_grid_03.mp4" type="video/mp4">
+                </video>
+              </div>
+
+              <div class="video-carousel-slide">
+                <video controls muted loop playsinline preload="metadata">
+                  <source src="paper_videos_final/e2e_forcing/scale_grid_04.mp4" type="video/mp4">
+                </video>
+              </div>
+
+              <div class="video-carousel-slide">
+                <video controls muted loop playsinline preload="metadata">
+                  <source src="paper_videos_final/e2e_forcing/scale_grid_05.mp4" type="video/mp4">
+                </video>
+              </div>
+
+            </div>
+
+            <button class="video-carousel-arrow prev" aria-label="Previous scene">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="video-carousel-arrow next" aria-label="Next scene">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          <div class="video-carousel-dots" role="tablist"></div>
+          <div class="video-carousel-counter"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ Section E: Minute-level video generation ============ -->
+  <section class="hero is-small is-light" id="sec-minute-level-video">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3 has-text-centered">
+          Minute-Level Video Generation
+        </h2>
+
+        <div class="video-single" role="region" aria-label="Minute-level video, 2×5 scene grid">
+          <video controls muted loop playsinline preload="metadata">
+            <source src="paper_videos_final/e2e_long/minute_level_side_by_side.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ Section F: Closed-loop driving simulation ============ -->
+  <section class="hero is-small" id="sec-closed-loop">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3 has-text-centered">
+          Closed-Loop Driving Simulation
+        </h2>
+
+        <div class="video-single" role="region" aria-label="Closed-loop driving simulation, three scenes stacked">
+          <video controls muted loop playsinline preload="metadata">
+            <source src="paper_videos_final/e2e_close_loop/closed_loop_stacked.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div><!-- End video-sections-wrapper -->
+
+  <!-- ============ Quantitative results (main + e2e) ============ -->
+  <section class="hero is-small is-light" id="sec-quantitative">
+    <div class="hero-body">
+      <div class="container is-max-widescreen">
+        <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
+
+        <h3 class="title is-4 mt-5">nuScenes val</h3>
+        <div class="table-container metric-table-wrap">
+          <table class="table is-fullwidth is-striped is-hoverable is-narrow">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th class="has-text-right">FID↓</th>
+                <th class="has-text-right">FVD↓</th>
+                <th class="has-text-right">Qual.↑</th>
+                <th class="has-text-right">Mot.↑</th>
+                <th class="has-text-right">Img.↑</th>
+                <th class="has-text-right">ARE↓</th>
+                <th class="has-text-right">DTW↓</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="8"><em>Long-horizon interactive world model frameworks</em></td></tr>
+              <tr><td>Matrix-Game3</td><td class="has-text-right">35.69</td><td class="has-text-right">338.22</td><td class="has-text-right">78.99</td><td class="has-text-right">93.78</td><td class="has-text-right">60.44</td><td class="has-text-right">N/A</td><td class="has-text-right">N/A</td></tr>
+              <tr><td>Helios</td><td class="has-text-right">30.53</td><td class="has-text-right">218.23</td><td class="has-text-right">79.02</td><td class="has-text-right">95.03</td><td class="has-text-right">58.82</td><td class="has-text-right">N/A</td><td class="has-text-right">N/A</td></tr>
+              <tr><td>Causal-Forcing</td><td class="has-text-right">49.07</td><td class="has-text-right">373.29</td><td class="has-text-right">74.35</td><td class="has-text-right">92.42</td><td class="has-text-right">59.00</td><td class="has-text-right">N/A</td><td class="has-text-right">N/A</td></tr>
+              <tr><td>HY-WorldPlay</td><td class="has-text-right">33.51</td><td class="has-text-right">580.72</td><td class="has-text-right">76.58</td><td class="has-text-right">99.48</td><td class="has-text-right">58.60</td><td class="has-text-right">N/A</td><td class="has-text-right">N/A</td></tr>
+              <tr><td>LingBot-World</td><td class="has-text-right">37.67</td><td class="has-text-right">325.55</td><td class="has-text-right">77.08</td><td class="has-text-right">92.87</td><td class="has-text-right">55.55</td><td class="has-text-right">N/A</td><td class="has-text-right">N/A</td></tr>
+              <tr><td colspan="8"><em>Long-horizon streaming methods (re-trained on our base model and data)</em></td></tr>
+              <tr><td>Self-Forcing</td><td class="has-text-right">41.53</td><td class="has-text-right">161.00</td><td class="has-text-right">79.27</td><td class="has-text-right">94.17</td><td class="has-text-right">59.65</td><td class="has-text-right">3.47</td><td class="has-text-right">6.22</td></tr>
+              <tr><td>Self-Forcing++</td><td class="has-text-right">28.84</td><td class="has-text-right">147.57</td><td class="has-text-right">79.47</td><td class="has-text-right">93.92</td><td class="has-text-right">60.25</td><td class="has-text-right">3.78</td><td class="has-text-right">3.61</td></tr>
+              <tr><td>LongLive</td><td class="has-text-right">29.05</td><td class="has-text-right">161.41</td><td class="has-text-right">79.35</td><td class="has-text-right">93.46</td><td class="has-text-right">60.80</td><td class="has-text-right">3.28</td><td class="has-text-right">3.65</td></tr>
+              <tr class="has-background-light">
+                <td><strong>HorizonDrive (Ours)</strong></td>
+                <td class="has-text-right"><strong>13.82</strong></td>
+                <td class="has-text-right"><strong>92.99</strong></td>
+                <td class="has-text-right"><strong>79.53</strong></td>
+                <td class="has-text-right">93.85</td>
+                <td class="has-text-right"><strong>62.50</strong></td>
+                <td class="has-text-right"><strong>2.60</strong></td>
+                <td class="has-text-right"><strong>3.27</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="title is-4 mt-6">Self-collected dataset</h3>
+        <div class="table-container metric-table-wrap">
+          <table class="table is-fullwidth is-striped is-hoverable is-narrow">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th class="has-text-right">FID↓</th>
+                <th class="has-text-right">FVD↓</th>
+                <th class="has-text-right">Qual.↑</th>
+                <th class="has-text-right">Mot.↑</th>
+                <th class="has-text-right">Img.↑</th>
+                <th class="has-text-right">ARE↓</th>
+                <th class="has-text-right">DTW↓</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="8"><em>Long-horizon streaming methods (re-trained on our base model and e2e data)</em></td></tr>
+              <tr><td>Self-Forcing</td><td class="has-text-right">58.23</td><td class="has-text-right">561.11</td><td class="has-text-right">76.68</td><td class="has-text-right">94.48</td><td class="has-text-right"><span style="text-decoration: underline;">63.18</span></td><td class="has-text-right">5.43</td><td class="has-text-right">14.13</td></tr>
+              <tr><td>Self-Forcing++</td><td class="has-text-right">66.93</td><td class="has-text-right">534.36</td><td class="has-text-right">74.54</td><td class="has-text-right">92.70</td><td class="has-text-right">59.12</td><td class="has-text-right">7.32</td><td class="has-text-right">18.40</td></tr>
+              <tr><td>LongLive</td><td class="has-text-right"><span style="text-decoration: underline;">28.39</span></td><td class="has-text-right"><span style="text-decoration: underline;">374.94</span></td><td class="has-text-right"><span style="text-decoration: underline;">78.18</span></td><td class="has-text-right"><span style="text-decoration: underline;">94.57</span></td><td class="has-text-right">62.53</td><td class="has-text-right"><span style="text-decoration: underline;">4.05</span></td><td class="has-text-right"><span style="text-decoration: underline;">8.11</span></td></tr>
+              <tr class="has-background-light">
+                <td><strong>HorizonDrive (Ours)</strong></td>
+                <td class="has-text-right"><strong>12.01</strong></td>
+                <td class="has-text-right"><strong>117.27</strong></td>
+                <td class="has-text-right"><strong>80.12</strong></td>
+                <td class="has-text-right"><strong>95.22</strong></td>
+                <td class="has-text-right"><strong>67.65</strong></td>
+                <td class="has-text-right"><strong>3.67</strong></td>
+                <td class="has-text-right"><strong>5.29</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>

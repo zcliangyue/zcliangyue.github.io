@@ -7,7 +7,7 @@ typora-root-url: ./index
 
 My name is Conglang Zhang, and I am a second-year graduate student at the State Key Laboratory of Information Engineering in Surveying, Mapping and Remote Sensing (LIESMARS), Wuhan University, advised by Prof. [Zhen Dong](https://dongzhenwhu.github.io/) and Prof. Bisheng Yang. My research interests primarily center on world models and video generation.
 
-I am currently a research intern at Horizon Robotics, focusing on generative close-loop simulation. Previously, during my internship at Huawei, I explored leveraging controllable video models to enhance the realism of diverse CG scenes (See our [project page](https://albertchen98.github.io/DwD-project/)).
+I am currently a research intern at Horizon Robotics, focusing on generative closed-loop simulation. See our [project page](/HorizonDrive/) for [HorizonDrive](https://arxiv.org/abs/2605.11596). Previously, during my internship at Huawei, I explored leveraging controllable video models to enhance the realism of diverse CG scenes. Check out our [project page](https://albertchen98.github.io/DwD-project/) for [DwD](https://arxiv.org/abs/2602.06159).
 
 I am also a member of [WHU-USI3DV](https://github.com/WHU-USI3DV), a research group dedicated to 3D Computer Vision, including 3D reconstruction, scene understanding, and their applications in intelligent transportation and digital twins.
 
