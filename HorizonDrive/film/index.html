@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HorizonDrive film mode preview">
+  <title>HorizonDrive Film Mode Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="film.css?v=hd-film-preview-10">
+  <script defer src="film.js?v=hd-film-preview-9"></script>
+</head>
+<body>
+  <main class="film-page">
+    <div class="film-glow" aria-hidden="true"></div>
+
+    <header class="film-topbar">
+      <a class="film-back" href="../" aria-label="Back to the HorizonDrive project page">
+        <span aria-hidden="true">&#8592;</span>
+        <span>Project page</span>
+      </a>
+      <div class="film-kicker">
+        <span>HorizonDrive</span>
+        <strong>Film mode preview</strong>
+      </div>
+    </header>
+
+    <section class="film-player" aria-label="HorizonDrive film preview">
+      <div class="film-stage">
+        <section class="film-scene scene-hero is-active" data-scene data-duration="15" data-label="Opening">
+          <video class="scene-cover" data-scene-video data-tail-seconds="15" muted playsinline preload="auto">
+            <source src="../static/videos/hero-bg.mp4" type="video/mp4">
+          </video>
+          <div class="scene-veil scene-veil--hero"></div>
+          <div class="hero-scan" aria-hidden="true"></div>
+          <div class="scene-copy hero-copy">
+            <p class="eyebrow">Long-horizon driving world model</p>
+            <h1>HorizonDrive</h1>
+            <p class="hero-subtitle">Self-Corrective Autoregressive World Model for Long-horizon Driving Simulation</p>
+            <div class="hero-points" aria-hidden="true">
+              <span>Controllable</span>
+              <span>Interactive</span>
+              <span>Closed-loop</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="film-scene scene-abstract" data-scene data-duration="6" data-label="Abstract">
+          <video class="scene-cover abstract-road" data-scene-video muted loop playsinline preload="metadata">
+            <source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/25_8d56b71c09c04ece827107b3c103498f.mp4" type="video/mp4">
+          </video>
+          <div class="scene-veil scene-veil--dense"></div>
+          <div class="abstract-frame">
+            <div class="scene-copy abstract-copy">
+              <p class="eyebrow">Abstract</p>
+              <h2>HorizonDrive keeps autoregressive driving simulation reliable beyond short clips.</h2>
+            </div>
+            <div class="feature-rails feature-rails--six" aria-label="Key features">
+              <article class="feature-rail feature-rail--compact">
+                <span class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M6 26 13 7"></path>
+                    <path d="M16 26V7" stroke-dasharray="4 4"></path>
+                    <path d="M26 26 19 7"></path>
+                  </svg>
+                </span>
+                <strong>Controllable</strong>
+                <span>Driving scene generation</span>
+              </article>
+              <article class="feature-rail feature-rail--compact">
+                <span class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <rect x="5" y="9" width="6" height="7" rx="1.2"></rect>
+                    <rect x="13" y="9" width="6" height="7" rx="1.2"></rect>
+                    <rect x="21" y="9" width="6" height="7" rx="1.2"></rect>
+                    <path d="M5 23h19M20 19l5 4-5 4"></path>
+                  </svg>
+                </span>
+                <strong>Long-Horizon</strong>
+                <span>Stable generation quality</span>
+              </article>
+              <article class="feature-rail feature-rail--compact">
+                <span class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M8 24V9M8 24h15M8 24l11-10"></path>
+                    <path d="m5.5 12 2.5-3 2.5 3M20 21l3 3-3 3M16 14h3v3"></path>
+                    <path class="feature-deny-mark" d="M22 7l5 5M27 7l-5 5"></path>
+                  </svg>
+                </span>
+                <strong>No Explicit</strong>
+                <span>3D representations</span>
+              </article>
+              <article class="feature-rail feature-rail--compact">
+                <span class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M24 11a10 10 0 0 0-15-2l-2 2"></path>
+                    <path d="M8 6v5h5"></path>
+                    <path d="M8 21a10 10 0 0 0 15 2l2-2"></path>
+                    <path d="M24 26v-5h-5"></path>
+                    <path d="M12 20v-4l2-3h4l2 3v4M11 20h10"></path>
+                  </svg>
+                </span>
+                <strong>Closed-Loop</strong>
+                <span>Simulation ready</span>
+              </article>
+              <article class="feature-rail feature-rail--compact">
+                <span class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M9 10h8a6 6 0 0 1 6 6v1"></path>
+                    <path d="m20 14 3 3 3-3"></path>
+                    <path d="M23 22h-8a6 6 0 0 1-6-6v-1"></path>
+                    <path d="m12 18-3-3-3 3"></path>
+                    <circle cx="16" cy="16" r="3"></circle>
+                  </svg>
+                </span>
+                <strong>Interactive</strong>
+                <span>AR rollout</span>
+              </article>
+              <article class="feature-rail feature-rail--compact">
+                <span class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <circle cx="6" cy="16" r="2.2"></circle>
+                    <circle cx="25" cy="7" r="2.2"></circle>
+                    <circle cx="25" cy="16" r="2.2"></circle>
+                    <circle cx="25" cy="25" r="2.2"></circle>
+                    <path d="M8.2 16h5"></path>
+                    <path d="M13.2 16c4 0 5-9 9.6-9"></path>
+                    <path d="M13.2 16h9.6"></path>
+                    <path d="M13.2 16c4 0 5 9 9.6 9"></path>
+                  </svg>
+                </span>
+                <strong>Scalable</strong>
+                <span>Diverse driving scenes</span>
+              </article>
+            </div>
+            <strong class="abstract-key-insight" data-scene-reveal data-reveal-at="0">
+              Our key insight is to make the teacher rollout-capable,
+              ensuring reliable supervision from its own AR rollouts.
+            </strong>
+          </div>
+        </section>
+
+        <section class="film-scene scene-method" data-scene data-duration="5" data-label="Method">
+          <video class="scene-cover abstract-road method-road" data-scene-video muted loop playsinline preload="metadata">
+            <source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/25_8d56b71c09c04ece827107b3c103498f.mp4" type="video/mp4">
+          </video>
+          <div class="scene-veil scene-veil--method"></div>
+          <div class="method-sequence">
+            <div class="scene-copy method-copy">
+              <h2>Method Overview</h2>
+            </div>
+            <figure class="method-drawing-frame" data-home-method aria-label="Three-stage HorizonDrive method overview">
+              <span class="method-drawing-loading">Loading Method Overview</span>
+            </figure>
+            <p class="method-overview-caption">
+              Overview of HorizonDrive framework. We first train a conditional driving world model,
+              then improve its autoregressive stability through scheduled rollout recovery,
+              and finally distill long-horizon teacher rollouts into a few-step, short-chunk student
+              via teacher-rollout DMD.
+            </p>
+          </div>
+        </section>
+
+        <section class="film-scene scene-nuscenes" data-scene data-duration="10" data-label="20 seconds" data-playback-rate="2">
+          <div class="scene-veil scene-veil--results"></div>
+          <div class="results-layout results-layout--result-split">
+            <div class="scene-copy results-copy">
+              <p class="eyebrow">Results</p>
+              <h2>Twenty-Second Results on Nuscenes</h2>
+              <span class="result-speed-pill" aria-label="Result videos play at double speed">2x playback</span>
+            </div>
+            <div class="film-grid film-grid--nusc film-grid--results">
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/106_43da50265dfa4876bdf1efed38e7a261.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/109_1f048fa210c64e80b9d57e3dc757702c.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/116_852e22dbdbbf422e99224c488d7618bf.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/128_637fc435f95f4bc1b72f09811f2d78d2.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/142_21bb21c84c3e43908cd554db2686278f.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/19_b9db804449d34414ba98868e9034abd3.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/22_806011e8a7114eca971fd0f6b95bcd4b.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/25_8d56b71c09c04ece827107b3c103498f.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/35_c28c950afda14f7b93ff956799873dff.mp4" type="video/mp4"></video>
+            </div>
+          </div>
+        </section>
+
+        <section class="film-scene scene-scale" data-scene data-duration="15" data-label="30 seconds" data-playback-rate="2">
+          <div class="scene-veil scene-veil--results"></div>
+          <div class="results-layout results-layout--result-split">
+            <div class="scene-copy results-copy">
+              <p class="eyebrow">Results</p>
+              <h2>Thirty-Second Results on Self-Collected Dataset</h2>
+              <span class="result-speed-pill" aria-label="Result videos play at double speed">2x playback</span>
+            </div>
+            <div class="film-grid film-grid--nusc film-grid--results">
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2008_hrn_GA20230001_clip_DZ878__20240717_004028_049-20240717_004208_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2009_hrn_GA20230001_clip_DZ878__20240717_004933_049-20240717_005032_048.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2046_hrn_GA20230001_clip_DZ878__20240717_100203_548-20240717_100302_048.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2049_hrn_GA20230001_clip_DZ878__20240717_101817_848-20240717_101916_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2511_hrn_GA20230001_clip_DZ878__20240803_110528_449-20240803_110627_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3015_hrn_GA20230001_clip_DZ878__20240707_105003_849-20240707_105102_048.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3025_hrn_GA20230001_clip_DZ878__20240707_111917_950-20240707_112016_048.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3032_hrn_GA20230001_clip_DZ878__20240707_114320_049-20240707_114418_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3037_hrn_GA20230001_clip_DZ878__20240707_114838_249-20240707_114937_049.mp4" type="video/mp4"></video>
+            </div>
+          </div>
+        </section>
+
+        <section class="film-scene scene-minute" data-scene data-duration="20" data-label="Minute level" data-playback-rate="3">
+          <div class="scene-veil scene-veil--results"></div>
+          <div class="results-layout results-layout--result-split">
+            <div class="scene-copy results-copy">
+              <p class="eyebrow">Results</p>
+              <h2>Minute-Level Video Generation</h2>
+              <span class="result-speed-pill" aria-label="Result videos play at triple speed">3x playback</span>
+            </div>
+            <div class="film-grid film-grid--nusc film-grid--results">
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/4_hrn_GA20230001_clip_DZ878__20240710_224616_648-20240710_224812_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/5_hrn_GA20230001_clip_DZ878__20240711_221120_048-20240711_221242_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/8_hrn_GA20230001_clip_DZ878__20240717_222721_049-20240717_222834_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/14_hrn_GA20230001_clip_DZ878__20240717_004028_049-20240717_004208_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/16_hrn_GA20230001_clip_DZ878__20240717_115056_750-20240717_115227_048.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/18_hrn_GA20230001_clip_DZ878__20240707_141742_750-20240707_141857_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/19_hrn_GA20230001_clip_DZ878__20240707_162419_849-20240707_162553_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/25_hrn_GA20230001_clip_DZ878__20240717_170213_849-20240717_170339_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/24_hrn_GA20230001_clip_DZ878__20240711_104932_750-20240711_105118_049.mp4" type="video/mp4"></video>
+            </div>
+          </div>
+        </section>
+
+        <section class="film-scene scene-closed-loop" data-scene data-duration="4" data-label="Closed loop">
+          <div class="scene-veil scene-veil--results"></div>
+          <div class="results-layout results-layout--closed-loop-split">
+            <div class="scene-copy results-copy">
+              <p class="eyebrow">Simulation</p>
+              <h2>Closed-Loop Driving Simulation</h2>
+            </div>
+            <div class="closed-loop-grid">
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/e2e_close_loop/hrn_GA20230001_clip_DZ871__20240924_110537_449-20240924_110636_049_pred_v3.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/e2e_close_loop/hrn_GA20230001_clip_DZ878__20240702_092600_449-20240702_092659_048_pred_v3.mp4" type="video/mp4"></video>
+              <video data-scene-video muted loop playsinline preload="metadata"><source src="../paper_videos_final/e2e_close_loop/hrn_GA20230001_clip_DZ878__20240706_235008_449-20240706_235107_049_pred_v3.mp4" type="video/mp4"></video>
+            </div>
+          </div>
+        </section>
+
+        <section class="film-scene scene-thanks" data-scene data-duration="8" data-label="Thank you">
+          <div class="scene-veil scene-veil--thanks"></div>
+          <div class="thanks-layout">
+            <div class="scene-copy thanks-copy">
+              <p class="eyebrow">HorizonDrive</p>
+              <h2>Thank you for your interest in our work.</h2>
+              <p>See more details at</p>
+            </div>
+            <div class="thanks-links">
+              <a href="https://github.com/zcliangyue/HorizonDrive">
+                <span>GitHub</span>
+                <strong>https://github.com/zcliangyue/HorizonDrive</strong>
+              </a>
+              <a href="http://zcliangyue.github.io/HorizonDrive/">
+                <span>Paper webpage</span>
+                <strong>http://zcliangyue.github.io/HorizonDrive/</strong>
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer class="film-controls">
+        <button class="film-button" type="button" data-toggle aria-label="Pause film preview">
+          <span class="button-icon" data-toggle-icon aria-hidden="true"></span>
+          <span data-toggle-text>Pause</span>
+        </button>
+        <button class="film-button film-button--ghost" type="button" data-restart aria-label="Restart film preview">
+          <span aria-hidden="true">&#8634;</span>
+          <span>Restart</span>
+        </button>
+        <label class="film-timeline">
+          <span class="sr-only">Film position</span>
+          <input data-scrubber type="range" min="0" max="1000" value="0">
+          <span class="timeline-fill" data-progress></span>
+        </label>
+        <div class="film-clock">
+          <strong data-scene-label>Opening</strong>
+          <span data-timecode>00:00 / 00:49</span>
+        </div>
+      </footer>
+    </section>
+  </main>
+</body>
+</html>

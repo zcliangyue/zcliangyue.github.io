@@ -1,0 +1,830 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/whu.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="SGGZCL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="近来饱受专业实习折磨，学习方面，有所懈怠  论文：Dynamic Graph CNN for Learning on Point Clouds 一、摘要及引言 在 PointNet、PointNet++ 中，都没有考虑到点云的拓扑结构，即相邻点之间的邻接关系。如果设计一个能够恢复拓扑结构的模型，应当可以增强网络的表示能力。基于这一想法，论文设计了网络模块 EdgeConv 来提取">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DGCNN 论文阅读笔记">
+<meta property="og:url" content="http://zcliangyue.github.io/2023/06/08/DGCNN/index.html">
+<meta property="og:site_name" content="ZCL&#39;s Blog">
+<meta property="og:description" content="近来饱受专业实习折磨，学习方面，有所懈怠  论文：Dynamic Graph CNN for Learning on Point Clouds 一、摘要及引言 在 PointNet、PointNet++ 中，都没有考虑到点云的拓扑结构，即相邻点之间的邻接关系。如果设计一个能够恢复拓扑结构的模型，应当可以增强网络的表示能力。基于这一想法，论文设计了网络模块 EdgeConv 来提取">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://zcliangyue.github.io/img/DGCNN.jpg">
+<meta property="article:published_time" content="2023-06-08T15:51:00.000Z">
+<meta property="article:modified_time" content="2024-10-28T08:22:12.877Z">
+<meta property="article:author" content="SGGZCL">
+<meta property="article:tag" content="神经网络">
+<meta property="article:tag" content="点云">
+<meta property="article:tag" content="论文阅读笔记">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://zcliangyue.github.io/img/DGCNN.jpg">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>DGCNN 论文阅读笔记 - ZCL&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_5124066_gn1z3319k8j.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zcliangyue.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ZCL&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/7.0.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="DGCNN 论文阅读笔记"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-06-08 23:51" pubdate>
+          June 8, 2023 pm
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">DGCNN 论文阅读笔记</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <blockquote>
+<p>近来饱受专业实习折磨，学习方面，有所懈怠</p>
+</blockquote>
+<p>论文：<a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1801.07829.pdf">Dynamic Graph
+CNN for Learning on Point Clouds</a></p>
+<h1 id="一摘要及引言">一、摘要及引言</h1>
+<p>在 PointNet、PointNet++
+中，都没有考虑到点云的拓扑结构，即相邻点之间的邻接关系。如果设计一个能够恢复<strong>拓扑结构</strong>的模型，应当可以增强网络的表示能力。基于这一想法，论文设计了网络模块
+EdgeConv 来提取局部邻域信息和潜在的长距离语义特征。</p>
+<span id="more"></span>
+<p>PointNet
+通过在局部邻域内独立地处理点，确保了顺序不变性，然而这种<strong>独立性</strong>一定程度上忽略了点之间的几何关系，因而难以捕获局部特征。而
+EdgeConv
+并不从点的嵌入中生成点特征，而是生成了描述点与其邻域内点之间关系的<strong>边特征</strong>，并且对邻域内点的排序具有不变性。同时
+EdgeConv 易于嵌入到现有网络中。论文将其集成到 PointNet
+中，得到了很好的性能。</p>
+<h1 id="二方法">二、方法</h1>
+<p>## 图卷积神经网络（Graphic Convolutional Neural Networks，GCN）</p>
+<p>由于文章借鉴了图卷积神经网络，因此简单了解了一下图卷积的原理。与 CNN
+相比，GCN
+主要应用于<strong>图数据</strong>。也就是节点和边组成的图形。当然图像也是一种特殊的图形，它具有规整的结构。而在特征嵌入方面，两者都是局部连接，并且卷积核权重处处共享。因此
+GCN 与 CNN 思想上是基本一致的，只不过应用场景不同。相比之下，GCN
+所处理的数据结构会更复杂。</p>
+<p><img src="/2023/06/08/DGCNN/605d901a470d47739b7ee58670f91c82.jpg" srcset="/img/loading.gif" lazyload style="zoom:60%;display: block; margin-left: auto; margin-right: auto;"></p>
+<h2 id="边卷积edge-convolution">边卷积（Edge Convolution）</h2>
+<h3 id="基本原理">基本原理</h3>
+<p>利用点云能够生成的最简单的图，大概是体素连通性分割里的体素邻接图。但论文所使用的方法有所区别于
+GCN，因为它会在每一层根据新的特征序列，重新计算节点的邻接关系。不同于使用空间距离构建的图，这样做意味着图会<strong>动态更新</strong>，即每个点的
+<span class="math inline">\(k\)</span>
+近邻点会在不同层之间发生变化。这使得<strong>非局部</strong>（non-local）信息能够得到扩散。下面阐述
+EdgeConv 具体架构。</p>
+<p>将数量为 <span class="math inline">\(n\)</span> 的 <span class="math inline">\(F\)</span> 维点云记作 <span class="math inline">\(\mathbf{X}=\left\{\mathbf{x}_1, \ldots,
+\mathbf{x}_n\right\} \subseteq \mathbb{R}^F\)</span> ，令 <span class="math inline">\(F=3\)</span> ，则每个点包含三维坐标 <span class="math inline">\(\mathbf{x}=(x_i,y_i,z_i)\)</span>
+，也可以包含颜色、法线等附加特征。因此 <span class="math inline">\(F\)</span> 更一般的含义是点特征。</p>
+<p>引入一个有向图 <span class="math inline">\(\mathcal{G}=(\mathcal{V},
+\mathcal{E})\)</span> 来表示局部点云结构，其中 <span class="math inline">\(\mathcal{V}=\{1, \ldots, n\}\)</span> , $ $
+，分别表示节点和边，最简单的 <span class="math inline">\(\mathcal{G}\)</span> 是 <span class="math inline">\(k\)</span>
+近邻图。图中包含了自环（self-loop），即每个节点也会指向自己。论文定义了以
+<span class="math inline">\(\mathbf{x}_i,\mathbf{x}_j\)</span>
+为端点的边缘的特征： <span class="math display">\[
+\boldsymbol{e}_{i j}=h_{\Theta}\left(\mathbf{x}_i, \mathbf{x}_j\right)
+\]</span> 其中 <span class="math inline">\(h_{\boldsymbol{\Theta}}:
+\mathbb{R}^F \times \mathbb{R}^F \rightarrow
+\mathbb{R}^{F^{\prime}}\)</span> 是一个非线性函数，<span class="math inline">\(\Theta\)</span> 为一组可学习优化的参数。</p>
+<p>最后，将边缘特征定义为由顶点出发的所有边特征的聚合，聚合方式为对称函数（如求和或者池化），论文里记作一个<del>令人费解的</del>正方形：
+<span class="math display">\[
+\mathbf{x}_i^{\prime}=\underset{j:(i, j) \in \mathcal{E}}{\square}
+h_{\Theta}\left(\mathbf{x}_i, \mathbf{x}_j\right)
+\]</span> 类比于图像卷积， <span class="math inline">\(\mathbf{x}_i\)</span> 为中心像点，<span class="math inline">\(\{\mathbf{x}_j:(i,j)\in\mathcal{E}\}\)</span>
+为其邻域内像点。总之，给定一个 <span class="math inline">\(F\)</span>
+维的点云，EdgeConv 将其转换为点数不变的 <span class="math inline">\(F&#39;\)</span> 维点云。</p>
+<p><img src="/2023/06/08/DGCNN/image-20230608223623247.png" srcset="/img/loading.gif" lazyload alt="image-20230608223623247" style="zoom:70%;display: block; margin-left: auto; margin-right: auto;"></p>
+<h3 id="函数的选择">函数的选择</h3>
+<p>在 EdgeConv 中主要涉及到两个函数的选取：<span class="math inline">\(h\)</span> 和 <span class="math inline">\(\square\)</span> 。若 <span class="math inline">\(\mathbf{x}_1,\dots,\mathbf{x}_n\)</span>
+是规则网格上的图像像素，而图 <span class="math inline">\(\mathcal{G}\)</span>
+中表示了每个像素周围固定大小的块的连通性，同时选取边缘函数为 <span class="math inline">\(\Theta_m\cdot\mathbf{x}_j\)</span>
+，聚合操作为求和函数，就得到了标准的卷积操作： <span class="math display">\[
+x_{i m}^{\prime}=\sum_{j:(i, j) \in \mathcal{E}} \boldsymbol{\theta}_m
+\cdot \mathbf{x}_j,
+\]</span> 这个表示的细节就不深究了，个人感觉和一般说的 CNN
+不太一样，因为这里似乎对所有邻域内的点都共享了权重。</p>
+<p>后面论文列举了很多函数的选取，都比较常规，这里不再赘述。论文所采用的函数如下所示:
+<span class="math display">\[
+\left\{\begin{aligned}
+&amp;e&#39;_{ijm}=\operatorname{ReLU}(\theta_m\cdot(\mathbf{x}_j-\mathbf{x}_i)+\boldsymbol{\phi}_m\cdot\mathbf{x}_i),
+\\
+&amp;x&#39;_{im} =\max\limits_{j:(i,j)\in\mathcal{E}}e&#39;_{ijm},
+\end{aligned}\right.
+\]</span> 不同于 PointNet 中共享的 MLP
+，这种特征提取方式考虑了边特征。论文中说可以用共享 MLP
+实现，但我还没想明白如何做到的。</p>
+<h2 id="动态图更新dynamic-graph-update">动态图更新（Dynamic Graph
+Update）</h2>
+<p>论文再次强调了在特征空间中定义图形的优势，即使得感受野和点云直径一样大，并且是稀疏的。用人话说就是不局限在周边点，还会将点云中其它具有相似特征的点纳入到感受野中。在具体实现中，计算了特征空间中的成对距离矩阵，从而为每个点提取最近的
+<span class="math inline">\(k\)</span> 个点。</p>
+<h2 id="特性">特性</h2>
+<p>主要包括<strong>置换不变性</strong>和<strong>平移不变性</strong>。置换不变性就不必多说了，平移不变性则来自于
+<span class="math inline">\(h\)</span> 函数。若对点云进行平移操作 <span class="math inline">\(T\)</span> ，则特征值变为： <span class="math display">\[
+\begin{aligned}
+e&#39;_{ijm}
+&amp;=\operatorname{ReLU}(\theta_m\cdot(\mathbf{x}_j+T-(\mathbf{x}_i+T))+\boldsymbol{\phi}_m\cdot(\mathbf{x}_i+T))
+\\
+&amp;=\operatorname{ReLU}(\theta_m\cdot(\mathbf{x}_j-\mathbf{x}_i)+\boldsymbol{\phi}_m\cdot(\mathbf{x}_i+T))
+\end{aligned}
+\]</span> 当 <span class="math inline">\(\boldsymbol{\phi}_m=0\)</span>
+时，算子对平移是完全不变的。然而这会导致模型的简化，patches
+的位置信息被忽略。以 <span class="math inline">\(\mathbf{x}_j-\mathbf{x}_i\)</span> 和 <span class="math inline">\(\mathbf{x}_i\)</span>
+作为输入，既能保留全局形状信息，也能考虑到局部几何关系。</p>
+<h1 id="三模型架构">三、模型架构</h1>
+<p><img src="/2023/06/08/DGCNN/image-20230608215922553.png" srcset="/img/loading.gif" lazyload alt="image-20230608215922553" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;"></p>
+<h2 id="变换块point-cloud-transform-block">变换块（Point cloud transform
+block）</h2>
+<p><img src="/2023/06/08/DGCNN/image-20230608223703797.png" srcset="/img/loading.gif" lazyload alt="image-20230608223703797" style="zoom:80%;display: block; margin-left: auto; margin-right: auto;"></p>
+<p>在架构的最开始，对点云应用一个 <span class="math inline">\(3\times
+3\)</span> 的矩阵变换以将其对齐。这和 PointNet 中的 T-Net
+想法类似。为了学习到变换矩阵参数，构建了 <span class="math inline">\(k\)</span>
+近邻图，并提取了每个点与其相邻点的坐标差张量。</p>
+<h2 id="分类">分类</h2>
+<p>输入为变换后 <span class="math inline">\(n\)</span> 个点的坐标，在
+EdgeConv 中为每个点计算大小为 <span class="math inline">\(k\)</span>
+的边特征集合，通过 MLP 扩展并聚合每个集合中的特征。不同于 PointNet++
+里的下采样，EdgeConv
+并不改变点的大小和顺序，因此在多级特征组合的时候更为便利。</p>
+<p>四个 EdgeConv 层使用了三个共享的全连接层 <span class="math inline">\((64,64,128,256)\)</span> ，并根据每个 EdgeConv
+输出的特征重新计算图，将其应用于下一层。将这几层的输出连接后得到 <span class="math inline">\(512\)</span> 维的特征，通过一个 MLP
+和池化操作将其扩展到 <span class="math inline">\(1024\)</span>
+维，并进行池化操作，最终通过一系列 MLP 得到点云全局特征。</p>
+<p>对于超参数 <span class="math inline">\(k\)</span>
+的选取，采用了留出验证的方式来评估不同 <span class="math inline">\(k\)</span> 对模型性能的影响。</p>
+<h2 id="分割">分割</h2>
+<p>分割不同于分类的点无非在于需要同时用到每个点的全局信息和局部信息。论文采用了非常类似于
+PointNet 的方法，将多层 EdgeConv 得到的全局特征（和分类部分类似）与 MLP
+处理后的分类张量（categorical vector） 相连接，得到 <span class="math inline">\(1088\)</span> 维的特征，并与前面每一层 EdgeConv
+的输出相连接。最后通过一些列 MLP 将特征压缩到需要的维数。</p>
+<p>有待确认的是，架构图中的 categorical vector
+具体来自于哪一层，论文中似乎没有具体说明。</p>
+<h1 id="四总结">四、总结</h1>
+<p>关于 DGCNN ，主要需要关注的有以下几点：</p>
+<ul>
+<li>考虑了点云的拓扑结构（个人觉得 PointNet++
+实际上也包含了简单的拓扑关系，但 DGCNN
+的动态图使得其可能学到的更多），关注了<strong>边特征</strong>；</li>
+<li>EdgeConv 通过 MLP
+提取边特征，通过池化来确保邻域内的置换不变性；</li>
+<li>图的构建基于<strong>特征空间</strong>，在每一层对图进行更新，即所谓的<strong>动态图</strong>。这种方式让感受野变得更大、更稀疏；</li>
+<li>EdgeConv 很容易嵌入到其它网络中；</li>
+<li>整体架构类似于 PointNet ，也就是用 EdgeConv 替换了 PointNet 中的共享
+MLP 层；</li>
+</ul>
+<p>与 PointNet 及 PointNet++ 的对比：</p>
+<ul>
+<li>PointNet 是 DGCNN 的一个特例，即当 <span class="math inline">\(k=1\)</span> 时，边集为空集，边缘函数 <span class="math inline">\(h\)</span> 为 <span class="math inline">\(h_{\Theta}(\mathbf{x}_i,\mathbf{x}_j)=h_{\Theta}(\mathbf{x}_i)\)</span>
+。换言之， PointNet 是不考虑边特征、不考虑拓扑关系的 DGCNN ；</li>
+<li>PointNet++ 的主要组件是 SA 层，分为下采样和 PointNet
+层，每一次输出后点数减少；EdgeConv
+也考虑了点的邻域，但不改变点数，因此在特征组合时无需上采样。当然
+PointNet++ 也可以取消采样层从而保持点数不变，但这不是分层的本意；</li>
+<li>PointNet++ 利用 PointNet 层来聚合局部信息， PointNet
+能够对邻域内每个点特征进行编码然后池化；EdgeConv
+则对边特征进行编码，而非每个点单独的特征；</li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="print-no-link">#神经网络</a>
+      
+        <a href="/tags/%E7%82%B9%E4%BA%91/" class="print-no-link">#点云</a>
+      
+        <a href="/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" class="print-no-link">#论文阅读笔记</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>DGCNN 论文阅读笔记</div>
+      <div>http://zcliangyue.github.io/2023/06/08/DGCNN/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>SGGZCL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>June 8, 2023</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Updated on</div>
+          <div>October 28, 2024</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/06/10/Patch-based%20Progressive%203D%20Point%20Set%20Upsampling/" title="MPU 论文阅读笔记">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">MPU 论文阅读笔记</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/05/31/EC-Net/" title="EC-Net 论文阅读笔记">
+                        <span class="hidden-mobile">EC-Net 论文阅读笔记</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>

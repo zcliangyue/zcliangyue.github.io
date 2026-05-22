@@ -1,0 +1,772 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="title" content="HorizonDrive: Self-Corrective Autoregressive World Model for Long-horizon Driving Simulation">
+  <meta name="description" content="HorizonDrive: Self-Corrective Autoregressive World Model for Long-horizon Driving Simulation">
+
+  <title>HorizonDrive: Self-Corrective Autoregressive World Model for Long-horizon Driving Simulation</title>
+
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/index.css?v=hd20260522-heroveil">
+
+  <!-- Non-critical CSS - load asynchronously -->
+  <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  </noscript>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Defer non-critical JavaScript -->
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script defer src="static/js/index.js?v=hd20260521-video-lazy-current-page1"></script>
+</head>
+
+<body>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+<main id="main-content">
+
+  <!-- ============ Hero ============ -->
+  <section class="hero publication-hero">
+    <div class="publication-hero-bg" aria-hidden="true">
+      <video autoplay muted loop playsinline preload="auto" disablepictureinpicture>
+        <source src="static/videos/hero-bg.mp4?v=hero-crf25" type="video/mp4">
+      </video>
+      <div class="publication-hero-veil"></div>
+    </div>
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+
+            <h1 class="title is-1 publication-name">HorizonDrive</h1>
+            <p class="publication-subtitle">
+              Self-Corrective Autoregressive World Model for Long-horizon Driving Simulation
+            </p>
+
+            <div class="publication-authors content has-text-centered is-size-6" style="max-width: 56rem; margin-left: auto; margin-right: auto;">
+              <p class="mb-3" style="line-height: 1.65;">
+                <strong>Conglang Zhang</strong><sup>1,*</sup>&ensp;
+                <strong>Yifan Zhan</strong><sup>2,*</sup>&ensp;
+                <strong>Qingjie Wang</strong><sup>3</sup>&ensp;
+                <strong>Zhanpeng Ouyang</strong><sup>3</sup>&ensp;
+                <strong>Yu Li</strong><sup>4</sup><br>
+                <strong>Zihao Yang</strong><sup>5</sup>&ensp;
+                <strong>Xiaoyang Guo</strong><sup>6</sup>&ensp;
+                <strong>Weiqiang Ren</strong><sup>3</sup>&ensp;
+                <strong>Qian Zhang</strong><sup>3</sup>&ensp;
+                <strong>Zhen Dong</strong><sup>1</sup><br>
+                <strong>Yinqiang Zheng</strong><sup>2</sup>&ensp;
+                <strong>Wei Yin</strong><sup>3,&#8225;</sup>&ensp;
+                <strong>Zhengqing Chen</strong><sup>3,&#8224;</sup>
+              </p>
+              <p class="is-size-7 mb-3" style="line-height: 1.6;">
+                <sup>1</sup>&nbsp;Wuhan University &emsp;
+                <sup>2</sup>&nbsp;The University of Tokyo &emsp;
+                <sup>3</sup>&nbsp;Horizon Robotics &emsp;
+                <sup>4</sup>&nbsp;Tsinghua University<br>
+                <sup>5</sup>&nbsp;University of Science and Technology of China &emsp;
+                <sup>6</sup>&nbsp;The Chinese University of Hong Kong
+              </p>
+              <p class="is-size-7 mb-0">
+                <sup>*</sup>&nbsp;Equal contribution &emsp;
+                <sup>&#8225;</sup>&nbsp;Project lead &emsp;
+                <sup>&#8224;</sup>&nbsp;Corresponding author
+              </p>
+            </div>
+
+            <div class="publication-resource-links is-flex is-justify-content-center is-flex-wrap-wrap">
+              <a href="https://arxiv.org/abs/2605.11596"
+                 class="supp-arxiv-link"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="HorizonDrive paper on arXiv (2605.11596)">
+                <img class="supp-arxiv-icon" src="static/images/arxiv.svg" width="22" height="22" alt="" decoding="async" />
+                <span>arXiv</span>
+                <span class="supp-arxiv-id">2605.11596</span>
+              </a>
+              <a href="https://github.com/zcliangyue/HorizonDrive"
+                 class="supp-github-link"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="HorizonDrive on GitHub">
+                <img class="supp-github-icon" src="static/images/github.svg" width="22" height="22" alt="" decoding="async" />
+                <span>GitHub</span>
+                <span class="supp-github-id">HorizonDrive</span>
+              </a>
+              <a href="film/"
+                 class="supp-film-link"
+                 aria-label="HorizonDrive film mode preview page">
+                <img class="supp-film-icon" src="static/images/film.svg" width="22" height="22" alt="" decoding="async" />
+                <span>Film mode</span>
+                <span class="supp-film-id">Preview</span>
+              </a>
+            </div>
+
+            <!-- Hero section nav (anchor buttons) - disabled: too cluttered
+            <div class="publication-links section-nav-links" style="margin-top:1.25rem;">
+              <span class="link-block">
+                <a href="#sec-method-overview"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Method overview">
+                  <span class="icon"><i class="fas fa-project-diagram"></i></span>
+                  <span>Method Overview</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#sec-streaming-nusc"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Twenty-Second Results on Nuscenes">
+                  <span class="icon"><i class="fas fa-stream"></i></span>
+                  <span>Twenty-Second Results on Nuscenes</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#sec-more-e2e"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Thirty-Second Results on Self-Collected Dataset">
+                  <span class="icon"><i class="fas fa-road"></i></span>
+                  <span>Thirty-Second Results on Self-Collected Dataset</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#sec-minute-level-video"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Minute-level video generation">
+                  <span class="icon"><i class="fas fa-clock"></i></span>
+                  <span>Minute-Level Video Generation</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#sec-closed-loop"
+                   class="external-link button is-normal is-rounded is-dark"
+                   title="Closed-loop driving simulation results">
+                  <span class="icon"><i class="fas fa-sync-alt"></i></span>
+                  <span>Closed-Loop Driving Simulation</span>
+                </a>
+              </span>
+            </div>
+            -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Abstract ============ -->
+  <section class="hero is-small supp-abstract-panel" id="sec-abstract" aria-labelledby="abstract-heading">
+    <div class="hero-body">
+      <div class="container is-max-fullhd">
+        <div class="content has-text-justified hero-abstract-block supp-abstract-inner">
+          <h2 id="abstract-heading" class="title is-3 has-text-centered publication-abstract-heading">Abstract</h2>
+          <p class="hero-abstract-text mb-0">
+            Closed-loop driving simulation requires real-time interaction beyond short offline clips, pushing current driving world models toward autoregressive (AR) rollout. Existing AR distillation approaches typically rely on frame sinks or student-side degradation training. The former transfers poorly to driving due to fast ego-motion and rapid scene changes, while the latter remains bounded by the teacher's single-pass output length and thus provides only a limited supervision horizon. A natural question is: can the teacher itself be extended via AR rollout to provide unbounded-horizon supervision at bounded memory cost? The key difficulty is that a standard teacher drifts under its own predictions, contaminating the supervision it provides. <strong>Our key insight is to make the teacher rollout-capable, ensuring reliable supervision from its own AR rollouts.</strong> This is instantiated as HorizonDrive, an anti-drifting training-and-distillation framework for AR driving simulation. First, scheduled rollout recovery (SRR) trains the base model to reconstruct ground-truth future clips from prediction-corrupted histories, yielding a teacher that remains stable across long AR rollouts. Second, the rollout-capable teacher is extended via AR rollout, providing long-horizon distribution-matching supervision under bounded memory, while a short-window student aligns to it with teacher rollout DMD (TRD) for efficient real-time deployment. HorizonDrive natively supports minute-scale AR rollout under bounded memory; on nuScenes, HorizonDrive reduces FID by 52% and FVD by 37%, and lowers ARE and DTW by 21% and 9% relative to the strongest long-horizon streaming baselines, while remaining competitive with single-pass driving video generators.
+          </p>
+          <div class="abstract-key-features" aria-label="Key features">
+            <p class="abstract-key-features-title">Key Features</p>
+            <div class="abstract-key-features-row">
+              <div class="abstract-key-feature">
+                <span class="abstract-key-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M6 26 13 7" />
+                    <path d="M16 26V7" stroke-dasharray="4 4" />
+                    <path d="M26 26 19 7" />
+                  </svg>
+                </span>
+                <strong class="abstract-key-feature-title">Controllable</strong>
+                <span class="abstract-key-feature-text">Driving scene generation</span>
+              </div>
+              <div class="abstract-key-feature">
+                <span class="abstract-key-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <rect x="5" y="9" width="6" height="7" rx="1.2" />
+                    <rect x="13" y="9" width="6" height="7" rx="1.2" />
+                    <rect x="21" y="9" width="6" height="7" rx="1.2" />
+                    <path d="M5 23h19M20 19l5 4-5 4" />
+                  </svg>
+                </span>
+                <strong class="abstract-key-feature-title">Long-Horizon</strong>
+                <span class="abstract-key-feature-text">Stable generation quality</span>
+              </div>
+              <div class="abstract-key-feature">
+                <span class="abstract-key-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M8 24V9M8 24h15M8 24l11-10" />
+                    <path d="m5.5 12 2.5-3 2.5 3M20 21l3 3-3 3M16 14h3v3" />
+                    <path class="abstract-key-feature-deny-mark" d="M22 7l5 5M27 7l-5 5" />
+                  </svg>
+                </span>
+                <strong class="abstract-key-feature-title">No Explicit</strong>
+                <span class="abstract-key-feature-text">3D representations</span>
+              </div>
+              <div class="abstract-key-feature">
+                <span class="abstract-key-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M24 11a10 10 0 0 0-15-2l-2 2" />
+                    <path d="M8 6v5h5" />
+                    <path d="M8 21a10 10 0 0 0 15 2l2-2" />
+                    <path d="M24 26v-5h-5" />
+                    <path d="M12 20v-4l2-3h4l2 3v4M11 20h10" />
+                  </svg>
+                </span>
+                <strong class="abstract-key-feature-title">Closed-Loop</strong>
+                <span class="abstract-key-feature-text">Simulation ready</span>
+              </div>
+              <div class="abstract-key-feature">
+                <span class="abstract-key-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M9 10h8a6 6 0 0 1 6 6v1" />
+                    <path d="m20 14 3 3 3-3" />
+                    <path d="M23 22h-8a6 6 0 0 1-6-6v-1" />
+                    <path d="m12 18-3-3-3 3" />
+                    <circle cx="16" cy="16" r="3" />
+                  </svg>
+                </span>
+                <strong class="abstract-key-feature-title">Interactive</strong>
+                <span class="abstract-key-feature-text">AR rollout</span>
+              </div>
+              <div class="abstract-key-feature">
+                <span class="abstract-key-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <circle cx="6" cy="16" r="2.2" />
+                    <circle cx="25" cy="7" r="2.2" />
+                    <circle cx="25" cy="16" r="2.2" />
+                    <circle cx="25" cy="25" r="2.2" />
+                    <path d="M8.2 16h5" />
+                    <path d="M13.2 16c4 0 5-9 9.6-9" />
+                    <path d="M13.2 16h9.6" />
+                    <path d="M13.2 16c4 0 5 9 9.6 9" />
+                  </svg>
+                </span>
+                <strong class="abstract-key-feature-title">Scalable</strong>
+                <span class="abstract-key-feature-text">Diverse driving scenes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Method overview (pipeline figure) ============ -->
+  <section class="hero is-small supp-method-overview-panel" id="sec-method-overview" aria-labelledby="method-overview-heading">
+    <div class="hero-body">
+      <div class="container is-max-widescreen">
+        <h2 id="method-overview-heading" class="title is-3 has-text-centered">Method Overview</h2>
+        <div class="method-overview-figure-wrap">
+          <svg class="method-wireframe-svg"
+               viewBox="0 0 1579 512"
+               role="img"
+               aria-labelledby="method-wireframe-title method-wireframe-desc">
+            <title id="method-wireframe-title">Overview of the HorizonDrive method pipeline.</title>
+            <desc id="method-wireframe-desc">A three-stage method diagram showing conditional world model training, scheduled rollout recovery, and teacher rollout DMD.</desc>
+            <defs>
+              <marker id="mw-arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#48d5ee" />
+              </marker>
+              <marker id="mw-arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#67dca8" />
+              </marker>
+              <marker id="mw-arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#f2a24b" />
+              </marker>
+              <marker id="mw-arrow-gray" viewBox="0 0 12 8" refX="11" refY="4" markerWidth="4" markerHeight="4" orient="auto">
+                <path d="M0,0 L12,4 L0,8 Z" fill="#aeb8c8" stroke="#000" stroke-width="0.8" />
+              </marker>
+              <pattern id="mw-placeholder" width="58" height="38" patternUnits="userSpaceOnUse">
+                <rect width="58" height="38" fill="#4d5860" />
+                <rect width="58" height="15" fill="#9ba7aa" opacity="0.52" />
+                <path d="M0 32 L58 24" stroke="#dbe5e7" stroke-width="1.4" opacity="0.68" />
+                <path d="M12 38 L31 16" stroke="#eef5f4" stroke-width="1.3" opacity="0.5" />
+              </pattern>
+              <pattern id="mw-noisy-placeholder" width="10" height="10" patternUnits="userSpaceOnUse">
+                <rect width="10" height="10" fill="#687077" />
+                <circle cx="2" cy="2" r="1" fill="#fff" opacity="0.35" />
+                <circle cx="7" cy="5" r="1" fill="#333" opacity="0.35" />
+                <circle cx="5" cy="8" r="0.8" fill="#fff" opacity="0.22" />
+              </pattern>
+              <linearGradient id="mw-stage1-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#48d5ee" />
+                <stop offset="100%" stop-color="#6f8cff" />
+              </linearGradient>
+              <linearGradient id="mw-stage2-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ffd06a" />
+                <stop offset="100%" stop-color="#f47b45" />
+              </linearGradient>
+              <linearGradient id="mw-stage3-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#9ce66f" />
+                <stop offset="100%" stop-color="#4de0b6" />
+              </linearGradient>
+              <linearGradient id="mw-cfg-curve" x1="1328" y1="209" x2="1528" y2="347" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#d8fff2" />
+                <stop offset="42%" stop-color="#8cebb0" />
+                <stop offset="100%" stop-color="#4de0b6" />
+              </linearGradient>
+              <filter id="mw-frame-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="1.2" flood-color="#000000" flood-opacity="0.45" />
+              </filter>
+            </defs>
+
+            <rect x="0" y="0" width="1579" height="512" fill="transparent" />
+
+            <g class="mw-headers">
+              <rect x="10" y="32" width="442" height="54" rx="7" fill="#061220" fill-opacity="0.96" stroke="url(#mw-stage1-glow)" stroke-width="2.2" />
+              <rect x="482" y="32" width="515" height="54" rx="7" fill="#170f08" fill-opacity="0.96" stroke="url(#mw-stage2-glow)" stroke-width="2.2" />
+              <rect x="1031" y="32" width="538" height="54" rx="7" fill="#061711" fill-opacity="0.96" stroke="url(#mw-stage3-glow)" stroke-width="2.2" />
+              <text x="231" y="67" text-anchor="middle" font-size="20" font-weight="800" fill="#b7dcff">Stage1: Conditional Driving WM (Sec. 4.1)</text>
+              <text x="739.5" y="67" text-anchor="middle" font-size="20" font-weight="800" fill="#ffd59a">Stage2: Scheduled Rollout Recovery (Sec. 4.2 )</text>
+              <text x="1300" y="67" text-anchor="middle" font-size="20" font-weight="800" fill="#baf7d0">Stage3: Teacher Rollout DMD (Sec. 4.3)</text>
+              <line x1="453" y1="58" x2="480" y2="58" stroke="#aeb8c8" stroke-width="4.5" marker-end="url(#mw-arrow-gray)" />
+              <line x1="998" y1="58" x2="1026" y2="58" stroke="#aeb8c8" stroke-width="4.5" marker-end="url(#mw-arrow-gray)" />
+              <line x1="463" y1="86" x2="463" y2="462" stroke="#d8e2ef" stroke-opacity="0.72" stroke-width="2.2" stroke-dasharray="9 7" />
+              <line x1="1016" y1="86" x2="1016" y2="462" stroke="#d8e2ef" stroke-opacity="0.72" stroke-width="2.2" stroke-dasharray="9 7" />
+            </g>
+
+            <g class="mw-stage1">
+              <rect x="16" y="134" width="138" height="33" fill="#071827" fill-opacity="0.82" stroke="url(#mw-stage1-glow)" stroke-width="2.4" />
+              <rect x="16" y="197" width="138" height="33" fill="#071827" fill-opacity="0.82" stroke="url(#mw-stage1-glow)" stroke-width="2.4" />
+              <rect x="16" y="262" width="138" height="33" fill="#071827" fill-opacity="0.82" stroke="url(#mw-stage1-glow)" stroke-width="2.4" />
+              <path d="M26 162 L40 140" fill="none" stroke="#8fc7ff" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M43 162 L43 140" fill="none" stroke="#8fc7ff" stroke-width="1.6" stroke-dasharray="4 3" stroke-linecap="round" />
+              <path d="M60 162 L46 140" fill="none" stroke="#8fc7ff" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M25 207 H47 V229 H25 Z M37 198 H59 V220 H37 Z M25 207 L37 198 M47 207 L59 198 M47 229 L59 220 M25 229 L37 220" fill="none" stroke="#8fc7ff" stroke-width="1.5" stroke-linejoin="round" />
+              <circle cx="41" cy="278" r="12" fill="none" stroke="#8fc7ff" stroke-width="2" />
+              <circle cx="41" cy="278" r="3.2" fill="none" stroke="#8fc7ff" stroke-width="1.6" />
+              <path d="M41 281 L34 287 M41 281 L48 287 M41 281 V267" stroke="#8fc7ff" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M31 278 C33 271 38 268 41 268 C44 268 49 271 51 278" fill="none" stroke="#8fc7ff" stroke-width="1.4" stroke-linecap="round" />
+              <text x="80" y="155" font-size="16" fill="#d7eaff">HD Map</text>
+              <text x="77" y="219" font-size="16" fill="#d7eaff">3D Bboxs</text>
+              <text x="88" y="284" font-size="16" fill="#d7eaff">Action</text>
+              <path d="M154 151 H182 V171 H220" stroke="#48d5ee" stroke-width="2.2" fill="none" marker-end="url(#mw-arrow-teal)" />
+              <path d="M154 214 H220" stroke="#48d5ee" stroke-width="2.2" fill="none" marker-end="url(#mw-arrow-teal)" />
+              <path d="M154 278 H182 V255 H220" stroke="#48d5ee" stroke-width="2.2" fill="none" marker-end="url(#mw-arrow-teal)" />
+
+              <rect x="222" y="122" width="166" height="181" rx="8" fill="#071827" fill-opacity="0.86" stroke="url(#mw-stage1-glow)" stroke-width="2.6" />
+              <g stroke="#8fc7ff" stroke-width="3.2" fill="none">
+                <path d="M272 154 L336 154 M272 190 L336 154 M272 226 L336 154 M272 154 L336 190 M272 190 L336 190 M272 226 L336 190 M272 154 L336 226 M272 190 L336 226 M272 226 L336 226" />
+              </g>
+              <g fill="#8fc7ff">
+                <circle cx="272" cy="154" r="7" /><circle cx="272" cy="190" r="7" /><circle cx="272" cy="226" r="7" />
+                <circle cx="336" cy="154" r="7" /><circle cx="336" cy="190" r="7" /><circle cx="336" cy="226" r="7" />
+              </g>
+              <text x="304" y="263" text-anchor="middle" font-size="22" fill="#d7eaff">Conditional</text>
+              <text x="304" y="290" text-anchor="middle" font-size="22" fill="#d7eaff">Driving WM</text>
+              <line x1="294" y1="303" x2="294" y2="373" stroke="#48d5ee" stroke-width="2.2" stroke-dasharray="5 4" marker-end="url(#mw-arrow-teal)" />
+
+              <text x="130" y="371" font-size="22" font-weight="800" fill="#ff7a6f">Short Horizon</text>
+              <rect x="66" y="375" width="268" height="74" rx="8" fill="none" stroke="#48d5ee" stroke-width="2.6" />
+              <rect x="79" y="383" width="64" height="59" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f000.jpg" x="79" y="383" width="64" height="59" preserveAspectRatio="xMidYMid slice" />
+              <rect x="151" y="383" width="64" height="59" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f020.jpg" x="151" y="383" width="64" height="59" preserveAspectRatio="xMidYMid slice" />
+              <rect x="223" y="383" width="64" height="59" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f040.jpg" x="223" y="383" width="64" height="59" preserveAspectRatio="xMidYMid slice" />
+              <text x="303" y="415" font-size="22" fill="#48d5ee">...</text>
+              <text x="136" y="473" font-size="24" fill="#48d5ee">Base Model</text>
+            </g>
+
+            <g class="mw-stage2">
+              <rect x="488" y="109" width="178" height="35" fill="#1b1008" fill-opacity="0.86" stroke="url(#mw-stage2-glow)" stroke-width="2" />
+              <text x="577" y="133" text-anchor="middle" font-size="19" fill="#ffd8a6">Data Preparation</text>
+              <text x="806" y="133" font-size="22" font-weight="800" fill="#fff">Rollout</text>
+              <rect x="484" y="143" width="512" height="73" rx="9" fill="none" stroke="#f2a24b" stroke-width="2.3" stroke-dasharray="12 7" />
+              <rect x="492" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f000.jpg" x="492" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <rect x="574" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f020.jpg" x="574" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <rect x="656" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f040.jpg" x="656" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <line x1="729" y1="145" x2="729" y2="214" stroke="#f2a24b" stroke-width="2" stroke-dasharray="7 5" />
+              <rect x="738" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f060.jpg" x="738" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <rect x="820" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f080.jpg" x="820" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <rect x="902" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f100.jpg" x="902" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <text x="984" y="178" text-anchor="middle" font-size="20" fill="#f2a24b">...</text>
+              <text x="585" y="244" font-size="21" fill="#f2a24b">Base Model Rollout Prediction</text>
+              <path d="M910 216 V262 H598 V295" stroke="#f2a24b" stroke-width="2.2" fill="none" marker-end="url(#mw-arrow-orange)" />
+              <rect x="491" y="264" width="68" height="34" fill="#1b1008" fill-opacity="0.86" stroke="url(#mw-stage2-glow)" stroke-width="2" />
+              <text x="525" y="288" text-anchor="middle" font-size="21" fill="#ffd8a6">Train</text>
+              <rect x="484" y="299" width="512" height="74" rx="9" fill="none" stroke="#f2a24b" stroke-width="2.3" />
+              <rect x="492" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f060.jpg" x="492" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <rect x="574" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f080.jpg" x="574" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <rect x="656" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f100.jpg" x="656" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <rect x="738" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f120_noise.jpg" x="738" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <rect x="820" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f140_noise.jpg" x="820" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <rect x="902" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f160_noise.jpg" x="902" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <line x1="732" y1="373" x2="732" y2="438" stroke="#f2a24b" stroke-width="2.2" marker-end="url(#mw-arrow-orange)" />
+              <text x="514" y="397" font-size="24" fill="#fff">degraded history</text>
+              <text x="751" y="397" font-size="24" fill="#fff">clean target with noise</text>
+              <text x="590" y="470" font-size="24" fill="#f2a24b">Rollout-capable Base Model</text>
+            </g>
+
+            <g class="mw-stage3">
+              <text x="1028" y="153" font-size="24" fill="#baf7d0">Rollout</text>
+              <text x="1028" y="186" font-size="24" fill="#baf7d0">Teacher</text>
+              <text x="1042" y="290" font-size="19" fill="#9ce6c4">Teacher rollout DMD</text>
+              <text x="1028" y="409" font-size="24" fill="#baf7d0">Student</text>
+              <text x="1292" y="118" font-size="18" font-weight="800" fill="#8cebb0">Long Horizon</text>
+              <rect x="1147" y="126" width="410" height="74" rx="9" fill="none" stroke="url(#mw-stage3-glow)" stroke-width="2.3" stroke-dasharray="12 7" />
+              <rect x="1168" y="131" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f035.jpg" x="1168" y="131" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1158" y="141" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f000.jpg" x="1158" y="141" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1268" y="131" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f105.jpg" x="1268" y="131" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1258" y="141" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f070.jpg" x="1258" y="141" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <line x1="1343" y1="127" x2="1343" y2="199" stroke="#67dca8" stroke-width="2" stroke-dasharray="7 5" />
+              <rect x="1368" y="131" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f175.jpg" x="1368" y="131" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1358" y="141" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f140.jpg" x="1358" y="141" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1468" y="131" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f210.jpg" x="1468" y="131" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1458" y="141" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f175.jpg" x="1458" y="141" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <line x1="1238" y1="204" x2="1238" y2="356" stroke="#67dca8" stroke-width="2.2" stroke-dasharray="6 5" marker-start="url(#mw-arrow-green)" marker-end="url(#mw-arrow-green)" />
+              <text x="1253" y="235" font-size="16" fill="#fff">CFG</text>
+              <text x="1253" y="255" font-size="16" fill="#fff">truncation</text>
+              <text x="1253" y="276" font-size="16" fill="#fff">threshold</text>
+              <rect x="1328" y="209" width="200" height="138" fill="none" stroke="#8cebb0" stroke-opacity="0.7" stroke-width="1.6" />
+              <path d="M1374 209 V347 M1420 209 V347 M1466 209 V347 M1328 254 H1528 M1328 300 H1528" stroke="#8cebb0" stroke-width="0.8" stroke-opacity="0.18" fill="none" />
+              <path d="M1340 335 H1516 M1340 335 V220" stroke="#d8fff2" stroke-width="1.4" fill="none" />
+              <path d="M1345 228 C1367 255 1398 282 1433 303 C1459 318 1488 326 1516 329" stroke="url(#mw-cfg-curve)" stroke-width="2" fill="none" />
+              <text x="1336" y="229" font-size="16" fill="#d8fff2">1000</text>
+              <text x="1298" y="330" font-size="16" fill="#fff">300</text>
+              <text x="1425" y="272" font-size="16" fill="#baf7d0">no CFG</text>
+              <text x="1365" y="316" font-size="16" fill="#baf7d0">CFG</text>
+              <text x="1424" y="360" font-size="14" fill="#fff">training iterations</text>
+              <rect x="1147" y="365" width="410" height="74" rx="9" fill="none" stroke="url(#mw-stage3-glow)" stroke-width="2.3" stroke-dasharray="12 7" />
+              <rect x="1168" y="370" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f035.jpg" x="1168" y="370" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1158" y="380" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f000.jpg" x="1158" y="380" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <line x1="1243" y1="366" x2="1243" y2="438" stroke="#67dca8" stroke-width="2" stroke-dasharray="7 5" />
+              <rect x="1268" y="370" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f105.jpg" x="1268" y="370" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1258" y="380" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f070.jpg" x="1258" y="380" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <line x1="1343" y1="366" x2="1343" y2="438" stroke="#67dca8" stroke-width="2" stroke-dasharray="7 5" />
+              <rect x="1368" y="370" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f175.jpg" x="1368" y="370" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1358" y="380" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f140.jpg" x="1358" y="380" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <line x1="1443" y1="366" x2="1443" y2="438" stroke="#67dca8" stroke-width="2" stroke-dasharray="7 5" />
+              <rect x="1468" y="370" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f210.jpg" x="1468" y="370" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1458" y="380" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="static/images/method_frames/nusc_f175.jpg" x="1458" y="380" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <text x="1560" y="410" font-size="25" fill="#67dca8">...</text>
+              <text x="1149" y="459" font-size="16" fill="#8cebb0">1st chunk</text>
+              <text x="1256" y="459" font-size="16" fill="#8cebb0">2nd chunk</text>
+              <text x="1353" y="459" font-size="16" fill="#8cebb0">3rd chunk</text>
+              <text x="1455" y="459" font-size="16" fill="#8cebb0">4th chunk</text>
+            </g>
+          </svg>
+        </div>
+        <p class="method-overview-caption content has-text-justified">
+          Overview of HorizonDrive framework. We first train a conditional driving world model, then improve its autoregressive stability through scheduled rollout recovery, and finally distill long-horizon teacher rollouts into a few-step, short-chunk student via teacher-rollout DMD.
+        </p>
+      </div>
+    </div>
+  </section>
+
+<div id="video-sections-wrapper">
+
+  <!-- ============ Section A: Twenty-second results on Nuscenes ============ -->
+  <section class="hero is-small" id="sec-streaming-nusc">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3 has-text-centered">
+          Twenty-Second Results on Nuscenes
+        </h2>
+
+        <div class="video-grid video-grid--nusc" aria-label="Nuscenes results, 9 videos">
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/106_43da50265dfa4876bdf1efed38e7a261.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/109_1f048fa210c64e80b9d57e3dc757702c.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/116_852e22dbdbbf422e99224c488d7618bf.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/128_637fc435f95f4bc1b72f09811f2d78d2.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/142_21bb21c84c3e43908cd554db2686278f.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/19_b9db804449d34414ba98868e9034abd3.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/22_806011e8a7114eca971fd0f6b95bcd4b.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/25_8d56b71c09c04ece827107b3c103498f.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/35_c28c950afda14f7b93ff956799873dff.mp4" type="video/mp4"></video></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Section D: e2e scaling / generalization (diverse scenes in China) ============ -->
+  <section class="hero is-small" id="sec-more-e2e">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3 has-text-centered">
+          Thirty-Second Results on Self-Collected Dataset
+        </h2>
+
+        <div class="video-carousel video-carousel--scale-pages" data-carousel="scale-pages" aria-label="Scaling examples, 9 videos per page">
+          <div class="video-carousel-track">
+            <div class="video-carousel-slides">
+              <div class="video-carousel-slide">
+                <div class="video-grid video-grid--scale">
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1003_hrn_GA20230001_clip_DZ878__20240810_120021_750-20240810_120120_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1009_hrn_GA20230001_clip_DZ878__20240810_163933_150-20240810_164032_048.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1012_hrn_GA20230001_clip_DZ878__20240810_164002_350-20240810_164100_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1014_hrn_GA20230001_clip_DZ878__20240810_164100_849-20240810_164159_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1020_hrn_GA20230001_clip_DZ878__20240810_164909_550-20240810_165008_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1024_hrn_GA20230001_clip_DZ878__20240810_170355_448-20240810_170454_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1025_hrn_GA20230001_clip_DZ878__20240810_170610_249-20240810_170709_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1026_hrn_GA20230001_clip_DZ878__20240810_170814_849-20240810_170901_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1027_hrn_GA20230001_clip_DZ878__20240810_171226_350-20240810_171325_049.mp4" type="video/mp4"></video></div>
+                </div>
+              </div>
+              <div class="video-carousel-slide">
+                <div class="video-grid video-grid--scale">
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1032_hrn_GA20230001_clip_DZ878__20240810_201212_849-20240810_201311_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1035_hrn_GA20230001_clip_DZ878__20240810_202300_649-20240810_202359_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1036_hrn_GA20230001_clip_DZ878__20240810_202348_350-20240810_202447_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/11_hrn_GA20230001_clip_DZ871__20240927_095138_550-20240927_095237_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1507_hrn_GA20230001_clip_DZ878__20240705_102827_849-20240705_102926_048.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1525_hrn_GA20230001_clip_DZ878__20240705_110424_748-20240705_110523_048.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/1547_hrn_GA20230001_clip_DZ878__20240705_220529_649-20240705_220628_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/15_hrn_GA20230001_clip_DZ878__20240701_165715_150-20240701_165814_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/18_hrn_GA20230001_clip_DZ878__20240715_235549_550-20240715_235648_049.mp4" type="video/mp4"></video></div>
+                </div>
+              </div>
+              <div class="video-carousel-slide">
+                <div class="video-grid video-grid--scale">
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2008_hrn_GA20230001_clip_DZ878__20240717_004028_049-20240717_004208_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2009_hrn_GA20230001_clip_DZ878__20240717_004933_049-20240717_005032_048.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2046_hrn_GA20230001_clip_DZ878__20240717_100203_548-20240717_100302_048.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2049_hrn_GA20230001_clip_DZ878__20240717_101817_848-20240717_101916_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2511_hrn_GA20230001_clip_DZ878__20240803_110528_449-20240803_110627_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3015_hrn_GA20230001_clip_DZ878__20240707_105003_849-20240707_105102_048.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3025_hrn_GA20230001_clip_DZ878__20240707_111917_950-20240707_112016_048.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3032_hrn_GA20230001_clip_DZ878__20240707_114320_049-20240707_114418_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3037_hrn_GA20230001_clip_DZ878__20240707_114838_249-20240707_114937_049.mp4" type="video/mp4"></video></div>
+                </div>
+              </div>
+              <div class="video-carousel-slide">
+                <div class="video-grid video-grid--scale">
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/31_hrn_GA20230001_clip_DZ878__20240713_090554_649-20240713_090640_649.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3515_hrn_GA20230001_clip_DZ878__20240810_150349_449-20240810_150448_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/516_hrn_GA20230001_clip_DZ871__20240925_125624_350-20240925_125723_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/522_hrn_GA20230001_clip_DZ871__20240925_134025_148-20240925_134124_048.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/538_hrn_GA20230001_clip_DZ878__20240810_145545_448-20240810_145644_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/540_hrn_GA20230001_clip_DZ878__20240709_090601_649-20240709_090700_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/545_hrn_GA20230001_clip_DZ878__20240709_091310_449-20240709_091409_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/549_hrn_GA20230001_clip_DZ878__20240709_092112_748-20240709_092211_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/550_hrn_GA20230001_clip_DZ878__20240709_092257_550-20240709_092356_049.mp4" type="video/mp4"></video></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="video-carousel-arrow prev" aria-label="Previous page">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="video-carousel-arrow next" aria-label="Next page">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          <div class="video-carousel-dots" role="tablist"></div>
+          <div class="video-carousel-counter"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ Section E: Minute-level video generation ============ -->
+  <section class="hero is-small is-light" id="sec-minute-level-video">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3 has-text-centered">
+          Minute-Level Video Generation
+        </h2>
+
+        <div class="video-grid video-grid--minute" aria-label="Minute-level examples, 9 videos">
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/4_hrn_GA20230001_clip_DZ878__20240710_224616_648-20240710_224812_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/5_hrn_GA20230001_clip_DZ878__20240711_221120_048-20240711_221242_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/8_hrn_GA20230001_clip_DZ878__20240717_222721_049-20240717_222834_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/14_hrn_GA20230001_clip_DZ878__20240717_004028_049-20240717_004208_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/16_hrn_GA20230001_clip_DZ878__20240717_115056_750-20240717_115227_048.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/18_hrn_GA20230001_clip_DZ878__20240707_141742_750-20240707_141857_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/19_hrn_GA20230001_clip_DZ878__20240707_162419_849-20240707_162553_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/25_hrn_GA20230001_clip_DZ878__20240717_170213_849-20240717_170339_049.mp4" type="video/mp4"></video></div>
+          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_hud_crop76_crf24/24_hrn_GA20230001_clip_DZ878__20240711_104932_750-20240711_105118_049.mp4" type="video/mp4"></video></div>
+        </div>
+
+        <div class="video-single" role="region" aria-label="Minute-level video, 3x3 scene grid">
+          <video controls muted loop playsinline preload="metadata">
+          </video>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ Section F: Closed-loop driving simulation ============ -->
+  <section class="hero is-small" id="sec-closed-loop">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3 has-text-centered">
+          Closed-Loop Driving Simulation
+        </h2>
+
+        <div class="video-stack video-stack--tight" data-video-sync="closed-loop" role="region" aria-label="Closed-loop driving simulation, three scenes stacked">
+          <video class="video-sync-master" controls muted loop playsinline preload="metadata">
+            <source src="paper_videos_final/e2e_close_loop/hrn_GA20230001_clip_DZ871__20240924_110537_449-20240924_110636_049_pred_v3.mp4" type="video/mp4">
+          </video>
+          <video muted loop playsinline preload="metadata">
+            <source src="paper_videos_final/e2e_close_loop/hrn_GA20230001_clip_DZ878__20240702_092600_449-20240702_092659_048_pred_v3.mp4" type="video/mp4">
+          </video>
+          <video muted loop playsinline preload="metadata">
+            <source src="paper_videos_final/e2e_close_loop/hrn_GA20230001_clip_DZ878__20240706_235008_449-20240706_235107_049_pred_v3.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div><!-- End video-sections-wrapper -->
+
+  <!-- ============ Quantitative results (main + e2e) ============ -->
+  <section class="hero is-small is-light" id="sec-quantitative">
+    <div class="hero-body">
+      <div class="container is-max-widescreen">
+        <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
+
+        <h3 class="title is-4 mt-5">nuScenes val</h3>
+        <div class="table-container metric-table-wrap">
+          <table class="table is-fullwidth is-striped is-hoverable is-narrow">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th class="has-text-right">FID &#8595;</th>
+                <th class="has-text-right">FVD &#8595;</th>
+                <th class="has-text-right">Qual. &#8593;</th>
+                <th class="has-text-right">Mot. &#8593;</th>
+                <th class="has-text-right">Img. &#8593;</th>
+                <th class="has-text-right">ARE &#8595;</th>
+                <th class="has-text-right">DTW &#8595;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="8"><em>Long-horizon interactive world model frameworks</em></td></tr>
+              <tr><td>Matrix-Game3</td><td class="has-text-right">35.69</td><td class="has-text-right">338.22</td><td class="has-text-right">78.99</td><td class="has-text-right">93.78</td><td class="has-text-right">60.44</td><td class="has-text-right">N/A</td><td class="has-text-right">N/A</td></tr>
+              <tr><td>Helios</td><td class="has-text-right">30.53</td><td class="has-text-right">218.23</td><td class="has-text-right">79.02</td><td class="has-text-right">95.03</td><td class="has-text-right">58.82</td><td class="has-text-right">N/A</td><td class="has-text-right">N/A</td></tr>
+              <tr><td>Causal-Forcing</td><td class="has-text-right">49.07</td><td class="has-text-right">373.29</td><td class="has-text-right">74.35</td><td class="has-text-right">92.42</td><td class="has-text-right">59.00</td><td class="has-text-right">N/A</td><td class="has-text-right">N/A</td></tr>
+              <tr><td>HY-WorldPlay</td><td class="has-text-right">33.51</td><td class="has-text-right">580.72</td><td class="has-text-right">76.58</td><td class="has-text-right">99.48</td><td class="has-text-right">58.60</td><td class="has-text-right">N/A</td><td class="has-text-right">N/A</td></tr>
+              <tr><td>LingBot-World</td><td class="has-text-right">37.67</td><td class="has-text-right">325.55</td><td class="has-text-right">77.08</td><td class="has-text-right">92.87</td><td class="has-text-right">55.55</td><td class="has-text-right">N/A</td><td class="has-text-right">N/A</td></tr>
+              <tr><td colspan="8"><em>Long-horizon streaming methods (re-trained on our base model and data)</em></td></tr>
+              <tr><td>Self-Forcing</td><td class="has-text-right">41.53</td><td class="has-text-right">161.00</td><td class="has-text-right">79.27</td><td class="has-text-right">94.17</td><td class="has-text-right">59.65</td><td class="has-text-right">3.47</td><td class="has-text-right">6.22</td></tr>
+              <tr><td>Self-Forcing++</td><td class="has-text-right">28.84</td><td class="has-text-right">147.57</td><td class="has-text-right">79.47</td><td class="has-text-right">93.92</td><td class="has-text-right">60.25</td><td class="has-text-right">3.78</td><td class="has-text-right">3.61</td></tr>
+              <tr><td>LongLive</td><td class="has-text-right">29.05</td><td class="has-text-right">161.41</td><td class="has-text-right">79.35</td><td class="has-text-right">93.46</td><td class="has-text-right">60.80</td><td class="has-text-right">3.28</td><td class="has-text-right">3.65</td></tr>
+              <tr class="has-background-light">
+                <td><strong>HorizonDrive (Ours)</strong></td>
+                <td class="has-text-right"><strong>13.82</strong></td>
+                <td class="has-text-right"><strong>92.99</strong></td>
+                <td class="has-text-right"><strong>79.53</strong></td>
+                <td class="has-text-right">93.85</td>
+                <td class="has-text-right"><strong>62.50</strong></td>
+                <td class="has-text-right"><strong>2.60</strong></td>
+                <td class="has-text-right"><strong>3.27</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="title is-4 mt-6">Self-collected dataset</h3>
+        <div class="table-container metric-table-wrap">
+          <table class="table is-fullwidth is-striped is-hoverable is-narrow">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th class="has-text-right">FID &#8595;</th>
+                <th class="has-text-right">FVD &#8595;</th>
+                <th class="has-text-right">Qual. &#8593;</th>
+                <th class="has-text-right">Mot. &#8593;</th>
+                <th class="has-text-right">Img. &#8593;</th>
+                <th class="has-text-right">ARE &#8595;</th>
+                <th class="has-text-right">DTW &#8595;</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="8"><em>Long-horizon streaming methods (re-trained on our base model and e2e data)</em></td></tr>
+              <tr><td>Self-Forcing</td><td class="has-text-right">58.23</td><td class="has-text-right">561.11</td><td class="has-text-right">76.68</td><td class="has-text-right">94.48</td><td class="has-text-right"><span style="text-decoration: underline;">63.18</span></td><td class="has-text-right">5.43</td><td class="has-text-right">14.13</td></tr>
+              <tr><td>Self-Forcing++</td><td class="has-text-right">66.93</td><td class="has-text-right">534.36</td><td class="has-text-right">74.54</td><td class="has-text-right">92.70</td><td class="has-text-right">59.12</td><td class="has-text-right">7.32</td><td class="has-text-right">18.40</td></tr>
+              <tr><td>LongLive</td><td class="has-text-right"><span style="text-decoration: underline;">28.39</span></td><td class="has-text-right"><span style="text-decoration: underline;">374.94</span></td><td class="has-text-right"><span style="text-decoration: underline;">78.18</span></td><td class="has-text-right"><span style="text-decoration: underline;">94.57</span></td><td class="has-text-right">62.53</td><td class="has-text-right"><span style="text-decoration: underline;">4.05</span></td><td class="has-text-right"><span style="text-decoration: underline;">8.11</span></td></tr>
+              <tr class="has-background-light">
+                <td><strong>HorizonDrive (Ours)</strong></td>
+                <td class="has-text-right"><strong>12.01</strong></td>
+                <td class="has-text-right"><strong>117.27</strong></td>
+                <td class="has-text-right"><strong>80.12</strong></td>
+                <td class="has-text-right"><strong>95.22</strong></td>
+                <td class="has-text-right"><strong>67.65</strong></td>
+                <td class="has-text-right"><strong>3.67</strong></td>
+                <td class="has-text-right"><strong>5.29</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Citation ============ -->
+  <section class="hero is-small is-light" id="sec-citation" aria-labelledby="citation-heading">
+    <div class="hero-body">
+      <div class="container is-max-widescreen">
+        <div class="bibtex-header">
+          <h2 id="citation-heading" class="title is-3 mb-0">Citation</h2>
+          <button class="copy-bibtex-btn" type="button" onclick="copyBibTeX()" aria-label="Copy BibTeX citation">
+            <span class="icon"><i class="fas fa-copy"></i></span>
+            <span class="copy-text">Copy</span>
+          </button>
+        </div>
+        <p class="content has-text-grey mb-4">
+          If you find our work useful, please cite it as:
+        </p>
+        <pre><code id="bibtex-code">@misc{zhang2026horizondriveselfcorrectiveautoregressiveworld,
+  title={HorizonDrive: Self-Corrective Autoregressive World Model for Long-horizon Driving Simulation},
+  author={Zhang, Conglang and Zhan, Yifan and Wang, Qingjie and Ouyang, Zhanpeng and Li, Yu and Yang, Zihao and Guo, Xiaoyang and Ren, Weiqiang and Zhang, Qian and Dong, Zhen and Zheng, Yinqiang and Yin, Wei and Chen, Zhengqing},
+  year={2026},
+  eprint={2605.11596},
+  archivePrefix={arXiv},
+  primaryClass={cs.CV},
+  url={https://arxiv.org/abs/2605.11596},
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>

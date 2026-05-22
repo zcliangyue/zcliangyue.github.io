@@ -1,0 +1,862 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/whu.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="SGGZCL">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="参考资料：  生成扩散模型漫谈（五）：一般框架之SDE篇 Tutorial on Diffusion Models for Imaging and Vision">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SDE：重新理解DDPM和SMLD">
+<meta property="og:url" content="http://zcliangyue.github.io/2025/03/25/SDE%20diffusion/index.html">
+<meta property="og:site_name" content="ZCL&#39;s Blog">
+<meta property="og:description" content="参考资料：  生成扩散模型漫谈（五）：一般框架之SDE篇 Tutorial on Diffusion Models for Imaging and Vision">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://zcliangyue.github.io/img/SDE_ODE.png">
+<meta property="article:published_time" content="2025-03-24T16:44:00.000Z">
+<meta property="article:modified_time" content="2025-07-02T12:44:25.810Z">
+<meta property="article:author" content="SGGZCL">
+<meta property="article:tag" content="Diffusion">
+<meta property="article:tag" content="神经网络">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://zcliangyue.github.io/img/SDE_ODE.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>SDE：重新理解DDPM和SMLD - ZCL&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_5124066_gn1z3319k8j.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zcliangyue.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>ZCL&#39;s Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>Home</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>Archives</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>Tags</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>About</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/7.0.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="SDE：重新理解DDPM和SMLD"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-03-25 00:44" pubdate>
+          March 25, 2025 am
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.3k words
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          20 mins
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> views
+        </span>
+        
+
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">SDE：重新理解DDPM和SMLD</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>参考资料：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://spaces.ac.cn/archives/9209">生成扩散模型漫谈（五）：一般框架之SDE篇</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2403.18103">Tutorial on Diffusion
+Models for Imaging and Vision</a></li>
+</ul>
+<span id="more"></span>
+<h1 id="引子">引子</h1>
+<p>通常来说，初次接触DDPM是一个让人困惑的事情，因为似乎有许多不太一样的扩散模型，他们和DDPM的区别有些难以捉摸。这对于一个想要构建起知识体系的学习者来说是糟糕的。因此，通过SDE阐述扩散模型的方法非常值得学习，它提供了一个更一般的视角，使我们不必再依赖各种各样的直觉。</p>
+<p>让我们先从扩散模型的前向过程开始： <span class="math display">\[
+x_t = \sqrt{\alpha_t}x_{t-1}+\sqrt{1-\alpha_t}\epsilon_t,
+\]</span>
+这是一个迭代方程，每一个新的状态都是基于上一个状态进行更新的。这类型（即迭代）的方程通常可以和<strong>常微分方程</strong>（ODE）——即未知函数只包含一个自变量的微分方程——联系起来。例如，考虑一个最简单的匀速直线运动，每隔时间
+<span class="math inline">\(\Delta t\)</span> 更新一次位移，则 <span class="math display">\[
+S_{t+1}=S_t + \Delta S,
+\]</span> 其中 <span class="math inline">\(\Delta S\)</span>
+是一个常数。这个方程也可以写成连续的形式： <span class="math display">\[
+\frac{S(t+\Delta t) - S(t)}{\Delta t} = \frac{\Delta S}{\Delta t}=v,
+\]</span> 当 <span class="math inline">\(\Delta t\rightarrow 0\)</span>
+时，方程写作 <span class="math inline">\(\mathrm{d}S/\mathrm{d}t=v\)</span>
+。虽然这个例子有些过于简单，但是足够了。</p>
+<p>同理，既然扩散过程也是迭代，是否可以被写成微分方程？由于扩散过程具有随机性，需要借助<strong>随机微分方程</strong>（SDE）。</p>
+<h1 id="随机微分方程">随机微分方程</h1>
+<p>为了假装比较专业，我们先从一些标准形式开始。首先是常微分方程： <span class="math display">\[
+\mathrm{d}x = f(t, x)\mathrm{d}t
+\]</span> 其中 <span class="math inline">\(x\)</span> 是关于 <span class="math inline">\(t\)</span>
+的函数。常微分方程表明函数的导数不仅与自变量 <span class="math inline">\(t\)</span> 有关，还和当前函数值 <span class="math inline">\(x(t)\)</span> 有关。仅此而已。</p>
+<p>这个函数是确定性的，如果再加一个随机项： <span class="math display">\[
+\mathrm{d}x = f(t, x)\mathrm{d}t + g(t, x) \mathrm{d}w,\tag{1}\label{1}
+\]</span> 这就得到了随机微分方程，其中 <span class="math inline">\(\xi(t)\)</span> 是一个噪声函数。此外，这里的 <span class="math inline">\(w\)</span>
+是<strong>布朗运动</strong>，它满足以下性质：</p>
+<ul>
+<li>初始条件：<span class="math inline">\(w(0)=0\)</span></li>
+<li>独立增量：对于任意 <span class="math inline">\(0\le t_1 &lt; t_2
+&lt; \cdots &lt; t_n\)</span> ，布朗运动的增量 <span class="math inline">\(w(t_2-t_1),
+w(t_3-t_2),\cdots,w(t_n-t_{n-1})\)</span> 是相互独立的。</li>
+<li>增量正态分布： 对于任意 <span class="math inline">\(t\)</span> 和
+<span class="math inline">\(\Delta t&gt;0\)</span>
+，布朗运动的增量服从均值为 <span class="math inline">\(0\)</span>
+，方差为 <span class="math inline">\(\Delta t\)</span> 的正态分布：</li>
+</ul>
+<p><span class="math display">\[
+w(t+\Delta t) - w(t) \sim \mathcal{N}(0, \Delta t).
+\]</span></p>
+<ul>
+<li>连续性：布朗运动是连续的，没有跳跃。</li>
+</ul>
+<p>根据增量正态分布的性质，可以得到 <span class="math inline">\(\mathrm{d}w\sim\mathcal{N}(0,
+\mathrm{d}t)\)</span> ，理论上与 <span class="math inline">\(\xi(t)\sqrt{\mathrm{d}t}\)</span>
+同分布。这就是为什么将离散SDE写作 <span class="math display">\[
+x_{t+\Delta t} - x_t = f(t, x_t)\Delta t + g(t, x_t) \sqrt{\Delta t}
+\epsilon, \qquad \epsilon\sim \mathcal{N}(0, \mathbf{I}).
+\]</span> 这里我们不推导其与微分形式<span class="math inline">\(\eqref{1}\)</span>的等价性，因为常规的微分方法其实不适用于布朗运动（微分的方差无穷大），这一块我就完全不懂了。</p>
+<h1 id="前向过程">前向过程</h1>
+<p>下面我们尝试将前向过程写成SDE的形式。为了将其连续化，首先定义一个连续的噪声表，步长
+<span class="math inline">\(\Delta t= 1/N\)</span> ，因此 <span class="math inline">\(\beta(\frac{t}{N})=\beta_t\)</span>
+。此外，为了统一自变量的范围，规定 <span class="math inline">\(\beta(t/N)= \beta(t)/N = \beta(t)\Delta t\)</span>
+。</p>
+<p>从常规的迭代公式开始， <span class="math display">\[
+x_t = \sqrt{1-\beta_t}x_{t-1}+\sqrt{\beta_t}\epsilon_{t-1},
+\]</span> 我们代入连续的噪声表： <span class="math display">\[
+x_t = \sqrt{1-\beta\left(\frac{t}{N}\right)}x_{t-1} +
+\sqrt{\beta\left(\frac{t}{N}\right)} \epsilon_{t-1},
+\]</span> 同样，其它变量也变成连续形式： <span class="math display">\[
+x(t+\Delta t) = \sqrt{1-\beta(t)\Delta t}x(t) + \sqrt{\beta(t)\Delta t}
+\epsilon(t),
+\]</span> 下面做一些近似： <span class="math display">\[
+x(t+\Delta t) \approx \left(1-\frac{1}{2}\beta(t)\Delta t\right)x(t) +
+\sqrt{\beta(t)\Delta t} \epsilon(t),
+\]</span> 整理得到： <span class="math display">\[
+x(t+\Delta t)-x(t) \approx -\frac{1}{2}\beta(t)\Delta tx(t) +
+\sqrt{\beta(t)}\sqrt{ \Delta t}\epsilon(t),
+\]</span> 这就得到了离散SDE形式。我们将其转换为连续的： <span class="math display">\[
+\mathrm{d}x = -\frac{1}{2}\beta(t)x\Delta t +
+\sqrt{\beta(t)}\mathrm{d}w,\tag{2}\label{2}
+\]</span></p>
+<p>即 <span class="math inline">\(f(x,t)=-\frac{1}{2}\beta(t)x, \quad
+g(x, t)= \sqrt{\beta(t)}\)</span> 。</p>
+<h1 id="逆向随机微分方程">逆向随机微分方程</h1>
+<p>任何SDE都有一个相应的逆向SDE。了解这一点其实也就足够了，可以直接跳到结果部分。下面给出一个逆向过程的推导，参考<a target="_blank" rel="noopener" href="https://spaces.ac.cn/archives/9209">生成扩散模型漫谈（五）：一般框架之SDE篇</a>。</p>
+<p>对于一般形式<span class="math inline">\(\eqref{1}\)</span>的SDE，我们可以将其写成Diffusion中条件概率的形式：
+<span class="math display">\[
+p(x_{t+\Delta t}|x_t) = \mathcal{N}\left(x_t+f(t, x)\Delta t, g^2(t,
+x)\Delta t\right)
+\]</span></p>
+<p>为了寻求逆分布，我们也采用DDPM中相同的推导方式，即贝叶斯定理： <span class="math display">\[
+p(x_t|x_{t+\Delta t}) = \frac{p(x_{t+\Delta t}|x_t)p(x_t)}{p(x_{t+\Delta
+t})}=p(x_{t+\Delta t}|x_t)\exp\left(\log p(x_t) - \log p(x_{t+\Delta
+t})\right)
+\]</span> 代入高斯分布得： <span class="math display">\[
+p(x_t|x_{t+\Delta t}) \propto \exp\left(-\frac{\|x_{t+\Delta t}-x_t-f(x,
+t)\Delta t\|^2}{2g^2(x,t)\Delta t} + \log p(x_t) - \log p(x_{t+\Delta
+t})\right)
+\]</span> 由于我们关心的是 <span class="math inline">\(\Delta
+t\rightarrow 0\)</span> 的情形，可以将 <span class="math inline">\(\log
+p(x_{t+\Delta t})\)</span> 做泰勒展开： <span class="math display">\[
+\log p(x_{t+\Delta t})\approx \log p(x_t) + (x_{t+\Delta t} - x_t)\cdot
+\nabla_{x_t}\log p(x_t) + \Delta t \frac{\partial}{\partial t}\log
+p(x_t)
+\]</span> 代入得： <span class="math display">\[
+p(x_t|x_{t+\Delta t}) \propto \exp\left(-\frac{\|x_{t+\Delta t}-x_t-f(x,
+t)\Delta t\|^2}{2g^2(x,t)\Delta t} - (x_{t+\Delta t} - x_t)\cdot
+\nabla_{x_t}\log p(x_t) - \Delta t \frac{\partial}{\partial t}\log
+p(x_t)\right)
+\]</span> 将 <span class="math inline">\((x_{t+\Delta t} - x_t)\cdot
+\nabla_{x_t}\log p(x_t)\)</span> 合并到前面的分子中，并省去 <span class="math inline">\(\Delta t\)</span> 的二次项，可得 <span class="math display">\[
+\begin{aligned}
+p(x_t|x_{t+\Delta t}) \propto&amp;\, \exp\left(-\frac{\Vert x_{t+\Delta
+t} - x_t - \left[f(x_t, t) - g(x_t, t)^2\nabla_{x_t}\log p(x_t)
+\right]\Delta t\Vert^2}{2 g(x_t, t)^2\Delta t}\right) \\
+\approx&amp;\,\exp\left(-\frac{\Vert x_t - x_{t+\Delta t} +
+\left[f_{t+\Delta t}(x_{t+\Delta t}) - g_{t+\Delta
+t}^2\nabla_{x_{t+\Delta t}}\log p(x_{t+\Delta t}) \right]\Delta
+t\Vert^2}{2 g_{t+\Delta t}^2\Delta t}\right)
+\end{aligned}
+\]</span> 换回到SDE的形式，可得 <span class="math display">\[
+x_t = x_{t+\Delta t} - \left[f_{t+\Delta t}(x_{t+\Delta t}) -
+g^2(x_{t+\Delta t}, t+\Delta t)\nabla_{x_{t+\Delta t}}\log p(x_{t+\Delta
+t}) \right]\Delta t - g(x_{t+\Delta t}, t+\Delta t)\sqrt{\Delta
+t}\epsilon.
+\]</span> 注意等式右边不包含 <span class="math inline">\(x_t\)</span>，因为我们必须用 <span class="math inline">\(x_{t+\Delta t}\)</span> 来导出 <span class="math inline">\(x_t\)</span> 。对于微分形式，则全部都用 <span class="math inline">\(x\)</span> 即可： <span class="math display">\[
+\mathrm{d}x = \left[f(x, t)-g^2(x, t)\nabla_{x}\log
+p(x)\right]\mathrm{d}t + g(x, t)\mathrm{d}w.\tag{3}\label{3}
+\]</span> 注意这里等式右边的符号。反向过程和 <span class="math inline">\(\mathrm{d}x\)</span>
+的方向是相反的，所以右边又反转了一次正负号。</p>
+<h1 id="反向去噪">反向去噪</h1>
+<p>结合前向过程的SDE形式<span class="math inline">\(\eqref{2}\)</span>以及标准的反向SDE方程<span class="math inline">\(\eqref{3}\)</span>
+，可以给出DDPM反向去噪的SDE方程： <span class="math display">\[
+\mathrm{d}x = -\beta(t)\left[\frac{x}{2}+\nabla_{x}\log
+p(x)\right]\mathrm{d}t + \sqrt{\beta(t)}\mathrm{d}w.
+\]</span> 实际应用时，回到离散的形式： <span class="math display">\[
+\begin{equation}
+x_{t} - x_{t+\Delta t} =-\beta(t+\Delta t)\left[\frac{x_{t+\Delta
+t}}{2}+\nabla_{x_{t+\Delta t}}\log p(x_{t+\Delta t})\right]\Delta t +
+\sqrt{\beta(t+\Delta t)}\sqrt{\Delta t}\epsilon_t.\tag{4}\label{4}
+\end{equation}
+\]</span> 这个式子中未知的部分是 <span class="math inline">\(\nabla_{x_{t+\Delta t}}\log p(x_{t+\Delta
+t})\)</span> ，也就是SMLD中的<strong>分数</strong>。这里做一个速通：</p>
+<ul>
+<li>SMLD的核心思想是通过预测对数似然函数的梯度 <span class="math inline">\(\nabla_x\log
+p(x)\)</span>，然后利用朗之万方程（带有随机项的梯度下降）从分布中采样。</li>
+<li>为了实现对分数的预测，需要用到分数匹配的技术。其中最流行的是去噪分数匹配，通过构建条件分布的分数来监督神经网络。</li>
+<li>在推理过程中，采用退火采样，在初期用较大的噪声采样，后期用较小的噪声，避免在初期陷入低密度区域（预测不准），导致错误的结果。</li>
+</ul>
+<p>如果我们沿着<span class="math inline">\(\eqref{4}\)</span>推导出离散的反向过程，会发现它和DDPM完全一致，这当然符合我们的预期：从前向过程推导出<span class="math inline">\(f\)</span> 和 <span class="math inline">\(g\)</span>
+，然后应用到逆向SDE的公式中，应当符合反向过程的SDE。这被称为<strong>方差保留</strong>（VP）SDE。</p>
+<p>另一方面，SMLD中的反向过程并不是这么做的，说明其前向应当也是不一样的。在SMLD中并没有真正意义上定义过前向过程，因为它是直接从高斯分布出发的。但注意到它在训练时采用了一系列噪声尺度
+<span class="math inline">\(\sigma_i(i=1,2,\dots,N)\)</span>
+，我们可以手动给出一个马尔科夫链： <span class="math display">\[
+x_t = x_{t-1} + \sqrt{\sigma^2_t-\sigma^2_{t-1}}\epsilon_{t-1}.
+\]</span> 这使得当 <span class="math inline">\(x_{t-1}\)</span> 的方差为
+<span class="math inline">\(\sigma_{t-1}\)</span> 时，<span class="math inline">\(x_t\)</span> 的方差为 <span class="math inline">\(\sigma_t\)</span>
+。我们同样可以根据这个式子，导出其SDE形式。根据 <span class="math display">\[
+x(t+\Delta t) = x(t) + \sqrt{\sigma(t+\Delta t)^2 -
+\sigma(t)^2}\epsilon_t，
+\]</span> 当 <span class="math inline">\(\Delta t\rightarrow 0\)</span>
+时，有 <span class="math display">\[
+x(t+\Delta t) = x(t)
++  \sqrt{\frac{\mathrm{d[\sigma(t)^2]}}{\mathrm{d}t}\Delta t}
+\epsilon_t，
+\]</span> 因此 <span class="math inline">\(f(x, t)=0, g(x,t)=
+\sqrt{\frac{\mathrm{d[\sigma(t)^2]}}{\mathrm{d}t}}\)</span> ，则SDE为：
+<span class="math display">\[
+\mathrm{d}x =
+\sqrt{\frac{\mathrm{d[\sigma(t)^2]}}{\mathrm{d}t}}\mathrm{d}w.
+\]</span> 紧接着，直接导出反向SDE： <span class="math display">\[
+\mathrm{d}x =
+-\left[\frac{\mathrm{d[\sigma(t)^2]}}{\mathrm{d}t}\nabla_{x}\log
+p(x)\right]\mathrm{d}t
++\sqrt{\frac{\mathrm{d[\sigma(t)^2]}}{\mathrm{d}t}}\mathrm{d}w.
+\]</span> 将 <span class="math inline">\(\frac{\mathrm{d[\sigma(t)^2]}}{\mathrm{d}t}\)</span>
+简记为 <span class="math inline">\(\alpha(t)\)</span> ，则有 <span class="math display">\[
+\mathrm{d}x = -\alpha(t)\nabla_{x}\log p(x)\mathrm{d}t
++\sqrt{\alpha(t)}\mathrm{d}w.
+\]</span>
+我们就得到了<strong>朗之万方程</strong>，由此验证SMLD也可以表达为SDE以及逆向SDE。对应的，这被称作<strong>方差爆炸</strong>（VE）SDE。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Diffusion/" class="print-no-link">#Diffusion</a>
+      
+        <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="print-no-link">#神经网络</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>SDE：重新理解DDPM和SMLD</div>
+      <div>http://zcliangyue.github.io/2025/03/25/SDE diffusion/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>Author</div>
+          <div>SGGZCL</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Posted on</div>
+          <div>March 25, 2025</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>Updated on</div>
+          <div>July 2, 2025</div>
+        </div>
+      
+      
+        <div class="license-meta-item">
+          <div>Licensed under</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - Attribution">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/03/30/DDIM/" title="DDIM简介">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">DDIM简介</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/10/16/%E6%8C%81%E4%B9%85%E5%90%8C%E8%B0%83%E6%80%A7%E7%AE%80%E4%BB%8B/" title="持久同调性简介">
+                        <span class="hidden-mobile">持久同调性简介</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>Table of Contents</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">Keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">Blog works best with JavaScript enabled</div>
+  </noscript>
+</body>
+</html>
