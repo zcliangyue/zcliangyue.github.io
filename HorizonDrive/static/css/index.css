@@ -2535,6 +2535,17 @@ main#main-content .hero.publication-hero .publication-resource-links > a.supp-fi
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 0 30px rgba(0, 245, 212, 0.22);
 }
 
+main#main-content .hero.publication-hero .publication-resource-links > a.supp-film-link,
+.supp-film-link {
+  border-color: rgba(0, 245, 212, 0.72) !important;
+  outline: 2px solid rgba(45, 212, 255, 0.52);
+  outline-offset: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 0 1px rgba(45, 212, 255, 0.08),
+    0 0 30px rgba(0, 245, 212, 0.22);
+}
+
 .supp-arxiv-icon,
 .supp-github-icon,
 .supp-film-icon {

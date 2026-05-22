@@ -204,34 +204,35 @@
     });
   };
 
-  const syncAbstractCarryoverToMethod = (previousIndex, nextIndex) => {
+  const syncContinuousSceneVideo = (previousIndex, nextIndex) => {
     const previousScene = scenes[previousIndex];
     const nextScene = scenes[nextIndex];
     if (!previousScene || !nextScene) {
       return;
     }
-    if (!previousScene.classList.contains("scene-abstract") || !nextScene.classList.contains("scene-method")) {
+
+    const previousVideo = previousScene.querySelector("[data-continuous-video]");
+    if (!(previousVideo instanceof HTMLVideoElement)) {
       return;
     }
 
-    const abstractVideo = previousScene.querySelector(".abstract-road");
-    const methodVideo = nextScene.querySelector(".method-road");
-    if (!(abstractVideo instanceof HTMLVideoElement) || !(methodVideo instanceof HTMLVideoElement)) {
+    const nextVideo = nextScene.querySelector(`[data-continuous-video="${previousVideo.dataset.continuousVideo}"]`);
+    if (!(nextVideo instanceof HTMLVideoElement)) {
       return;
     }
 
-    const fromTime = Number.isFinite(abstractVideo.currentTime) ? abstractVideo.currentTime : 0;
+    const fromTime = Number.isFinite(previousVideo.currentTime) ? previousVideo.currentTime : 0;
     const applyCurrentTime = () => {
-      const maxPlayable = Number.isFinite(methodVideo.duration) ? Math.max(0, methodVideo.duration - 0.08) : fromTime;
-      methodVideo.currentTime = Math.min(fromTime, maxPlayable);
+      const maxPlayable = Number.isFinite(nextVideo.duration) ? Math.max(0, nextVideo.duration - 0.08) : fromTime;
+      nextVideo.currentTime = Math.min(fromTime, maxPlayable);
     };
 
-    if (methodVideo.readyState >= 1) {
+    if (nextVideo.readyState >= 1) {
       applyCurrentTime();
       return;
     }
 
-    methodVideo.addEventListener("loadedmetadata", applyCurrentTime, { once: true });
+    nextVideo.addEventListener("loadedmetadata", applyCurrentTime, { once: true });
   };
 
   const formatTime = (seconds) => {
@@ -375,7 +376,7 @@
       }, SCENE_CROSSFADE_MS);
     }
 
-    syncAbstractCarryoverToMethod(previousIndex, sceneIndex);
+    syncContinuousSceneVideo(previousIndex, sceneIndex);
     syncSceneVideoSources(sceneIndex, {
       keepLoadedIndex: previousIndex >= 0 ? previousIndex : null,
       preloadIndex: sceneIndex + 1,
