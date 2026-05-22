@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="film.css?v=hd-film-preview-10">
-  <script defer src="film.js?v=hd-film-preview-12"></script>
+  <link rel="stylesheet" href="film.css?v=hd-film-preview-11">
+  <script defer src="film.js?v=hd-film-preview-13"></script>
 </head>
 <body>
   <main class="film-page">
@@ -159,8 +159,224 @@
             <div class="scene-copy method-copy">
               <h2>Method Overview</h2>
             </div>
-            <figure class="method-drawing-frame" data-home-method aria-label="Three-stage HorizonDrive method overview">
-              <span class="method-drawing-loading">Loading Method Overview</span>
+            <figure class="method-drawing-frame" aria-label="Three-stage HorizonDrive method overview">
+              <svg class="method-wireframe-svg"
+               viewBox="0 0 1579 512"
+               role="img"
+               aria-labelledby="method-wireframe-title method-wireframe-desc">
+            <title id="method-wireframe-title">Overview of the HorizonDrive method pipeline.</title>
+            <desc id="method-wireframe-desc">A three-stage method diagram showing conditional world model training, scheduled rollout recovery, and teacher rollout DMD.</desc>
+            <defs>
+              <marker id="mw-arrow-teal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#48d5ee" />
+              </marker>
+              <marker id="mw-arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#67dca8" />
+              </marker>
+              <marker id="mw-arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0,0 L10,5 L0,10 Z" fill="#f2a24b" />
+              </marker>
+              <marker id="mw-arrow-gray" viewBox="0 0 12 8" refX="11" refY="4" markerWidth="4" markerHeight="4" orient="auto">
+                <path d="M0,0 L12,4 L0,8 Z" fill="#aeb8c8" stroke="#000" stroke-width="0.8" />
+              </marker>
+              <pattern id="mw-placeholder" width="58" height="38" patternUnits="userSpaceOnUse">
+                <rect width="58" height="38" fill="#4d5860" />
+                <rect width="58" height="15" fill="#9ba7aa" opacity="0.52" />
+                <path d="M0 32 L58 24" stroke="#dbe5e7" stroke-width="1.4" opacity="0.68" />
+                <path d="M12 38 L31 16" stroke="#eef5f4" stroke-width="1.3" opacity="0.5" />
+              </pattern>
+              <pattern id="mw-noisy-placeholder" width="10" height="10" patternUnits="userSpaceOnUse">
+                <rect width="10" height="10" fill="#687077" />
+                <circle cx="2" cy="2" r="1" fill="#fff" opacity="0.35" />
+                <circle cx="7" cy="5" r="1" fill="#333" opacity="0.35" />
+                <circle cx="5" cy="8" r="0.8" fill="#fff" opacity="0.22" />
+              </pattern>
+              <linearGradient id="mw-stage1-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#48d5ee" />
+                <stop offset="100%" stop-color="#6f8cff" />
+              </linearGradient>
+              <linearGradient id="mw-stage2-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#ffd06a" />
+                <stop offset="100%" stop-color="#f47b45" />
+              </linearGradient>
+              <linearGradient id="mw-stage3-glow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#9ce66f" />
+                <stop offset="100%" stop-color="#4de0b6" />
+              </linearGradient>
+              <linearGradient id="mw-cfg-curve" x1="1328" y1="209" x2="1528" y2="347" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#d8fff2" />
+                <stop offset="42%" stop-color="#8cebb0" />
+                <stop offset="100%" stop-color="#4de0b6" />
+              </linearGradient>
+              <filter id="mw-frame-shadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="2" stdDeviation="1.2" flood-color="#000000" flood-opacity="0.45" />
+              </filter>
+            </defs>
+
+            <rect x="0" y="0" width="1579" height="512" fill="transparent" />
+
+            <g class="mw-headers">
+              <rect x="10" y="32" width="442" height="54" rx="7" fill="#061220" fill-opacity="0.96" stroke="url(#mw-stage1-glow)" stroke-width="2.2" />
+              <rect x="482" y="32" width="515" height="54" rx="7" fill="#170f08" fill-opacity="0.96" stroke="url(#mw-stage2-glow)" stroke-width="2.2" />
+              <rect x="1031" y="32" width="538" height="54" rx="7" fill="#061711" fill-opacity="0.96" stroke="url(#mw-stage3-glow)" stroke-width="2.2" />
+              <text x="231" y="67" text-anchor="middle" font-size="20" font-weight="800" fill="#b7dcff">Stage1: Conditional Driving WM (Sec. 4.1)</text>
+              <text x="739.5" y="67" text-anchor="middle" font-size="20" font-weight="800" fill="#ffd59a">Stage2: Scheduled Rollout Recovery (Sec. 4.2 )</text>
+              <text x="1300" y="67" text-anchor="middle" font-size="20" font-weight="800" fill="#baf7d0">Stage3: Teacher Rollout DMD (Sec. 4.3)</text>
+              <line x1="453" y1="58" x2="480" y2="58" stroke="#aeb8c8" stroke-width="4.5" marker-end="url(#mw-arrow-gray)" />
+              <line x1="998" y1="58" x2="1026" y2="58" stroke="#aeb8c8" stroke-width="4.5" marker-end="url(#mw-arrow-gray)" />
+              <line x1="463" y1="86" x2="463" y2="462" stroke="#d8e2ef" stroke-opacity="0.72" stroke-width="2.2" stroke-dasharray="9 7" />
+              <line x1="1016" y1="86" x2="1016" y2="462" stroke="#d8e2ef" stroke-opacity="0.72" stroke-width="2.2" stroke-dasharray="9 7" />
+            </g>
+
+            <g class="mw-stage1">
+              <rect x="16" y="134" width="138" height="33" fill="#071827" fill-opacity="0.82" stroke="url(#mw-stage1-glow)" stroke-width="2.4" />
+              <rect x="16" y="197" width="138" height="33" fill="#071827" fill-opacity="0.82" stroke="url(#mw-stage1-glow)" stroke-width="2.4" />
+              <rect x="16" y="262" width="138" height="33" fill="#071827" fill-opacity="0.82" stroke="url(#mw-stage1-glow)" stroke-width="2.4" />
+              <path d="M26 162 L40 140" fill="none" stroke="#8fc7ff" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M43 162 L43 140" fill="none" stroke="#8fc7ff" stroke-width="1.6" stroke-dasharray="4 3" stroke-linecap="round" />
+              <path d="M60 162 L46 140" fill="none" stroke="#8fc7ff" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M25 207 H47 V229 H25 Z M37 198 H59 V220 H37 Z M25 207 L37 198 M47 207 L59 198 M47 229 L59 220 M25 229 L37 220" fill="none" stroke="#8fc7ff" stroke-width="1.5" stroke-linejoin="round" />
+              <circle cx="41" cy="278" r="12" fill="none" stroke="#8fc7ff" stroke-width="2" />
+              <circle cx="41" cy="278" r="3.2" fill="none" stroke="#8fc7ff" stroke-width="1.6" />
+              <path d="M41 281 L34 287 M41 281 L48 287 M41 281 V267" stroke="#8fc7ff" stroke-width="1.8" stroke-linecap="round" />
+              <path d="M31 278 C33 271 38 268 41 268 C44 268 49 271 51 278" fill="none" stroke="#8fc7ff" stroke-width="1.4" stroke-linecap="round" />
+              <text x="80" y="155" font-size="16" fill="#d7eaff">HD Map</text>
+              <text x="77" y="219" font-size="16" fill="#d7eaff">3D Bboxs</text>
+              <text x="88" y="284" font-size="16" fill="#d7eaff">Action</text>
+              <path d="M154 151 H182 V171 H220" stroke="#48d5ee" stroke-width="2.2" fill="none" marker-end="url(#mw-arrow-teal)" />
+              <path d="M154 214 H220" stroke="#48d5ee" stroke-width="2.2" fill="none" marker-end="url(#mw-arrow-teal)" />
+              <path d="M154 278 H182 V255 H220" stroke="#48d5ee" stroke-width="2.2" fill="none" marker-end="url(#mw-arrow-teal)" />
+
+              <rect x="222" y="122" width="166" height="181" rx="8" fill="#071827" fill-opacity="0.86" stroke="url(#mw-stage1-glow)" stroke-width="2.6" />
+              <g stroke="#8fc7ff" stroke-width="3.2" fill="none">
+                <path d="M272 154 L336 154 M272 190 L336 154 M272 226 L336 154 M272 154 L336 190 M272 190 L336 190 M272 226 L336 190 M272 154 L336 226 M272 190 L336 226 M272 226 L336 226" />
+              </g>
+              <g fill="#8fc7ff">
+                <circle cx="272" cy="154" r="7" /><circle cx="272" cy="190" r="7" /><circle cx="272" cy="226" r="7" />
+                <circle cx="336" cy="154" r="7" /><circle cx="336" cy="190" r="7" /><circle cx="336" cy="226" r="7" />
+              </g>
+              <text x="304" y="263" text-anchor="middle" font-size="22" fill="#d7eaff">Conditional</text>
+              <text x="304" y="290" text-anchor="middle" font-size="22" fill="#d7eaff">Driving WM</text>
+              <line x1="294" y1="303" x2="294" y2="373" stroke="#48d5ee" stroke-width="2.2" stroke-dasharray="5 4" marker-end="url(#mw-arrow-teal)" />
+
+              <text x="130" y="371" font-size="22" font-weight="800" fill="#ff7a6f">Short Horizon</text>
+              <rect x="66" y="375" width="268" height="74" rx="8" fill="none" stroke="#48d5ee" stroke-width="2.6" />
+              <rect x="79" y="383" width="64" height="59" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f000.jpg" x="79" y="383" width="64" height="59" preserveAspectRatio="xMidYMid slice" />
+              <rect x="151" y="383" width="64" height="59" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f020.jpg" x="151" y="383" width="64" height="59" preserveAspectRatio="xMidYMid slice" />
+              <rect x="223" y="383" width="64" height="59" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f040.jpg" x="223" y="383" width="64" height="59" preserveAspectRatio="xMidYMid slice" />
+              <text x="303" y="415" font-size="22" fill="#48d5ee">...</text>
+              <text x="136" y="473" font-size="24" fill="#48d5ee">Base Model</text>
+            </g>
+
+            <g class="mw-stage2">
+              <rect x="488" y="109" width="178" height="35" fill="#1b1008" fill-opacity="0.86" stroke="url(#mw-stage2-glow)" stroke-width="2" />
+              <text x="577" y="133" text-anchor="middle" font-size="19" fill="#ffd8a6">Data Preparation</text>
+              <text x="806" y="133" font-size="22" font-weight="800" fill="#fff">Rollout</text>
+              <rect x="484" y="143" width="512" height="73" rx="9" fill="none" stroke="#f2a24b" stroke-width="2.3" stroke-dasharray="12 7" />
+              <rect x="492" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f000.jpg" x="492" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <rect x="574" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f020.jpg" x="574" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <rect x="656" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f040.jpg" x="656" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <line x1="729" y1="145" x2="729" y2="214" stroke="#f2a24b" stroke-width="2" stroke-dasharray="7 5" />
+              <rect x="738" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f060.jpg" x="738" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <rect x="820" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f080.jpg" x="820" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <rect x="902" y="151" width="64" height="56" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f100.jpg" x="902" y="151" width="64" height="56" preserveAspectRatio="xMidYMid slice" />
+              <text x="984" y="178" text-anchor="middle" font-size="20" fill="#f2a24b">...</text>
+              <text x="585" y="244" font-size="21" fill="#f2a24b">Base Model Rollout Prediction</text>
+              <path d="M910 216 V262 H598 V295" stroke="#f2a24b" stroke-width="2.2" fill="none" marker-end="url(#mw-arrow-orange)" />
+              <rect x="491" y="264" width="68" height="34" fill="#1b1008" fill-opacity="0.86" stroke="url(#mw-stage2-glow)" stroke-width="2" />
+              <text x="525" y="288" text-anchor="middle" font-size="21" fill="#ffd8a6">Train</text>
+              <rect x="484" y="299" width="512" height="74" rx="9" fill="none" stroke="#f2a24b" stroke-width="2.3" />
+              <rect x="492" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f060.jpg" x="492" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <rect x="574" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f080.jpg" x="574" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <rect x="656" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f100.jpg" x="656" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <rect x="738" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f120_noise.jpg" x="738" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <rect x="820" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f140_noise.jpg" x="820" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <rect x="902" y="306" width="64" height="58" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.82" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f160_noise.jpg" x="902" y="306" width="64" height="58" preserveAspectRatio="xMidYMid slice" />
+              <line x1="732" y1="373" x2="732" y2="438" stroke="#f2a24b" stroke-width="2.2" marker-end="url(#mw-arrow-orange)" />
+              <text x="514" y="397" font-size="24" fill="#fff">degraded history</text>
+              <text x="751" y="397" font-size="24" fill="#fff">clean target with noise</text>
+              <text x="590" y="470" font-size="24" fill="#f2a24b">Rollout-capable Base Model</text>
+            </g>
+
+            <g class="mw-stage3">
+              <text x="1028" y="153" font-size="24" fill="#baf7d0">Rollout</text>
+              <text x="1028" y="186" font-size="24" fill="#baf7d0">Teacher</text>
+              <text x="1042" y="290" font-size="19" fill="#9ce6c4">Teacher rollout DMD</text>
+              <text x="1028" y="409" font-size="24" fill="#baf7d0">Student</text>
+              <text x="1292" y="118" font-size="18" font-weight="800" fill="#8cebb0">Long Horizon</text>
+              <rect x="1147" y="126" width="410" height="74" rx="9" fill="none" stroke="url(#mw-stage3-glow)" stroke-width="2.3" stroke-dasharray="12 7" />
+              <rect x="1168" y="131" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f035.jpg" x="1168" y="131" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1158" y="141" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f000.jpg" x="1158" y="141" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1268" y="131" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f105.jpg" x="1268" y="131" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1258" y="141" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f070.jpg" x="1258" y="141" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <line x1="1343" y1="127" x2="1343" y2="199" stroke="#67dca8" stroke-width="2" stroke-dasharray="7 5" />
+              <rect x="1368" y="131" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f175.jpg" x="1368" y="131" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1358" y="141" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f140.jpg" x="1358" y="141" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1468" y="131" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f210.jpg" x="1468" y="131" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1458" y="141" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f175.jpg" x="1458" y="141" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <line x1="1238" y1="204" x2="1238" y2="356" stroke="#67dca8" stroke-width="2.2" stroke-dasharray="6 5" marker-start="url(#mw-arrow-green)" marker-end="url(#mw-arrow-green)" />
+              <text x="1253" y="235" font-size="16" fill="#fff">CFG</text>
+              <text x="1253" y="255" font-size="16" fill="#fff">truncation</text>
+              <text x="1253" y="276" font-size="16" fill="#fff">threshold</text>
+              <rect x="1328" y="209" width="200" height="138" fill="none" stroke="#8cebb0" stroke-opacity="0.7" stroke-width="1.6" />
+              <path d="M1374 209 V347 M1420 209 V347 M1466 209 V347 M1328 254 H1528 M1328 300 H1528" stroke="#8cebb0" stroke-width="0.8" stroke-opacity="0.18" fill="none" />
+              <path d="M1340 335 H1516 M1340 335 V220" stroke="#d8fff2" stroke-width="1.4" fill="none" />
+              <path d="M1345 228 C1367 255 1398 282 1433 303 C1459 318 1488 326 1516 329" stroke="url(#mw-cfg-curve)" stroke-width="2" fill="none" />
+              <text x="1336" y="229" font-size="16" fill="#d8fff2">1000</text>
+              <text x="1298" y="330" font-size="16" fill="#fff">300</text>
+              <text x="1425" y="272" font-size="16" fill="#baf7d0">no CFG</text>
+              <text x="1365" y="316" font-size="16" fill="#baf7d0">CFG</text>
+              <text x="1424" y="360" font-size="14" fill="#fff">training iterations</text>
+              <rect x="1147" y="365" width="410" height="74" rx="9" fill="none" stroke="url(#mw-stage3-glow)" stroke-width="2.3" stroke-dasharray="12 7" />
+              <rect x="1168" y="370" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f035.jpg" x="1168" y="370" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1158" y="380" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f000.jpg" x="1158" y="380" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <line x1="1243" y1="366" x2="1243" y2="438" stroke="#67dca8" stroke-width="2" stroke-dasharray="7 5" />
+              <rect x="1268" y="370" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f105.jpg" x="1268" y="370" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1258" y="380" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f070.jpg" x="1258" y="380" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <line x1="1343" y1="366" x2="1343" y2="438" stroke="#67dca8" stroke-width="2" stroke-dasharray="7 5" />
+              <rect x="1368" y="370" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f175.jpg" x="1368" y="370" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1358" y="380" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f140.jpg" x="1358" y="380" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <line x1="1443" y1="366" x2="1443" y2="438" stroke="#67dca8" stroke-width="2" stroke-dasharray="7 5" />
+              <rect x="1468" y="370" width="56" height="50" fill="#02070c" stroke="#baf7d0" stroke-opacity="0.72" stroke-width="1" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f210.jpg" x="1468" y="370" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <rect x="1458" y="380" width="56" height="50" fill="#02070c" stroke="#d8fff2" stroke-opacity="0.88" stroke-width="1.2" filter="url(#mw-frame-shadow)" />
+              <image href="../static/images/method_frames/nusc_f175.jpg" x="1458" y="380" width="56" height="50" preserveAspectRatio="xMidYMid slice" />
+              <text x="1560" y="410" font-size="25" fill="#67dca8">...</text>
+              <text x="1149" y="459" font-size="16" fill="#8cebb0">1st chunk</text>
+              <text x="1256" y="459" font-size="16" fill="#8cebb0">2nd chunk</text>
+              <text x="1353" y="459" font-size="16" fill="#8cebb0">3rd chunk</text>
+              <text x="1455" y="459" font-size="16" fill="#8cebb0">4th chunk</text>
+            </g>
+          </svg>
             </figure>
             <p class="method-overview-caption">
               Overview of HorizonDrive framework. We first train a conditional driving world model,

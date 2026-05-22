@@ -15,46 +15,6 @@
     return;
   }
 
-  const hydrateMethodDrawing = () => {
-    const host = document.querySelector("[data-home-method]");
-    if (!host) {
-      return;
-    }
-
-    const homepageUrl = new URL("../index.html", window.location.href);
-
-    fetch(homepageUrl, { credentials: "same-origin" })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Homepage Method Overview unavailable.");
-        }
-        return response.text();
-      })
-      .then((html) => {
-        const methodSvg = new DOMParser()
-          .parseFromString(html, "text/html")
-          .querySelector(".method-wireframe-svg");
-
-        if (!methodSvg) {
-          throw new Error("Homepage Method Overview drawing missing.");
-        }
-
-        methodSvg.querySelectorAll("image[href]").forEach((image) => {
-          const href = image.getAttribute("href");
-          if (!href) {
-            return;
-          }
-
-          image.setAttribute("href", new URL(href, homepageUrl).toString());
-        });
-
-        host.replaceChildren(methodSvg);
-      })
-      .catch(() => {
-        host.innerHTML = '<span class="method-drawing-loading">Method Overview unavailable</span>';
-      });
-  };
-
   const durations = scenes.map((scene) => Number(scene.dataset.duration) || 6);
   const sceneStarts = durations.map((_, index) => durations
     .slice(0, index)
@@ -508,7 +468,6 @@
     });
   });
 
-  hydrateMethodDrawing();
   renderControls();
   preloadFilmVideos().then(() => {
     loader?.classList.add("is-ready");
