@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="film.css?v=hd-film-preview-10">
-  <script defer src="film.js?v=hd-film-preview-9"></script>
+  <script defer src="film.js?v=hd-film-preview-11"></script>
 </head>
 <body>
   <main class="film-page">
@@ -28,9 +28,18 @@
 
     <section class="film-player" aria-label="HorizonDrive film preview">
       <div class="film-stage">
+        <div class="film-loader" data-film-loader role="status" aria-live="polite">
+          <div class="film-loader-copy">
+            <strong>Preparing film</strong>
+            <span data-film-loader-status>Loading video scenes</span>
+          </div>
+          <div class="film-loader-track" aria-hidden="true">
+            <span data-film-loader-progress></span>
+          </div>
+        </div>
         <section class="film-scene scene-hero is-active" data-scene data-duration="15" data-label="Opening">
           <video class="scene-cover" data-scene-video data-tail-seconds="15" muted playsinline preload="auto">
-            <source src="../static/videos/hero-bg.mp4" type="video/mp4">
+            <source src="../static/videos/hero-bg.mp4?v=grid-demo-v3-crf24" type="video/mp4">
           </video>
           <div class="scene-veil scene-veil--hero"></div>
           <div class="hero-scan" aria-hidden="true"></div>
@@ -83,30 +92,6 @@
               <article class="feature-rail feature-rail--compact">
                 <span class="feature-icon" aria-hidden="true">
                   <svg viewBox="0 0 32 32">
-                    <path d="M8 24V9M8 24h15M8 24l11-10"></path>
-                    <path d="m5.5 12 2.5-3 2.5 3M20 21l3 3-3 3M16 14h3v3"></path>
-                    <path class="feature-deny-mark" d="M22 7l5 5M27 7l-5 5"></path>
-                  </svg>
-                </span>
-                <strong>No Explicit</strong>
-                <span>3D representations</span>
-              </article>
-              <article class="feature-rail feature-rail--compact">
-                <span class="feature-icon" aria-hidden="true">
-                  <svg viewBox="0 0 32 32">
-                    <path d="M24 11a10 10 0 0 0-15-2l-2 2"></path>
-                    <path d="M8 6v5h5"></path>
-                    <path d="M8 21a10 10 0 0 0 15 2l2-2"></path>
-                    <path d="M24 26v-5h-5"></path>
-                    <path d="M12 20v-4l2-3h4l2 3v4M11 20h10"></path>
-                  </svg>
-                </span>
-                <strong>Closed-Loop</strong>
-                <span>Simulation ready</span>
-              </article>
-              <article class="feature-rail feature-rail--compact">
-                <span class="feature-icon" aria-hidden="true">
-                  <svg viewBox="0 0 32 32">
                     <path d="M9 10h8a6 6 0 0 1 6 6v1"></path>
                     <path d="m20 14 3 3 3-3"></path>
                     <path d="M23 22h-8a6 6 0 0 1-6-6v-1"></path>
@@ -132,6 +117,30 @@
                 </span>
                 <strong>Scalable</strong>
                 <span>Diverse driving scenes</span>
+              </article>
+              <article class="feature-rail feature-rail--compact">
+                <span class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M24 11a10 10 0 0 0-15-2l-2 2"></path>
+                    <path d="M8 6v5h5"></path>
+                    <path d="M8 21a10 10 0 0 0 15 2l2-2"></path>
+                    <path d="M24 26v-5h-5"></path>
+                    <path d="M12 20v-4l2-3h4l2 3v4M11 20h10"></path>
+                  </svg>
+                </span>
+                <strong>Closed-Loop</strong>
+                <span>Simulation ready</span>
+              </article>
+              <article class="feature-rail feature-rail--compact">
+                <span class="feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M8 24V9M8 24h15M8 24l11-10"></path>
+                    <path d="m5.5 12 2.5-3 2.5 3M20 21l3 3-3 3M16 14h3v3"></path>
+                    <path class="feature-deny-mark" d="M22 7l5 5M27 7l-5 5"></path>
+                  </svg>
+                </span>
+                <strong>No Explicit</strong>
+                <span>3D representations</span>
               </article>
             </div>
             <strong class="abstract-key-insight" data-scene-reveal data-reveal-at="0">
@@ -167,7 +176,7 @@
           <div class="results-layout results-layout--result-split">
             <div class="scene-copy results-copy">
               <p class="eyebrow">Results</p>
-              <h2>Twenty-Second Results on Nuscenes</h2>
+              <h2><span class="result-scale-accent">20-Second</span> Results on Nuscenes</h2>
               <span class="result-speed-pill" aria-label="Result videos play at double speed">2x playback</span>
             </div>
             <div class="film-grid film-grid--nusc film-grid--results">
@@ -189,19 +198,19 @@
           <div class="results-layout results-layout--result-split">
             <div class="scene-copy results-copy">
               <p class="eyebrow">Results</p>
-              <h2>Thirty-Second Results on Self-Collected Dataset</h2>
+              <h2><span class="result-scale-accent">30-Second</span> Results on Self-Collected Dataset</h2>
               <span class="result-speed-pill" aria-label="Result videos play at double speed">2x playback</span>
             </div>
             <div class="film-grid film-grid--nusc film-grid--results">
-              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2008_hrn_GA20230001_clip_DZ878__20240717_004028_049-20240717_004208_049.mp4" type="video/mp4"></video>
-              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2009_hrn_GA20230001_clip_DZ878__20240717_004933_049-20240717_005032_048.mp4" type="video/mp4"></video>
-              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2046_hrn_GA20230001_clip_DZ878__20240717_100203_548-20240717_100302_048.mp4" type="video/mp4"></video>
-              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/2049_hrn_GA20230001_clip_DZ878__20240717_101817_848-20240717_101916_049.mp4" type="video/mp4"></video>
-              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3515_hrn_GA20230001_clip_DZ878__20240810_150349_449-20240810_150448_049.mp4" type="video/mp4"></video>
-              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3015_hrn_GA20230001_clip_DZ878__20240707_105003_849-20240707_105102_048.mp4" type="video/mp4"></video>
-              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3025_hrn_GA20230001_clip_DZ878__20240707_111917_950-20240707_112016_048.mp4" type="video/mp4"></video>
-              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3032_hrn_GA20230001_clip_DZ878__20240707_114320_049-20240707_114418_049.mp4" type="video/mp4"></video>
-              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v2_hud_crop76_crf24/3037_hrn_GA20230001_clip_DZ878__20240707_114838_249-20240707_114937_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v3_hud_crop76_crf24/1525_hrn_GA20230001_clip_DZ878__20240705_110424_748-20240705_110523_048.mp4" type="video/mp4"></video>
+              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v3_hud_crop76_crf24/2009_hrn_GA20230001_clip_DZ878__20240717_004933_049-20240717_005032_048.mp4" type="video/mp4"></video>
+              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v3_hud_crop76_crf24/202_hrn_GA20230001_clip_DZ878__20240714_151520_350-20240714_151619_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v3_hud_crop76_crf24/2223_hrn_GA20230001_clip_DZ871__20240924_191330_550-20240924_191429_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v3_hud_crop76_crf24/2273_hrn_GA20230001_clip_DZ878__20240803_131456_648-20240803_131555_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v3_hud_crop76_crf24/3284_hrn_GA20230001_clip_DZ871__20240927_172001_049-20240927_172059_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v3_hud_crop76_crf24/3301_hrn_GA20230001_clip_DZ871__20240927_174507_750-20240927_174606_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v3_hud_crop76_crf24/3526_hrn_GA20230001_clip_DZ878__20240810_154245_849-20240810_154344_049.mp4" type="video/mp4"></video>
+              <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v3_hud_crop76_crf24/3583_hrn_GA20230001_clip_DZ878__20240810_210322_350-20240810_210421_048.mp4" type="video/mp4"></video>
             </div>
           </div>
         </section>
@@ -211,7 +220,7 @@
           <div class="results-layout results-layout--result-split">
             <div class="scene-copy results-copy">
               <p class="eyebrow">Results</p>
-              <h2>Minute-Level Video Generation</h2>
+              <h2><span class="result-scale-accent">Minute-Level</span> Video Generation</h2>
               <span class="result-speed-pill" aria-label="Result videos play at triple speed">3x playback</span>
             </div>
             <div class="film-grid film-grid--nusc film-grid--results">
@@ -228,7 +237,7 @@
           </div>
         </section>
 
-        <section class="film-scene scene-closed-loop" data-scene data-duration="4" data-label="Closed loop">
+        <section class="film-scene scene-closed-loop" data-scene data-duration="6" data-label="Closed loop">
           <div class="scene-veil scene-veil--results"></div>
           <div class="results-layout results-layout--closed-loop-split">
             <div class="scene-copy results-copy">

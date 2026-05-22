@@ -7,6 +7,9 @@
   const progress = document.querySelector("[data-progress]");
   const sceneLabel = document.querySelector("[data-scene-label]");
   const timecode = document.querySelector("[data-timecode]");
+  const loader = document.querySelector("[data-film-loader]");
+  const loaderProgress = document.querySelector("[data-film-loader-progress]");
+  const loaderStatus = document.querySelector("[data-film-loader-status]");
 
   if (!scenes.length || !toggleButton || !scrubber || !progress) {
     return;
@@ -18,7 +21,9 @@
       return;
     }
 
-    fetch("../", { credentials: "same-origin" })
+    const homepageUrl = new URL("../index.html", window.location.href);
+
+    fetch(homepageUrl, { credentials: "same-origin" })
       .then((response) => {
         if (!response.ok) {
           throw new Error("Homepage Method Overview unavailable.");
@@ -40,7 +45,7 @@
             return;
           }
 
-          image.setAttribute("href", new URL(href, new URL("../", window.location.href)).toString());
+          image.setAttribute("href", new URL(href, homepageUrl).toString());
         });
 
         host.replaceChildren(methodSvg);
@@ -56,11 +61,13 @@
     .reduce((sum, duration) => sum + duration, 0));
   const totalDuration = durations.reduce((sum, duration) => sum + duration, 0);
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const recordMode = new URLSearchParams(window.location.search).has("record");
   const SCENE_CROSSFADE_MS = 2000;
   const SCENE_PRELOAD_SECONDS = 2;
   let position = 0;
   let sceneIndex = -1;
-  let playing = !reduceMotion;
+  let playing = false;
+  let preloadComplete = false;
   let lastFrame = performance.now();
   let animationFrame = 0;
   let leavingTimer = 0;
@@ -94,6 +101,15 @@
   };
 
   const syncSceneVideoSources = (activeIndex, options = {}) => {
+    if (preloadComplete) {
+      scenes.forEach((scene) => {
+        scene.querySelectorAll("[data-scene-video]").forEach((video) => {
+          setSceneVideoLoaded(video, true);
+        });
+      });
+      return;
+    }
+
     const preloadIndex = options.preloadIndex ?? activeIndex + 1;
     const keepLoadedIndex = options.keepLoadedIndex ?? null;
 
@@ -113,6 +129,61 @@
     leavingTimer = 0;
     scenes.forEach((scene) => {
       scene.classList.remove("is-leaving", "is-exiting");
+    });
+  };
+
+  const preloadFilmVideos = () => {
+    const videos = [...document.querySelectorAll("[data-scene-video]")];
+    if (!videos.length) {
+      preloadComplete = true;
+      return Promise.resolve();
+    }
+
+    let readyCount = 0;
+    let errorCount = 0;
+
+    const renderPreloadProgress = () => {
+      const ratio = readyCount / videos.length;
+      if (loaderProgress) {
+        loaderProgress.style.width = `${ratio * 100}%`;
+      }
+      if (loaderStatus) {
+        loaderStatus.textContent = errorCount
+          ? `${errorCount} video${errorCount === 1 ? "" : "s"} could not be prepared`
+          : "Loading video scenes";
+      }
+    };
+
+    renderPreloadProgress();
+
+    return Promise.all(videos.map((video) => new Promise((resolve) => {
+      let settled = false;
+      const settle = (hasError = false) => {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        readyCount += 1;
+        if (hasError) {
+          errorCount += 1;
+        }
+        renderPreloadProgress();
+        resolve();
+      };
+
+      video.preload = "auto";
+      video.addEventListener("canplay", () => settle(), { once: true });
+      video.addEventListener("error", () => settle(true), { once: true });
+      setSceneVideoLoaded(video, true);
+
+      if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+        settle();
+      }
+    }))).then(() => {
+      preloadComplete = true;
+      if (loaderStatus) {
+        loaderStatus.textContent = errorCount ? "Film ready with missing video scenes" : "Film ready";
+      }
     });
   };
 
@@ -259,11 +330,13 @@
       scene.querySelectorAll("[data-scene-video]").forEach((video) => {
         video.playbackRate = Number(scene.dataset.playbackRate) || 1;
         if (shouldPlayScene && canPlaySceneVideo(video)) {
-          video.play().catch(() => {});
+          if (video.paused) {
+            video.play().catch(() => {});
+          }
           return;
         }
 
-        if (!isLeaving) {
+        if (!isLeaving && !video.paused) {
           video.pause();
         }
       });
@@ -341,6 +414,10 @@
   };
 
   const play = () => {
+    if (!preloadComplete) {
+      return;
+    }
+
     if (position >= totalDuration) {
       position = 0;
     }
@@ -366,6 +443,10 @@
   };
 
   toggleButton.addEventListener("click", () => {
+    if (!preloadComplete) {
+      return;
+    }
+
     if (playing) {
       pause();
       return;
@@ -374,12 +455,20 @@
   });
 
   restartButton?.addEventListener("click", () => {
+    if (!preloadComplete) {
+      return;
+    }
+
     clearSceneTransitions();
     seek(0);
     play();
   });
 
   scrubber.addEventListener("input", () => {
+    if (!preloadComplete) {
+      return;
+    }
+
     clearSceneTransitions();
     const nextPosition = (Number(scrubber.value) / Number(scrubber.max)) * totalDuration;
     seek(nextPosition);
@@ -387,6 +476,10 @@
 
   document.addEventListener("keydown", (event) => {
     if (event.target instanceof HTMLInputElement) {
+      return;
+    }
+
+    if (!preloadComplete) {
       return;
     }
 
@@ -415,8 +508,15 @@
   });
 
   hydrateMethodDrawing();
-  seek(0);
   renderControls();
-  syncVideos(sceneIndex);
+  preloadFilmVideos().then(() => {
+    loader?.classList.add("is-ready");
+    seek(0);
+    if (!reduceMotion && !recordMode) {
+      play();
+      return;
+    }
+    renderControls();
+  });
   animationFrame = window.requestAnimationFrame(tick);
 })();

@@ -175,6 +175,61 @@ video {
   content: "";
 }
 
+.film-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(14px, 1.2vw, 20px);
+  padding: clamp(24px, 4vw, 64px);
+  background:
+    radial-gradient(circle at 50% 32%, rgba(44, 93, 246, 0.24), transparent 30%),
+    rgba(1, 3, 8, 0.92);
+  text-align: center;
+  transition: opacity 420ms ease, visibility 420ms ease;
+}
+
+.film-loader.is-ready {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.film-loader-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.film-loader-copy strong {
+  font-size: clamp(1.35rem, 2.2vw, 2.35rem);
+  line-height: 1.08;
+}
+
+.film-loader-copy span {
+  color: var(--muted);
+  font-size: clamp(0.92rem, 1vw, 1.08rem);
+}
+
+.film-loader-track {
+  overflow: hidden;
+  width: min(100%, 520px);
+  height: 8px;
+  border: 1px solid rgba(150, 188, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(8, 18, 38, 0.72);
+}
+
+.film-loader-track span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--blue), var(--cyan), var(--mint));
+  transition: width 220ms ease;
+}
+
 .film-scene {
   position: absolute;
   inset: 0;
@@ -411,6 +466,13 @@ h2 {
 .scene-closed-loop .results-copy h2 {
   font-size: clamp(1.35rem, 2.1vw, 2.7rem);
   line-height: 1.04;
+}
+
+.result-scale-accent {
+  color: var(--blue);
+  text-shadow:
+    0 0 18px rgba(44, 93, 246, 0.34),
+    0 0 42px rgba(61, 217, 255, 0.16);
 }
 
 .abstract-copy p:last-child,
