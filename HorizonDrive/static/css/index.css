@@ -947,6 +947,64 @@ main#main-content .publication-resource-links > a.supp-film-link:hover .supp-fil
   padding: 6rem 1.5rem 4rem;
 }
 
+.publication-authors-collapse {
+  max-width: 56rem;
+  margin: 0 auto 1rem;
+}
+
+.publication-authors-collapse > summary {
+  list-style: none;
+}
+
+.publication-authors-collapse > summary::-webkit-details-marker {
+  display: none;
+}
+
+.publication-authors-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1.05rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.96);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.28);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.publication-authors-toggle:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.62);
+}
+
+.publication-authors-toggle:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 3px;
+}
+
+.publication-authors-toggle-icon {
+  font-size: 0.75rem;
+  transition: transform 0.2s ease;
+}
+
+.publication-authors-collapse[open] .publication-authors-toggle-icon {
+  transform: rotate(180deg);
+}
+
+.publication-authors-collapse .publication-authors {
+  margin-top: 0.85rem;
+  margin-bottom: 0;
+}
+
 .publication-authors {
     font-family: 'Inter', sans-serif !important;
     font-weight: 500;
