@@ -275,6 +275,13 @@
 
   const sceneElapsed = (index) => Math.max(0, position - (sceneStarts[index] || 0));
 
+  const getHeroVideoTime = (seconds) => {
+    const heroSceneDuration = durations[0] || 15;
+    const heroRate = Number(scenes[0]?.dataset.playbackRate) || 1;
+    const cappedSeconds = Math.min(Math.max(seconds, 0), heroSceneDuration);
+    return cappedSeconds * heroRate;
+  };
+
   const smoothstep = (value) => {
     const t = Math.min(Math.max(value, 0), 1);
     return t * t * (3 - 2 * t);
@@ -653,12 +660,35 @@
     timecode.textContent = `${formatTime(position)} / ${formatTime(totalDuration)}`;
   };
 
+  const syncContinuousHeroVideoTime = () => {
+    if (playing && sceneIndex === 0) {
+      return;
+    }
+
+    const targetTime = getHeroVideoTime(position);
+    scenes.forEach((scene, index) => {
+      if (index !== sceneIndex) {
+        return;
+      }
+
+      scene.querySelectorAll('[data-continuous-video="hero"]').forEach((video) => {
+        if (!(video instanceof HTMLVideoElement) || !Number.isFinite(video.duration)) {
+          return;
+        }
+
+        const maxTime = Math.max(0, video.duration - 0.06);
+        video.currentTime = Math.min(targetTime, maxTime);
+      });
+    });
+  };
+
   const seek = (seconds) => {
     position = Math.min(Math.max(seconds, 0), totalDuration);
     renderScene(sceneAt(Math.min(position, totalDuration - 0.001)));
     syncSceneCarousels();
     syncSceneReveals();
     syncVideos(sceneIndex);
+    syncContinuousHeroVideoTime();
     preloadUpcomingSceneVideos();
     renderControls();
   };
@@ -780,7 +810,8 @@
       return Promise.resolve();
     }
 
-    const heroFrame = Math.min(Math.max(Math.round(position * RENDER_FRAME_FPS), 0), 899);
+    const heroVideoTime = getHeroVideoTime(position);
+    const heroFrame = Math.min(Math.max(Math.round(heroVideoTime * RENDER_FRAME_FPS), 0), 899);
     const nextSrc = buildRenderFrameSrc(renderHeroFrameBase, heroFrame);
     const fallbackSrc = buildRenderFrameSrc(renderHeroFrameBase, 0);
     return loadRenderImageFrame(frame, nextSrc, fallbackSrc);
@@ -821,6 +852,10 @@
   );
 
   const renderVideoTime = (scene, index, video) => {
+    if (video.dataset.continuousVideo === "hero") {
+      return getHeroVideoTime(position);
+    }
+
     if (video.dataset.continuousVideo) {
       return position;
     }
