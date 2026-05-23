@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="film.css?v=hd-film-soundtrack">
-  <script defer src="film.js?v=hd-film-soundtrack"></script>
+  <link rel="stylesheet" href="film.css?v=hd-film-audio-toggle">
+  <script defer src="film.js?v=hd-film-audio-toggle"></script>
 </head>
 <body>
   <main class="film-page">
@@ -28,6 +28,17 @@
 
     <section class="film-player" aria-label="HorizonDrive film preview">
       <audio class="film-soundtrack" data-film-soundtrack preload="auto" src="../static/audio/film-soundtrack.mp3?v=solderlight-array"></audio>
+      <button class="film-audio-toggle" type="button" data-film-audio-toggle aria-pressed="false" aria-label="Turn on film soundtrack">
+        <svg class="film-audio-icon film-audio-icon--muted" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+          <path d="m16 9 6 6M22 9l-6 6"></path>
+        </svg>
+        <svg class="film-audio-icon film-audio-icon--on" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M11 5 6 9H3v6h3l5 4V5Z"></path>
+          <path d="M15.5 8.5a5 5 0 0 1 0 7"></path>
+          <path d="M18.5 5.5a9 9 0 0 1 0 13"></path>
+        </svg>
+      </button>
       <div class="film-landscape-gate" data-landscape-gate hidden>
         <div class="film-landscape-gate-panel">
           <div class="film-landscape-gate-icon" aria-hidden="true">

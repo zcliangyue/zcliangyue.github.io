@@ -155,6 +155,73 @@ video {
   display: none;
 }
 
+.film-audio-toggle {
+  position: absolute;
+  top: clamp(12px, 1.5vh, 18px);
+  right: clamp(12px, 1.5vw, 18px);
+  z-index: 25;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(153, 195, 255, 0.24);
+  border-radius: 50%;
+  background: rgba(4, 8, 17, 0.72);
+  color: rgba(214, 228, 255, 0.88);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.film-audio-toggle:hover {
+  border-color: rgba(91, 149, 255, 0.52);
+  background: rgba(10, 19, 39, 0.92);
+  color: #f6f9ff;
+  transform: translateY(-1px);
+}
+
+.film-audio-toggle.is-audible {
+  border-color: rgba(61, 217, 255, 0.42);
+  color: rgba(186, 236, 255, 0.98);
+}
+
+.film-audio-toggle[hidden] {
+  display: none;
+}
+
+.film-audio-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+.film-audio-toggle.is-audible .film-audio-icon--muted {
+  display: none;
+}
+
+.film-audio-toggle.is-audible .film-audio-icon--on {
+  display: block;
+}
+
+.film-audio-toggle:not(.is-audible) .film-audio-icon--on {
+  display: none;
+}
+
+.film-render-mode .film-audio-toggle {
+  display: none;
+}
+
 .film-landscape-gate {
   position: absolute;
   inset: 0;
@@ -1719,6 +1786,13 @@ html.film-mobile-fit body {
     max(env(safe-area-inset-right, 0px), 8px)
     max(env(safe-area-inset-bottom, 0px), 8px)
     max(env(safe-area-inset-left, 0px), 8px);
+}
+
+html.film-mobile-fit .film-audio-toggle {
+  top: 16px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
 }
 
 html.film-mobile-fit .film-topbar {

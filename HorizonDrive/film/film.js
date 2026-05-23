@@ -52,12 +52,14 @@
   const landscapeEnterButton = document.querySelector("[data-landscape-enter]");
   const filmPlayer = document.querySelector(".film-player");
   const filmSoundtrack = document.querySelector("[data-film-soundtrack]");
+  const filmAudioToggle = document.querySelector("[data-film-audio-toggle]");
   const filmSoundtrackEnabled = !renderMode && !recordMode && filmSoundtrack instanceof HTMLAudioElement;
   const landscapeGateEnabled = !renderMode && !recordMode;
   const mobileFilmQuery = window.matchMedia("(max-width: 900px)");
   const landscapeOrientationQuery = window.matchMedia("(orientation: landscape)");
   let playWhenLandscapeAllowed = false;
   let landscapeGateActive = false;
+  let filmSoundtrackAudible = false;
 
   if (renderMode) {
     document.documentElement.classList.add("film-render-mode");
@@ -464,8 +466,29 @@
     return Math.max(0, (totalDuration - seconds) / FILM_SOUNDTRACK_FADE_OUT_S);
   };
 
+  const updateFilmAudioToggle = () => {
+    if (!filmAudioToggle) {
+      return;
+    }
+
+    filmAudioToggle.classList.toggle("is-audible", filmSoundtrackAudible);
+    filmAudioToggle.setAttribute("aria-pressed", String(filmSoundtrackAudible));
+    filmAudioToggle.setAttribute(
+      "aria-label",
+      filmSoundtrackAudible ? "Turn off film soundtrack" : "Turn on film soundtrack"
+    );
+  };
+
   const syncFilmSoundtrack = ({ forceTime = false } = {}) => {
     if (!filmSoundtrackEnabled) {
+      return;
+    }
+
+    if (!filmSoundtrackAudible) {
+      filmSoundtrack.pause();
+      if (forceTime || Math.abs(filmSoundtrack.currentTime - position) > 0.04) {
+        filmSoundtrack.currentTime = position;
+      }
       return;
     }
 
@@ -484,8 +507,25 @@
     }
 
     if (filmSoundtrack.paused) {
-      filmSoundtrack.play().catch(() => {});
+      filmSoundtrack.play().catch(() => {
+        filmSoundtrackAudible = false;
+        updateFilmAudioToggle();
+      });
     }
+  };
+
+  const bindFilmAudioToggle = () => {
+    if (!filmSoundtrackEnabled || !filmAudioToggle) {
+      filmAudioToggle?.setAttribute("hidden", "");
+      return;
+    }
+
+    updateFilmAudioToggle();
+    filmAudioToggle.addEventListener("click", () => {
+      filmSoundtrackAudible = !filmSoundtrackAudible;
+      updateFilmAudioToggle();
+      syncFilmSoundtrack({ forceTime: true });
+    });
   };
 
   const preloadFilmSoundtrack = () => {
@@ -1190,6 +1230,7 @@
   };
 
   bindMobileTimelineSwipe();
+  bindFilmAudioToggle();
 
   document.addEventListener("keydown", (event) => {
     if (event.target instanceof HTMLInputElement) {
