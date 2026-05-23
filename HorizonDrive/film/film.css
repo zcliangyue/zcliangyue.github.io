@@ -1728,8 +1728,9 @@ html.film-mobile-fit .film-page {
   max-width: 1700px;
   min-height: auto;
   margin: 0;
-  padding: 24px;
-  gap: 14px;
+  padding: 16px;
+  gap: 0;
+  font-size: 14px;
   transform: scale(var(--film-fit-scale, 1));
   transform-origin: center center;
 }
@@ -1750,126 +1751,193 @@ html.film-mobile-fit .film-stage {
   min-height: 920px;
   max-height: 920px;
   aspect-ratio: auto;
+  overflow: hidden;
+}
+
+html.film-mobile-fit .film-scene {
+  overflow: hidden;
 }
 
 html.film-mobile-fit .hero-copy {
-  inset: auto auto 72px 96px;
-  width: min(calc(100% - 192px), 1180px);
+  inset: auto auto 56px 72px;
+  width: min(calc(100% - 144px), 980px);
 }
 
 html.film-mobile-fit .hero-copy h1 {
-  font-size: 72px;
+  font-size: 54px;
   line-height: 0.96;
 }
 
 html.film-mobile-fit .hero-subtitle {
-  margin-bottom: 20px;
-  font-size: 30px;
+  margin-bottom: 14px;
+  font-size: 22px;
   line-height: 1.16;
 }
 
+html.film-mobile-fit .eyebrow {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
 html.film-mobile-fit .abstract-frame {
-  gap: 24px;
-  padding: 52px;
+  gap: 16px;
+  padding: 36px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 html.film-mobile-fit .abstract-copy h2,
 html.film-mobile-fit .method-copy h2,
 html.film-mobile-fit .results-copy h2,
 html.film-mobile-fit .finale-copy h2 {
-  margin-bottom: 16px;
-  font-size: 44px;
+  margin-bottom: 10px;
+  font-size: 32px;
   line-height: 0.98;
 }
 
 html.film-mobile-fit .abstract-key-insight {
-  font-size: 26px;
-  line-height: 1.36;
+  font-size: 18px;
+  line-height: 1.34;
 }
 
 html.film-mobile-fit .method-sequence,
 html.film-mobile-fit .results-layout {
-  gap: 18px;
-  padding: 56px;
+  gap: 12px;
+  padding: 36px;
+  min-height: 0;
+  overflow: hidden;
 }
 
 html.film-mobile-fit .method-overview-caption {
-  font-size: 22px;
-  line-height: 1.38;
+  font-size: 16px;
+  line-height: 1.36;
+}
+
+html.film-mobile-fit .method-drawing-frame {
+  min-height: 0;
+  overflow: hidden;
+  padding: 14px;
 }
 
 html.film-mobile-fit .feature-rails,
 html.film-mobile-fit .feature-rails--six {
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
 }
 
 html.film-mobile-fit .feature-rail--compact {
-  min-height: 168px;
-  padding: 16px;
+  min-height: 132px;
+  padding: 12px;
 }
 
 html.film-mobile-fit .feature-rail strong {
-  font-size: 18px;
+  font-size: 13px;
 }
 
 html.film-mobile-fit .feature-rail > span:last-child {
-  font-size: 14px;
+  font-size: 11px;
+  line-height: 1.35;
 }
 
 html.film-mobile-fit .abstract-frame,
 html.film-mobile-fit .results-layout--split,
 html.film-mobile-fit .results-layout--result-split,
 html.film-mobile-fit .results-layout--closed-loop-split {
-  grid-template-columns: minmax(220px, 0.5fr) minmax(760px, 1.5fr);
-  align-items: center;
-  gap: 24px;
+  grid-template-columns: minmax(170px, 0.4fr) minmax(0, 1.6fr);
+  align-items: stretch;
+  gap: 16px;
+}
+
+html.film-mobile-fit .results-layout > *,
+html.film-mobile-fit .abstract-frame > * {
+  min-width: 0;
+  min-height: 0;
 }
 
 html.film-mobile-fit .scene-nuscenes .results-copy h2,
 html.film-mobile-fit .scene-scale .results-copy h2,
 html.film-mobile-fit .scene-minute .results-copy h2,
 html.film-mobile-fit .scene-closed-loop .results-copy h2 {
-  font-size: 28px;
-  line-height: 1.06;
+  font-size: 20px;
+  line-height: 1.08;
+}
+
+html.film-mobile-fit .film-grid {
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 html.film-mobile-fit .film-grid--nusc {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
+  height: 100%;
+}
+
+html.film-mobile-fit .film-grid--results {
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  align-content: stretch;
+  gap: 8px;
+  height: 100%;
 }
 
 html.film-mobile-fit .film-grid--nusc video:nth-child(n + 5) {
   display: block;
 }
 
-html.film-mobile-fit .film-grid--results video,
-html.film-mobile-fit .film-grid--results .render-video-frame {
-  border-radius: 16px;
+html.film-mobile-fit .film-grid video,
+html.film-mobile-fit .film-grid .render-video-frame {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  min-height: 0;
+  aspect-ratio: auto;
+  object-fit: cover;
+  overflow: hidden;
+  border-radius: 12px;
+  clip-path: inset(0 round 12px);
 }
 
 html.film-mobile-fit .film-grid--scale {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  height: 560px;
-  min-height: 560px;
+  height: 100%;
+  min-height: 0;
+  max-height: 100%;
 }
 
 html.film-mobile-fit .closed-loop-grid {
-  gap: 8px;
+  gap: 6px;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 html.film-mobile-fit .closed-loop-grid video,
 html.film-mobile-fit .closed-loop-grid .render-video-frame {
-  border-radius: 16px;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 44 / 9;
+  object-fit: contain;
+  overflow: hidden;
+  border-radius: 12px;
 }
 
 html.film-mobile-fit .results-rollout-footnote {
-  right: 40px;
-  bottom: 22px;
-  font-size: 0.82rem;
+  right: 32px;
+  bottom: 16px;
+  font-size: 11px;
   white-space: nowrap;
+}
+
+html.film-mobile-fit .result-speed-pill {
+  min-height: 30px;
+  margin-top: 8px;
+  padding: 0 10px;
+  font-size: 13px;
 }
 
 html.film-mobile-fit .film-button {

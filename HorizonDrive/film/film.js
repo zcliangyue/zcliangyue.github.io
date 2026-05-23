@@ -30,7 +30,7 @@
   const renderHeroFrameBase = params.get("heroFrameBase") || "../static/render/hero-frames";
   const renderVideoFrameBase = params.get("videoFrameBase") || "../static/render/video-frames";
   const FILM_DESIGN_STAGE_WIDTH = Number(params.get("designWidth")) || 1700;
-  const FILM_DESIGN_STAGE_HEIGHT = Number(params.get("designHeight")) || 968;
+  const FILM_DESIGN_STAGE_HEIGHT = Number(params.get("designHeight")) || 952;
   const SCENE_CROSSFADE_MS = 2000;
   const SCENE_PRELOAD_SECONDS = 2;
   const REVEAL_DURATION_S = 0.56;
