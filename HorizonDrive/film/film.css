@@ -213,6 +213,27 @@ html.film-mobile-locked .film-stage {
   pointer-events: none;
 }
 
+html.film-mobile-device .film-timeline {
+  display: none;
+}
+
+html.film-mobile-device .film-controls {
+  grid-template-columns: auto auto minmax(0, 1fr);
+}
+
+html.film-mobile-device .film-clock {
+  justify-self: end;
+}
+
+html.film-mobile-device .film-stage {
+  touch-action: pan-y pinch-zoom;
+}
+
+html.film-mobile-device .film-stage.is-touch-scrubbing {
+  touch-action: none;
+  cursor: grabbing;
+}
+
 .film-player:fullscreen,
 .film-player:-webkit-full-screen {
   display: grid;
@@ -1852,6 +1873,7 @@ html.film-mobile-fit .results-rollout-footnote {
 }
 
 html.film-mobile-fit .film-controls {
+  grid-template-columns: auto auto minmax(0, 1fr);
   min-height: 54px;
   padding: 8px;
   gap: 12px;

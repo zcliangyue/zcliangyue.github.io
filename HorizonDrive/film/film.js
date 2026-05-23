@@ -10,6 +10,7 @@
   const loader = document.querySelector("[data-film-loader]");
   const loaderProgress = document.querySelector("[data-film-loader-progress]");
   const loaderStatus = document.querySelector("[data-film-loader-status]");
+  const filmStage = document.querySelector(".film-stage");
 
   if (!scenes.length || !toggleButton || !scrubber || !progress) {
     return;
@@ -962,6 +963,103 @@
     const nextPosition = (Number(scrubber.value) / Number(scrubber.max)) * totalDuration;
     seek(nextPosition);
   });
+
+  const bindMobileTimelineSwipe = () => {
+    if (!landscapeGateEnabled || !filmStage) {
+      return;
+    }
+
+    let touchScrubbing = false;
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartPosition = 0;
+    let touchScrubWidth = 1;
+    let touchWasPlaying = false;
+    let touchAxisResolved = false;
+    let touchIsHorizontal = false;
+
+    const canScrub = () => preloadComplete && isMobileFilmDevice() && canPlayFilm();
+
+    const seekFromTouch = (clientX) => {
+      const deltaRatio = (clientX - touchStartX) / touchScrubWidth;
+      const nextPosition = Math.min(
+        Math.max(touchStartPosition + deltaRatio * totalDuration, 0),
+        totalDuration
+      );
+      clearSceneTransitions();
+      seek(nextPosition);
+    };
+
+    const endTouchScrub = () => {
+      if (!touchScrubbing) {
+        return;
+      }
+
+      touchScrubbing = false;
+      touchAxisResolved = false;
+      touchIsHorizontal = false;
+      filmStage.classList.remove("is-touch-scrubbing");
+
+      if (touchWasPlaying) {
+        play();
+      }
+    };
+
+    filmStage.addEventListener("touchstart", (event) => {
+      if (!canScrub() || event.touches.length !== 1) {
+        return;
+      }
+
+      touchScrubbing = true;
+      touchAxisResolved = false;
+      touchIsHorizontal = false;
+      touchWasPlaying = false;
+      touchStartX = event.touches[0].clientX;
+      touchStartY = event.touches[0].clientY;
+      touchStartPosition = position;
+      touchScrubWidth = Math.max(filmStage.getBoundingClientRect().width, 1);
+    }, { passive: true });
+
+    filmStage.addEventListener("touchmove", (event) => {
+      if (!touchScrubbing || event.touches.length !== 1) {
+        return;
+      }
+
+      const deltaX = event.touches[0].clientX - touchStartX;
+      const deltaY = event.touches[0].clientY - touchStartY;
+
+      if (!touchAxisResolved) {
+        if (Math.abs(deltaX) < 8 && Math.abs(deltaY) < 8) {
+          return;
+        }
+
+        touchAxisResolved = true;
+        touchIsHorizontal = Math.abs(deltaX) >= Math.abs(deltaY);
+        if (!touchIsHorizontal) {
+          touchScrubbing = false;
+          return;
+        }
+
+        touchWasPlaying = playing;
+        if (playing) {
+          pause();
+        }
+        filmStage.classList.add("is-touch-scrubbing");
+      }
+
+      if (!touchIsHorizontal) {
+        return;
+      }
+
+      seekFromTouch(event.touches[0].clientX);
+      event.preventDefault();
+    }, { passive: false });
+
+    filmStage.addEventListener("touchend", endTouchScrub);
+    filmStage.addEventListener("touchcancel", endTouchScrub);
+  };
+
+  bindMobileTimelineSwipe();
 
   document.addEventListener("keydown", (event) => {
     if (event.target instanceof HTMLInputElement) {
