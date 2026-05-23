@@ -1855,30 +1855,30 @@ html.film-mobile-fit .abstract-frame .feature-rails--six {
   max-width: none;
   grid-column: 1;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 6px;
+  gap: 7px;
   align-self: stretch;
   justify-self: stretch;
 }
 
 html.film-mobile-fit .abstract-frame .feature-rail--compact {
   min-height: 0;
-  padding: 8px 5px;
-  gap: 5px;
+  padding: 10px 6px;
+  gap: 6px;
 }
 
 html.film-mobile-fit .abstract-frame .feature-icon {
-  width: 28px;
-  border-radius: 8px;
+  width: 32px;
+  border-radius: 9px;
 }
 
 html.film-mobile-fit .abstract-frame .feature-rail strong {
-  font-size: 10px;
-  line-height: 1.05;
+  font-size: 12px;
+  line-height: 1.08;
 }
 
 html.film-mobile-fit .abstract-frame .feature-rail > span:last-child {
-  font-size: 9px;
-  line-height: 1.16;
+  font-size: 11px;
+  line-height: 1.2;
   text-wrap: balance;
 }
 
