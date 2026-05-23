@@ -29,7 +29,7 @@
   const renderHeroFrameBase = params.get("heroFrameBase") || "../static/render/hero-frames";
   const renderVideoFrameBase = params.get("videoFrameBase") || "../static/render/video-frames";
   const FILM_DESIGN_STAGE_WIDTH = Number(params.get("designWidth")) || 1700;
-  const FILM_DESIGN_STAGE_HEIGHT = Number(params.get("designHeight")) || 1100;
+  const FILM_DESIGN_STAGE_HEIGHT = Number(params.get("designHeight")) || 1020;
   const SCENE_CROSSFADE_MS = 2000;
   const SCENE_PRELOAD_SECONDS = 2;
   const REVEAL_DURATION_S = 0.56;
@@ -447,13 +447,24 @@
 
     if (!active) {
       document.documentElement.style.removeProperty("--film-fit-scale");
+      document.documentElement.style.removeProperty("--film-fit-offset-x");
+      document.documentElement.style.removeProperty("--film-fit-offset-y");
       return;
     }
 
-    const scaleX = window.innerWidth / FILM_DESIGN_STAGE_WIDTH;
-    const scaleY = window.innerHeight / FILM_DESIGN_STAGE_HEIGHT;
+    const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+    const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+    const scaleX = viewportWidth / FILM_DESIGN_STAGE_WIDTH;
+    const scaleY = viewportHeight / FILM_DESIGN_STAGE_HEIGHT;
     const fitScale = Math.min(scaleX, scaleY);
+    const scaledWidth = FILM_DESIGN_STAGE_WIDTH * fitScale;
+    const scaledHeight = FILM_DESIGN_STAGE_HEIGHT * fitScale;
+    const offsetX = Math.max((viewportWidth - scaledWidth) / 2, 0);
+    const offsetY = Math.max((viewportHeight - scaledHeight) / 2, 0);
+
     document.documentElement.style.setProperty("--film-fit-scale", String(fitScale));
+    document.documentElement.style.setProperty("--film-fit-offset-x", `${offsetX}px`);
+    document.documentElement.style.setProperty("--film-fit-offset-y", `${offsetY}px`);
   };
 
   const updateLandscapeGate = () => {
@@ -997,6 +1008,8 @@
     landscapeOrientationQuery.addEventListener("change", updateLandscapeGate);
     document.addEventListener("fullscreenchange", updateLandscapeGate);
     window.addEventListener("resize", syncFilmStageFit);
+    window.visualViewport?.addEventListener("resize", syncFilmStageFit);
+    window.visualViewport?.addEventListener("scroll", syncFilmStageFit);
     updateLandscapeGate();
   } else {
     syncFilmStageFit();

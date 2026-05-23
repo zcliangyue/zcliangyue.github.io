@@ -1483,76 +1483,76 @@ h2 {
 }
 
 @media (max-width: 1100px) {
-  body {
+  html:not(.film-mobile-fit) body {
     overflow: auto;
   }
 
-  .film-page {
+  html:not(.film-mobile-fit) .film-page {
     min-height: 100svh;
   }
 
-  .film-stage {
+  html:not(.film-mobile-fit) .film-stage {
     min-height: min(76svh, 760px);
     max-height: none;
     aspect-ratio: auto;
   }
 
-  .abstract-frame,
-  .results-layout--split,
-  .results-layout--result-split,
-  .results-layout--closed-loop-split {
+  html:not(.film-mobile-fit) .abstract-frame,
+  html:not(.film-mobile-fit) .results-layout--split,
+  html:not(.film-mobile-fit) .results-layout--result-split,
+  html:not(.film-mobile-fit) .results-layout--closed-loop-split {
     grid-template-columns: 1fr;
   }
 
-  .feature-rails {
+  html:not(.film-mobile-fit) .feature-rails {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .abstract-insight {
+  html:not(.film-mobile-fit) .abstract-insight {
     grid-template-columns: 1fr;
   }
 
-  .feature-rail {
+  html:not(.film-mobile-fit) .feature-rail {
     min-height: 150px;
   }
 
-  .method-board {
+  html:not(.film-mobile-fit) .method-board {
     grid-template-columns: 1fr;
     gap: 14px;
   }
 
-  .method-stage {
+  html:not(.film-mobile-fit) .method-stage {
     min-height: 0;
   }
 
-  .method-arrow {
+  html:not(.film-mobile-fit) .method-arrow {
     width: 2px;
     height: 24px;
     justify-self: center;
     background: linear-gradient(180deg, rgba(95, 140, 255, 0.26), rgba(193, 225, 255, 0.92));
   }
 
-  .method-arrow::after {
+  html:not(.film-mobile-fit) .method-arrow::after {
     top: auto;
     right: 50%;
     bottom: -1px;
     transform: translateX(50%) rotate(135deg);
   }
 
-  .film-grid--scale {
+  html:not(.film-mobile-fit) .film-grid--scale {
     height: auto;
     min-height: 320px;
   }
 
-  .finale-copy {
+  html:not(.film-mobile-fit) .finale-copy {
     width: min(66%, 740px);
   }
 
-  .finale-rail {
+  html:not(.film-mobile-fit) .finale-rail {
     width: min(55vw, 650px);
   }
 
-  .closed-loop-grid {
+  html:not(.film-mobile-fit) .closed-loop-grid {
     min-height: 0;
   }
 }
@@ -1680,35 +1680,105 @@ h2 {
   }
 }
 
-/* Mobile landscape: fixed 1700px design canvas, scaled to fit the viewport (same idea as offline render). */
+/* Mobile landscape: 1700px desktop canvas, transform-fit to viewport (avoid vw/svh drift). */
 html.film-mobile-fit {
   overflow: hidden;
-  height: 100svh;
+  height: 100%;
 }
 
 html.film-mobile-fit body {
   overflow: hidden;
-  height: 100svh;
+  height: 100%;
+  margin: 0;
+}
+
+html.film-mobile-fit .film-topbar {
+  display: none;
 }
 
 html.film-mobile-fit .film-page {
+  position: fixed;
+  left: var(--film-fit-offset-x, 0);
+  top: var(--film-fit-offset-y, 0);
   width: 1700px;
   max-width: 1700px;
-  min-height: auto;
-  margin-inline: auto;
-  zoom: var(--film-fit-scale, 1);
+  min-height: 1020px;
+  margin: 0;
+  padding: 34px;
+  gap: 18px;
+  transform: scale(var(--film-fit-scale, 1));
+  transform-origin: top left;
 }
 
-html.film-mobile-fit .film-topbar,
 html.film-mobile-fit .film-player {
   width: 1700px;
   max-width: 1700px;
+  gap: 18px;
 }
 
 html.film-mobile-fit .film-stage {
-  aspect-ratio: 16 / 8.65;
-  min-height: 560px;
-  max-height: calc(100svh - 150px);
+  width: 100%;
+  height: 918px;
+  min-height: 918px;
+  max-height: 918px;
+  aspect-ratio: auto;
+}
+
+html.film-mobile-fit .hero-copy {
+  inset: auto auto 92px 118px;
+  width: min(calc(100% - 236px), 1180px);
+}
+
+html.film-mobile-fit .hero-copy h1 {
+  font-size: 100px;
+  line-height: 0.96;
+}
+
+html.film-mobile-fit .hero-subtitle {
+  margin-bottom: 28px;
+  font-size: 42px;
+  line-height: 1.16;
+}
+
+html.film-mobile-fit .abstract-frame {
+  gap: 34px;
+  padding: 70px;
+}
+
+html.film-mobile-fit .abstract-copy h2,
+html.film-mobile-fit .method-copy h2,
+html.film-mobile-fit .results-copy h2,
+html.film-mobile-fit .finale-copy h2 {
+  margin-bottom: 22px;
+  font-size: 56px;
+  line-height: 0.98;
+}
+
+html.film-mobile-fit .abstract-key-insight {
+  font-size: 33px;
+  line-height: 1.36;
+}
+
+html.film-mobile-fit .method-sequence,
+html.film-mobile-fit .results-layout {
+  gap: 24px;
+  padding: 76px;
+}
+
+html.film-mobile-fit .method-overview-caption {
+  font-size: 29px;
+  line-height: 1.38;
+}
+
+html.film-mobile-fit .feature-rails,
+html.film-mobile-fit .feature-rails--six {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+}
+
+html.film-mobile-fit .feature-rail--compact {
+  min-height: 210px;
+  padding: 20px;
 }
 
 html.film-mobile-fit .abstract-frame,
@@ -1716,20 +1786,31 @@ html.film-mobile-fit .results-layout--split,
 html.film-mobile-fit .results-layout--result-split,
 html.film-mobile-fit .results-layout--closed-loop-split {
   grid-template-columns: minmax(220px, 0.5fr) minmax(760px, 1.5fr);
+  align-items: center;
+  gap: 30px;
 }
 
-html.film-mobile-fit .feature-rails,
-html.film-mobile-fit .feature-rails--six {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+html.film-mobile-fit .scene-nuscenes .results-copy h2,
+html.film-mobile-fit .scene-scale .results-copy h2,
+html.film-mobile-fit .scene-minute .results-copy h2,
+html.film-mobile-fit .scene-closed-loop .results-copy h2 {
+  font-size: 35px;
+  line-height: 1.06;
 }
 
 html.film-mobile-fit .film-grid--nusc {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 18px;
 }
 
 html.film-mobile-fit .film-grid--nusc video:nth-child(n + 5) {
   display: block;
+}
+
+html.film-mobile-fit .film-grid--results video,
+html.film-mobile-fit .film-grid--results .render-video-frame {
+  border-radius: 18px;
 }
 
 html.film-mobile-fit .film-grid--scale {
@@ -1739,16 +1820,30 @@ html.film-mobile-fit .film-grid--scale {
   min-height: 650px;
 }
 
+html.film-mobile-fit .closed-loop-grid {
+  gap: 9px;
+}
+
+html.film-mobile-fit .closed-loop-grid video,
+html.film-mobile-fit .closed-loop-grid .render-video-frame {
+  border-radius: 18px;
+}
+
+html.film-mobile-fit .results-rollout-footnote {
+  right: 48px;
+  bottom: 28px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+html.film-mobile-fit .film-controls {
+  min-height: 62px;
+  padding: 10px;
+  gap: 16px;
+}
+
 html.film-mobile-fit .film-player:fullscreen,
 html.film-mobile-fit .film-player:-webkit-full-screen {
   width: 1700px;
   max-width: 1700px;
-  margin-inline: auto;
-}
-
-@supports not (zoom: 1) {
-  html.film-mobile-fit .film-page {
-    transform: scale(var(--film-fit-scale, 1));
-    transform-origin: top center;
-  }
 }
