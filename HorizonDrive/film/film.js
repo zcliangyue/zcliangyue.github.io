@@ -29,6 +29,7 @@
   const renderHeroFrameBase = params.get("heroFrameBase") || "../static/render/hero-frames";
   const renderVideoFrameBase = params.get("videoFrameBase") || "../static/render/video-frames";
   const FILM_DESIGN_STAGE_WIDTH = Number(params.get("designWidth")) || 1700;
+  const FILM_DESIGN_STAGE_HEIGHT = Number(params.get("designHeight")) || 1100;
   const SCENE_CROSSFADE_MS = 2000;
   const SCENE_PRELOAD_SECONDS = 2;
   const REVEAL_DURATION_S = 0.56;
@@ -436,6 +437,25 @@
     });
   };
 
+  const syncFilmStageFit = () => {
+    const active = landscapeGateEnabled
+      && isMobileFilmDevice()
+      && isLandscapeOrientation()
+      && !landscapeGateActive;
+
+    document.documentElement.classList.toggle("film-mobile-fit", active);
+
+    if (!active) {
+      document.documentElement.style.removeProperty("--film-fit-scale");
+      return;
+    }
+
+    const scaleX = window.innerWidth / FILM_DESIGN_STAGE_WIDTH;
+    const scaleY = window.innerHeight / FILM_DESIGN_STAGE_HEIGHT;
+    const fitScale = Math.min(scaleX, scaleY);
+    document.documentElement.style.setProperty("--film-fit-scale", String(fitScale));
+  };
+
   const updateLandscapeGate = () => {
     if (!landscapeGateEnabled) {
       return;
@@ -460,6 +480,7 @@
         pauseAllSceneVideos();
         renderControls();
       }
+      syncFilmStageFit();
       return;
     }
 
@@ -467,6 +488,8 @@
       playWhenLandscapeAllowed = false;
       play({ skipLandscapeCheck: true });
     }
+
+    syncFilmStageFit();
   };
 
   const enterLandscapeFullscreen = async () => {
@@ -973,7 +996,10 @@
     mobileFilmQuery.addEventListener("change", updateLandscapeGate);
     landscapeOrientationQuery.addEventListener("change", updateLandscapeGate);
     document.addEventListener("fullscreenchange", updateLandscapeGate);
+    window.addEventListener("resize", syncFilmStageFit);
     updateLandscapeGate();
+  } else {
+    syncFilmStageFit();
   }
 
   const filmReady = preloadFilmVideos().then(async () => {
