@@ -1780,19 +1780,43 @@ html.film-mobile-fit .eyebrow {
 }
 
 html.film-mobile-fit .abstract-frame {
-  gap: 16px;
-  padding: 36px;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  align-content: start;
+  gap: 12px;
+  padding: 28px 40px 32px;
   min-height: 0;
   overflow: hidden;
 }
 
-html.film-mobile-fit .abstract-copy h2,
+html.film-mobile-fit .abstract-copy {
+  max-width: none;
+  width: 100%;
+}
+
+html.film-mobile-fit .abstract-copy h2 {
+  margin-bottom: 0;
+  font-size: 26px;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+html.film-mobile-fit .abstract-copy h2 .heading-keep {
+  white-space: normal;
+}
+
 html.film-mobile-fit .method-copy h2,
 html.film-mobile-fit .results-copy h2,
 html.film-mobile-fit .finale-copy h2 {
   margin-bottom: 10px;
   font-size: 32px;
   line-height: 0.98;
+}
+
+html.film-mobile-fit .method-copy h2 {
+  margin-bottom: 6px;
+  font-size: 24px;
+  line-height: 1.06;
 }
 
 html.film-mobile-fit .abstract-key-insight {
@@ -1808,15 +1832,30 @@ html.film-mobile-fit .results-layout {
   overflow: hidden;
 }
 
+html.film-mobile-fit .method-sequence {
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 8px;
+  padding: 24px 36px 28px;
+}
+
 html.film-mobile-fit .method-overview-caption {
-  font-size: 16px;
-  line-height: 1.36;
+  font-size: 13px;
+  line-height: 1.32;
 }
 
 html.film-mobile-fit .method-drawing-frame {
   min-height: 0;
   overflow: hidden;
-  padding: 14px;
+  padding: 10px;
+  align-self: stretch;
+}
+
+html.film-mobile-fit .abstract-frame .feature-rails--six {
+  width: 100%;
+  grid-column: 1;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 8px;
+  align-self: stretch;
 }
 
 html.film-mobile-fit .feature-rails,
@@ -1839,7 +1878,6 @@ html.film-mobile-fit .feature-rail > span:last-child {
   line-height: 1.35;
 }
 
-html.film-mobile-fit .abstract-frame,
 html.film-mobile-fit .results-layout--split,
 html.film-mobile-fit .results-layout--result-split,
 html.film-mobile-fit .results-layout--closed-loop-split {
@@ -1848,8 +1886,8 @@ html.film-mobile-fit .results-layout--closed-loop-split {
   gap: 16px;
 }
 
-html.film-mobile-fit .results-layout > *,
-html.film-mobile-fit .abstract-frame > * {
+html.film-mobile-fit .abstract-frame > *,
+html.film-mobile-fit .results-layout > * {
   min-width: 0;
   min-height: 0;
 }
