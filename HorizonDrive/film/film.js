@@ -20,10 +20,19 @@
     .slice(0, index)
     .reduce((sum, duration) => sum + duration, 0));
   const totalDuration = durations.reduce((sum, duration) => sum + duration, 0);
+  const params = new URLSearchParams(window.location.search);
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const recordMode = new URLSearchParams(window.location.search).has("record");
+  const recordMode = params.has("record");
+  const renderMode = params.has("render");
+  const renderHeroFrames = params.has("heroFrames");
+  const renderVideoFrames = params.has("videoFrames");
+  const renderHeroFrameBase = params.get("heroFrameBase") || "../static/render/hero-frames";
+  const renderVideoFrameBase = params.get("videoFrameBase") || "../static/render/video-frames";
+  const FILM_DESIGN_STAGE_WIDTH = Number(params.get("designWidth")) || 1700;
   const SCENE_CROSSFADE_MS = 2000;
   const SCENE_PRELOAD_SECONDS = 2;
+  const REVEAL_DURATION_S = 0.56;
+  const ABSTRACT_INSIGHT_DURATION_S = 0.52;
   let position = 0;
   let sceneIndex = -1;
   let playing = false;
@@ -31,6 +40,53 @@
   let lastFrame = performance.now();
   let animationFrame = 0;
   let leavingTimer = 0;
+  const renderHeroImages = new Map();
+  const renderVideoImages = new Map();
+  const renderVideoMaxFrame = new Map();
+  const renderImageLoadGeneration = new WeakMap();
+  const RENDER_FRAME_FPS = 30;
+  const landscapeGate = document.querySelector("[data-landscape-gate]");
+  const landscapeEnterButton = document.querySelector("[data-landscape-enter]");
+  const filmPlayer = document.querySelector(".film-player");
+  const landscapeGateEnabled = !renderMode && !recordMode;
+  const mobileFilmQuery = window.matchMedia("(max-width: 900px)");
+  const landscapeOrientationQuery = window.matchMedia("(orientation: landscape)");
+  let playWhenLandscapeAllowed = false;
+  let landscapeGateActive = false;
+
+  if (renderMode) {
+    document.documentElement.classList.add("film-render-mode");
+    const renderUiScale = Math.max(window.innerWidth / FILM_DESIGN_STAGE_WIDTH, 1);
+    document.documentElement.style.setProperty("--film-render-ui-scale", String(renderUiScale));
+  }
+
+  if (renderHeroFrames || renderVideoFrames) {
+    document.documentElement.classList.toggle("film-render-hero-frames", renderHeroFrames);
+    document.documentElement.classList.toggle("film-render-video-frames", renderVideoFrames);
+    let renderVideoIndex = 0;
+    scenes.forEach((scene) => {
+      scene.querySelectorAll("[data-scene-video]").forEach((video) => {
+        const isHero = video.dataset.continuousVideo === "hero";
+        if ((isHero && !renderHeroFrames) || (!isHero && !renderVideoFrames)) {
+          return;
+        }
+
+        const frame = document.createElement("img");
+        frame.className = `${video.className} ${isHero ? "render-hero-frame" : "render-video-frame"}`.trim();
+        frame.alt = "";
+        frame.decoding = "sync";
+        video.after(frame);
+        if (isHero) {
+          renderHeroImages.set(video, frame);
+          return;
+        }
+
+        video.dataset.renderFrameIndex = String(renderVideoIndex);
+        renderVideoImages.set(video, frame);
+        renderVideoIndex += 1;
+      });
+    });
+  }
 
   const setSceneVideoLoaded = (video, shouldLoad) => {
     const source = video.querySelector("source");
@@ -89,6 +145,7 @@
     leavingTimer = 0;
     scenes.forEach((scene) => {
       scene.classList.remove("is-leaving", "is-exiting");
+      scene.style.removeProperty("opacity");
     });
   };
 
@@ -216,6 +273,61 @@
 
   const sceneElapsed = (index) => Math.max(0, position - (sceneStarts[index] || 0));
 
+  const smoothstep = (value) => {
+    const t = Math.min(Math.max(value, 0), 1);
+    return t * t * (3 - 2 * t);
+  };
+
+  const applyRenderRevealProgress = (element, progress) => {
+    const eased = smoothstep(progress);
+    element.classList.toggle("is-revealed", eased >= 1);
+
+    if (element.classList.contains("feature-rail")) {
+      element.style.opacity = String(eased);
+      element.style.transform = `translateX(${-22 * (1 - eased)}px) translateY(${10 * (1 - eased)}px)`;
+      return;
+    }
+
+    if (element.classList.contains("method-drawing-frame")) {
+      element.style.opacity = String(eased);
+      element.style.visibility = eased > 0 ? "visible" : "hidden";
+      return;
+    }
+
+    element.style.opacity = String(eased);
+  };
+
+  const syncRenderReveals = () => {
+    scenes.forEach((scene, index) => {
+      const elapsed = sceneElapsed(index);
+
+      scene.querySelectorAll("[data-scene-reveal]").forEach((element) => {
+        const revealAt = Number(element.dataset.revealAt) || durations[index] / 2;
+        applyRenderRevealProgress(element, (elapsed - revealAt) / REVEAL_DURATION_S);
+      });
+
+      scene.querySelectorAll(".abstract-key-insight").forEach((element) => {
+        const eased = smoothstep(elapsed / ABSTRACT_INSIGHT_DURATION_S);
+        element.classList.toggle("is-revealed", eased >= 1);
+        element.style.opacity = String(eased);
+        element.style.transform = `translateY(${10 * (1 - eased)}px)`;
+      });
+    });
+  };
+
+  const clearRenderPresentationStyles = () => {
+    scenes.forEach((scene) => {
+      scene.style.removeProperty("opacity");
+      scene.style.removeProperty("transform");
+    });
+
+    document.querySelectorAll("[data-scene-reveal], .abstract-key-insight").forEach((element) => {
+      element.style.removeProperty("opacity");
+      element.style.removeProperty("transform");
+      element.style.removeProperty("visibility");
+    });
+  };
+
   const resetTailVideo = (video) => {
     const tailSeconds = Number(video.dataset.tailSeconds);
     if (!tailSeconds) {
@@ -244,6 +356,30 @@
     video.addEventListener("loadedmetadata", setTailStart, { once: true });
   };
 
+  const resetFilmVideos = () => {
+    scenes.forEach((scene) => {
+      scene.querySelectorAll("[data-scene-video]").forEach((video) => {
+        video.pause();
+
+        if (video.dataset.tailSeconds) {
+          resetTailVideo(video);
+          return;
+        }
+
+        const resetCurrentTime = () => {
+          video.currentTime = 0;
+        };
+
+        if (video.readyState >= 1) {
+          resetCurrentTime();
+          return;
+        }
+
+        video.addEventListener("loadedmetadata", resetCurrentTime, { once: true });
+      });
+    });
+  };
+
   const syncSceneCarousels = () => {
     scenes.forEach((scene, index) => {
       scene.querySelectorAll("[data-film-carousel]").forEach((carousel) => {
@@ -262,12 +398,98 @@
   };
 
   const syncSceneReveals = () => {
+    if (renderMode) {
+      syncRenderReveals();
+      return;
+    }
+
     scenes.forEach((scene, index) => {
       scene.querySelectorAll("[data-scene-reveal]").forEach((element) => {
         const revealAt = Number(element.dataset.revealAt) || durations[index] / 2;
         element.classList.toggle("is-revealed", sceneElapsed(index) >= revealAt);
       });
     });
+  };
+
+  const isMobileFilmDevice = () => {
+    if (!mobileFilmQuery.matches) {
+      return false;
+    }
+
+    return window.matchMedia("(hover: none) and (pointer: coarse)").matches
+      || navigator.maxTouchPoints > 0;
+  };
+
+  const isLandscapeOrientation = () => landscapeOrientationQuery.matches;
+
+  const canPlayFilm = () => {
+    if (!landscapeGateEnabled || !isMobileFilmDevice()) {
+      return true;
+    }
+
+    return isLandscapeOrientation();
+  };
+
+  const pauseAllSceneVideos = () => {
+    scenes.forEach((scene) => {
+      scene.querySelectorAll("[data-scene-video]").forEach((video) => video.pause());
+    });
+  };
+
+  const updateLandscapeGate = () => {
+    if (!landscapeGateEnabled) {
+      return;
+    }
+
+    const mobile = isMobileFilmDevice();
+    const landscape = isLandscapeOrientation();
+    landscapeGateActive = mobile && !landscape;
+
+    document.documentElement.classList.toggle("film-mobile-device", mobile);
+    document.documentElement.classList.toggle("film-mobile-locked", landscapeGateActive);
+    document.documentElement.classList.toggle("film-mobile-landscape", mobile && landscape);
+
+    if (landscapeGate) {
+      landscapeGate.hidden = !landscapeGateActive;
+    }
+
+    if (landscapeGateActive) {
+      if (playing) {
+        playWhenLandscapeAllowed = true;
+        playing = false;
+        pauseAllSceneVideos();
+        renderControls();
+      }
+      return;
+    }
+
+    if (mobile && landscape && playWhenLandscapeAllowed && preloadComplete) {
+      playWhenLandscapeAllowed = false;
+      play({ skipLandscapeCheck: true });
+    }
+  };
+
+  const enterLandscapeFullscreen = async () => {
+    playWhenLandscapeAllowed = true;
+    const target = filmPlayer || document.documentElement;
+
+    try {
+      if (!document.fullscreenElement && target.requestFullscreen) {
+        await target.requestFullscreen();
+      }
+    } catch (_) {
+      // Fullscreen may be blocked until the next explicit user gesture.
+    }
+
+    try {
+      if (screen.orientation?.lock) {
+        await screen.orientation.lock("landscape");
+      }
+    } catch (_) {
+      // Orientation lock generally requires fullscreen and still may fail on iOS.
+    }
+
+    updateLandscapeGate();
   };
 
   const canPlaySceneVideo = (video) => {
@@ -284,6 +506,11 @@
   };
 
   const syncVideos = (activeIndex) => {
+    if (landscapeGateEnabled && !canPlayFilm()) {
+      pauseAllSceneVideos();
+      return;
+    }
+
     scenes.forEach((scene, index) => {
       const isLeaving = scene.classList.contains("is-leaving");
       const shouldPlayScene = playing && (index === activeIndex || isLeaving);
@@ -302,6 +529,42 @@
         }
       });
     });
+  };
+
+  const setRenderSceneTransition = () => {
+    if (!renderMode) {
+      return;
+    }
+
+    scenes.forEach((scene, index) => {
+      if (index !== sceneIndex && index !== sceneIndex - 1) {
+        scene.style.removeProperty("opacity");
+        scene.style.removeProperty("transform");
+      }
+    });
+
+    if (sceneIndex <= 0) {
+      return;
+    }
+
+    const transitionSeconds = SCENE_CROSSFADE_MS / 1000;
+    const transitionElapsed = position - (sceneStarts[sceneIndex] || 0);
+    const leavingScene = scenes[sceneIndex - 1];
+    const activeScene = scenes[sceneIndex];
+
+    if (transitionElapsed < 0 || transitionElapsed >= transitionSeconds) {
+      leavingScene.classList.remove("is-leaving", "is-exiting");
+      leavingScene.style.removeProperty("opacity");
+      activeScene.style.removeProperty("opacity");
+      activeScene.style.removeProperty("transform");
+      return;
+    }
+
+    const fade = smoothstep(transitionElapsed / transitionSeconds);
+    leavingScene.classList.add("is-leaving", "is-exiting");
+    leavingScene.style.opacity = String(1 - fade);
+    activeScene.style.opacity = String(fade);
+    activeScene.style.transform = `scale(${1.02 - (0.02 * fade)})`;
   };
 
   const renderScene = (nextIndex) => {
@@ -323,7 +586,7 @@
       scene.classList.remove("is-active", "is-leaving", "is-exiting");
     });
 
-    if (previousIndex >= 0 && previousIndex !== sceneIndex && !reduceMotion) {
+    if (previousIndex >= 0 && previousIndex !== sceneIndex && !reduceMotion && !renderMode) {
       const leavingScene = scenes[previousIndex];
       leavingScene.classList.add("is-leaving");
       window.requestAnimationFrame(() => {
@@ -368,19 +631,252 @@
     renderControls();
   };
 
+  const seekVideoFrame = (video, targetTime) => new Promise((resolve) => {
+    if (!Number.isFinite(targetTime) || video.readyState < 1) {
+      resolve();
+      return;
+    }
+
+    const maxTime = Number.isFinite(video.duration)
+      ? Math.max(0, video.duration - 0.06)
+      : Math.max(0, targetTime);
+    const nextTime = Math.min(Math.max(targetTime, 0), maxTime);
+    if (Math.abs(video.currentTime - nextTime) < 0.02 && video.readyState >= 2) {
+      resolve();
+      return;
+    }
+
+    let settled = false;
+    const settle = () => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      window.clearTimeout(timeout);
+      video.removeEventListener("seeked", settle);
+      video.removeEventListener("error", settle);
+      resolve();
+    };
+    const timeout = window.setTimeout(settle, 1800);
+
+    video.addEventListener("seeked", settle);
+    video.addEventListener("error", settle);
+    video.currentTime = nextTime;
+  });
+
+  const buildRenderFrameSrc = (base, frameIndex) =>
+    `${base}/frame-${String(frameIndex).padStart(5, "0")}.jpg`;
+
+  const buildRenderVideoFrameSrc = (renderIndex, frameIndex) =>
+    `${renderVideoFrameBase}/video-${renderIndex}/frame-${String(frameIndex).padStart(5, "0")}.jpg`;
+
+  const waitForRenderPaint = () => new Promise((resolve) => {
+    window.requestAnimationFrame(() => window.requestAnimationFrame(resolve));
+  });
+
+  const loadRenderImageFrame = (frame, nextSrc, fallbackSrc) => {
+    if (!frame) {
+      return Promise.resolve();
+    }
+
+    if (frame.getAttribute("src") === nextSrc && frame.complete && frame.naturalWidth > 0) {
+      return Promise.resolve();
+    }
+
+    const generation = (renderImageLoadGeneration.get(frame) || 0) + 1;
+    renderImageLoadGeneration.set(frame, generation);
+
+    const waitForSrc = (src) => new Promise((resolve) => {
+      if (renderImageLoadGeneration.get(frame) !== generation) {
+        resolve(false);
+        return;
+      }
+
+      const finish = (loaded) => {
+        if (renderImageLoadGeneration.get(frame) !== generation) {
+          return;
+        }
+        frame.removeEventListener("load", onLoad);
+        frame.removeEventListener("error", onError);
+        resolve(loaded);
+      };
+
+      const onLoad = async () => {
+        if (typeof frame.decode === "function") {
+          try {
+            await frame.decode();
+          } catch (_) {
+            // Ignore decode failures; naturalWidth check below decides success.
+          }
+        }
+        finish(frame.naturalWidth > 0);
+      };
+
+      const onError = () => finish(false);
+
+      if (frame.getAttribute("src") === src && frame.complete) {
+        onLoad();
+        return;
+      }
+
+      frame.addEventListener("load", onLoad);
+      frame.addEventListener("error", onError);
+      frame.src = src;
+    });
+
+    return (async () => {
+      let loaded = await waitForSrc(nextSrc);
+      if (!loaded && fallbackSrc && fallbackSrc !== nextSrc) {
+        loaded = await waitForSrc(fallbackSrc);
+      }
+
+      if (!loaded) {
+        const lastGood = frame.dataset.renderLastGoodSrc;
+        if (lastGood && lastGood !== frame.getAttribute("src")) {
+          await waitForSrc(lastGood);
+        }
+        return;
+      }
+
+      frame.dataset.renderLastGoodSrc = frame.getAttribute("src");
+    })();
+  };
+
+  const loadRenderHeroFrame = (video) => {
+    const frame = renderHeroImages.get(video);
+    if (!frame) {
+      return Promise.resolve();
+    }
+
+    const heroFrame = Math.min(Math.max(Math.round(position * RENDER_FRAME_FPS), 0), 899);
+    const nextSrc = buildRenderFrameSrc(renderHeroFrameBase, heroFrame);
+    const fallbackSrc = buildRenderFrameSrc(renderHeroFrameBase, 0);
+    return loadRenderImageFrame(frame, nextSrc, fallbackSrc);
+  };
+
+  const loadRenderVideoFrame = (video, targetTime) => {
+    const frame = renderVideoImages.get(video);
+    if (!frame || !Number.isFinite(targetTime)) {
+      return Promise.resolve();
+    }
+
+    const renderIndex = String(Number(video.dataset.renderFrameIndex) || 0).padStart(3, "0");
+    let targetFrame = Math.max(Math.round(targetTime * RENDER_FRAME_FPS), 0);
+    const maxFrame = renderVideoMaxFrame.get(video);
+    if (Number.isFinite(maxFrame)) {
+      targetFrame = Math.min(targetFrame, maxFrame);
+    }
+
+    const nextSrc = buildRenderVideoFrameSrc(renderIndex, targetFrame);
+    const fallbackSrc = buildRenderVideoFrameSrc(renderIndex, 0);
+    return loadRenderImageFrame(frame, nextSrc, fallbackSrc);
+  };
+
+  const cacheRenderVideoMaxFrames = () => {
+    renderVideoImages.forEach((_, video) => {
+      if (!Number.isFinite(video.duration) || video.duration <= 0) {
+        return;
+      }
+      renderVideoMaxFrame.set(
+        video,
+        Math.max(0, Math.floor(video.duration * RENDER_FRAME_FPS) - 1)
+      );
+    });
+  };
+
+  const prewarmRenderVideoFrames = () => Promise.all(
+    [...renderVideoImages.keys()].map((video) => loadRenderVideoFrame(video, 0))
+  );
+
+  const renderVideoTime = (scene, index, video) => {
+    if (video.dataset.continuousVideo) {
+      return position;
+    }
+
+    let elapsed = sceneElapsed(index);
+    const carousel = video.closest("[data-film-carousel]");
+    const page = video.closest("[data-film-page]");
+    if (carousel && page) {
+      const pages = [...carousel.querySelectorAll("[data-film-page]")];
+      const pageDuration = Number(carousel.dataset.pageDuration) || 8;
+      elapsed -= Math.max(pages.indexOf(page), 0) * pageDuration;
+    }
+
+    const rate = Number(scene.dataset.playbackRate) || 1;
+    if (video.dataset.tailSeconds && Number.isFinite(video.duration)) {
+      return Math.max(0, video.duration - Number(video.dataset.tailSeconds)) + Math.max(elapsed, 0) * rate;
+    }
+
+    return Math.max(elapsed, 0) * rate;
+  };
+
+  const renderOfflineFrame = async (seconds) => {
+    if (!preloadComplete) {
+      return null;
+    }
+
+    playing = false;
+    clearSceneTransitions();
+    clearRenderPresentationStyles();
+    seek(seconds);
+    setRenderSceneTransition();
+    syncSceneReveals();
+    document.documentElement.style.setProperty("--film-render-time", `${position}s`);
+
+    const frameSeeks = [];
+    scenes.forEach((scene, index) => {
+      const shouldRenderScene = index === sceneIndex || scene.classList.contains("is-leaving");
+      scene.querySelectorAll("[data-scene-video]").forEach((video) => {
+        video.pause();
+        if (renderHeroFrames && video.dataset.continuousVideo === "hero") {
+          if (shouldRenderScene) {
+            frameSeeks.push(loadRenderHeroFrame(video));
+          }
+          return;
+        }
+        if (renderVideoFrames) {
+          if (shouldRenderScene && canPlaySceneVideo(video)) {
+            frameSeeks.push(loadRenderVideoFrame(video, renderVideoTime(scene, index, video)));
+          }
+          return;
+        }
+        if (shouldRenderScene && canPlaySceneVideo(video)) {
+          frameSeeks.push(seekVideoFrame(video, renderVideoTime(scene, index, video)));
+        }
+      });
+    });
+
+    await Promise.all(frameSeeks);
+    await waitForRenderPaint();
+    renderControls();
+    return {
+      position,
+      sceneIndex,
+      sceneLabel: scenes[sceneIndex]?.dataset.label || "Opening",
+    };
+  };
+
   const pause = () => {
     playing = false;
     syncVideos(sceneIndex);
     renderControls();
   };
 
-  const play = () => {
+  const play = (options = {}) => {
     if (!preloadComplete) {
       return;
     }
 
+    if (!options.skipLandscapeCheck && !canPlayFilm()) {
+      playWhenLandscapeAllowed = true;
+      updateLandscapeGate();
+      return;
+    }
+
     if (position >= totalDuration) {
-      position = 0;
+      clearSceneTransitions();
+      resetFilmVideos();
+      seek(0);
     }
     playing = true;
     lastFrame = performance.now();
@@ -421,12 +917,13 @@
     }
 
     clearSceneTransitions();
+    resetFilmVideos();
     seek(0);
     play();
   });
 
   scrubber.addEventListener("input", () => {
-    if (!preloadComplete) {
+    if (!preloadComplete || !canPlayFilm()) {
       return;
     }
 
@@ -440,7 +937,7 @@
       return;
     }
 
-    if (!preloadComplete) {
+    if (!preloadComplete || !canPlayFilm()) {
       return;
     }
 
@@ -469,14 +966,43 @@
   });
 
   renderControls();
-  preloadFilmVideos().then(() => {
+  if (landscapeGateEnabled) {
+    landscapeEnterButton?.addEventListener("click", () => {
+      enterLandscapeFullscreen();
+    });
+    mobileFilmQuery.addEventListener("change", updateLandscapeGate);
+    landscapeOrientationQuery.addEventListener("change", updateLandscapeGate);
+    document.addEventListener("fullscreenchange", updateLandscapeGate);
+    updateLandscapeGate();
+  }
+
+  const filmReady = preloadFilmVideos().then(async () => {
     loader?.classList.add("is-ready");
+    if (renderMode && renderVideoFrames) {
+      cacheRenderVideoMaxFrames();
+      await prewarmRenderVideoFrames();
+    }
     seek(0);
-    if (!reduceMotion && !recordMode) {
-      play();
+    if (!reduceMotion && !recordMode && !renderMode) {
+      if (canPlayFilm()) {
+        play();
+      } else {
+        playWhenLandscapeAllowed = true;
+        updateLandscapeGate();
+      }
       return;
     }
     renderControls();
   });
+
+  if (renderMode) {
+    window.horizonDriveFilmRender = {
+      ready: filmReady,
+      renderAt: renderOfflineFrame,
+      totalDuration,
+    };
+    return;
+  }
+
   animationFrame = window.requestAnimationFrame(tick);
 })();

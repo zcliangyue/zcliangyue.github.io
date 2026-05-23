@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="film.css?v=hd-film-preview-12">
-  <script defer src="film.js?v=hd-film-preview-13"></script>
+  <link rel="stylesheet" href="film.css?v=hd-film-mobile-landscape">
+  <script defer src="film.js?v=hd-film-mobile-landscape"></script>
 </head>
 <body>
   <main class="film-page">
@@ -27,6 +27,22 @@
     </header>
 
     <section class="film-player" aria-label="HorizonDrive film preview">
+      <div class="film-landscape-gate" data-landscape-gate hidden>
+        <div class="film-landscape-gate-panel">
+          <div class="film-landscape-gate-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" focusable="false">
+              <rect x="10" y="18" width="28" height="44" rx="4"></rect>
+              <rect x="26" y="2" width="44" height="28" rx="4"></rect>
+              <path d="M18 38h12M18 44h12"></path>
+            </svg>
+          </div>
+          <strong>Rotate your device to landscape</strong>
+          <p>Film mode plays in landscape on mobile. Turn your phone sideways, or tap below to enter landscape fullscreen.</p>
+          <button class="film-button film-landscape-gate-button" type="button" data-landscape-enter>
+            Play in landscape fullscreen
+          </button>
+        </div>
+      </div>
       <div class="film-stage">
         <div class="film-loader" data-film-loader role="status" aria-live="polite">
           <div class="film-loader-copy">
@@ -63,10 +79,14 @@
           <div class="abstract-frame">
             <div class="scene-copy abstract-copy">
               <p class="eyebrow">Abstract</p>
-              <h2>HorizonDrive keeps autoregressive driving simulation reliable beyond short clips.</h2>
+              <h2>HorizonDrive keeps autoregressive driving simulation reliable <span class="heading-keep">beyond short clips.</span></h2>
             </div>
+            <strong class="abstract-key-insight">
+              Our key insight is to make the teacher rollout-capable,
+              ensuring reliable supervision from its own AR rollouts.
+            </strong>
             <div class="feature-rails feature-rails--six" aria-label="Key features">
-              <article class="feature-rail feature-rail--compact">
+              <article class="feature-rail feature-rail--compact" data-scene-reveal data-reveal-at="0.9">
                 <span class="feature-icon" aria-hidden="true">
                   <svg viewBox="0 0 32 32">
                     <path d="M6 26 13 7"></path>
@@ -77,7 +97,7 @@
                 <strong>Controllable</strong>
                 <span>Driving scene generation</span>
               </article>
-              <article class="feature-rail feature-rail--compact">
+              <article class="feature-rail feature-rail--compact" data-scene-reveal data-reveal-at="1.05">
                 <span class="feature-icon" aria-hidden="true">
                   <svg viewBox="0 0 32 32">
                     <rect x="5" y="9" width="6" height="7" rx="1.2"></rect>
@@ -89,7 +109,7 @@
                 <strong>Long-Horizon</strong>
                 <span>Stable generation quality</span>
               </article>
-              <article class="feature-rail feature-rail--compact">
+              <article class="feature-rail feature-rail--compact" data-scene-reveal data-reveal-at="1.2">
                 <span class="feature-icon" aria-hidden="true">
                   <svg viewBox="0 0 32 32">
                     <path d="M9 10h8a6 6 0 0 1 6 6v1"></path>
@@ -102,7 +122,7 @@
                 <strong>Interactive</strong>
                 <span>AR rollout</span>
               </article>
-              <article class="feature-rail feature-rail--compact">
+              <article class="feature-rail feature-rail--compact" data-scene-reveal data-reveal-at="1.35">
                 <span class="feature-icon" aria-hidden="true">
                   <svg viewBox="0 0 32 32">
                     <circle cx="6" cy="16" r="2.2"></circle>
@@ -118,7 +138,7 @@
                 <strong>Scalable</strong>
                 <span>Diverse driving scenes</span>
               </article>
-              <article class="feature-rail feature-rail--compact">
+              <article class="feature-rail feature-rail--compact" data-scene-reveal data-reveal-at="1.5">
                 <span class="feature-icon" aria-hidden="true">
                   <svg viewBox="0 0 32 32">
                     <path d="M24 11a10 10 0 0 0-15-2l-2 2"></path>
@@ -131,7 +151,7 @@
                 <strong>Closed-Loop</strong>
                 <span>Simulation ready</span>
               </article>
-              <article class="feature-rail feature-rail--compact">
+              <article class="feature-rail feature-rail--compact" data-scene-reveal data-reveal-at="1.65">
                 <span class="feature-icon" aria-hidden="true">
                   <svg viewBox="0 0 32 32">
                     <path d="M8 24V9M8 24h15M8 24l11-10"></path>
@@ -143,14 +163,10 @@
                 <span>3D representations</span>
               </article>
             </div>
-            <strong class="abstract-key-insight" data-scene-reveal data-reveal-at="0">
-              Our key insight is to make the teacher rollout-capable,
-              ensuring reliable supervision from its own AR rollouts.
-            </strong>
           </div>
         </section>
 
-        <section class="film-scene scene-method" data-scene data-duration="5" data-label="Method">
+        <section class="film-scene scene-method" data-scene data-duration="7" data-label="Method">
           <video class="scene-cover abstract-road method-road continuous-hero-road" data-scene-video data-continuous-video="hero" muted playsinline preload="metadata">
             <source src="../static/videos/hero-bg.mp4?v=grid-demo-v3-crf24" type="video/mp4">
           </video>
@@ -158,8 +174,12 @@
           <div class="method-sequence">
             <div class="scene-copy method-copy">
               <h2>Method Overview</h2>
+              <p class="method-overview-caption">
+                We first train a conditional driving world model, then improve its autoregressive stability through scheduled rollout recovery,
+                and finally distill long-horizon teacher rollouts into a few-step, short-chunk student via teacher-rollout DMD.
+              </p>
             </div>
-            <figure class="method-drawing-frame" aria-label="Three-stage HorizonDrive method overview">
+            <figure class="method-drawing-frame" data-scene-reveal data-reveal-at="1.2" aria-label="Three-stage HorizonDrive method overview">
               <svg class="method-wireframe-svg"
                viewBox="0 0 1579 512"
                role="img"
@@ -215,20 +235,32 @@
 
             <rect x="0" y="0" width="1579" height="512" fill="transparent" />
 
-            <g class="mw-headers">
+            <g class="mw-header-stage1" data-scene-reveal data-reveal-at="1.2">
               <rect x="10" y="32" width="442" height="54" rx="7" fill="#061220" fill-opacity="0.96" stroke="url(#mw-stage1-glow)" stroke-width="2.2" />
-              <rect x="482" y="32" width="515" height="54" rx="7" fill="#170f08" fill-opacity="0.96" stroke="url(#mw-stage2-glow)" stroke-width="2.2" />
-              <rect x="1031" y="32" width="538" height="54" rx="7" fill="#061711" fill-opacity="0.96" stroke="url(#mw-stage3-glow)" stroke-width="2.2" />
               <text x="231" y="67" text-anchor="middle" font-size="20" font-weight="800" fill="#b7dcff">Stage1: Conditional Driving WM (Sec. 4.1)</text>
-              <text x="739.5" y="67" text-anchor="middle" font-size="20" font-weight="800" fill="#ffd59a">Stage2: Scheduled Rollout Recovery (Sec. 4.2 )</text>
-              <text x="1300" y="67" text-anchor="middle" font-size="20" font-weight="800" fill="#baf7d0">Stage3: Teacher Rollout DMD (Sec. 4.3)</text>
-              <line x1="453" y1="58" x2="480" y2="58" stroke="#aeb8c8" stroke-width="4.5" marker-end="url(#mw-arrow-gray)" />
-              <line x1="998" y1="58" x2="1026" y2="58" stroke="#aeb8c8" stroke-width="4.5" marker-end="url(#mw-arrow-gray)" />
               <line x1="463" y1="86" x2="463" y2="462" stroke="#d8e2ef" stroke-opacity="0.72" stroke-width="2.2" stroke-dasharray="9 7" />
+            </g>
+
+            <g class="mw-arrow-stage1" data-scene-reveal data-reveal-at="2.0">
+              <line x1="453" y1="58" x2="480" y2="58" stroke="#aeb8c8" stroke-width="4.5" marker-end="url(#mw-arrow-gray)" />
+            </g>
+
+            <g class="mw-header-stage2" data-scene-reveal data-reveal-at="2.5">
+              <rect x="482" y="32" width="515" height="54" rx="7" fill="#170f08" fill-opacity="0.96" stroke="url(#mw-stage2-glow)" stroke-width="2.2" />
+              <text x="739.5" y="67" text-anchor="middle" font-size="20" font-weight="800" fill="#ffd59a">Stage2: Scheduled Rollout Recovery (Sec. 4.2 )</text>
               <line x1="1016" y1="86" x2="1016" y2="462" stroke="#d8e2ef" stroke-opacity="0.72" stroke-width="2.2" stroke-dasharray="9 7" />
             </g>
 
-            <g class="mw-stage1">
+            <g class="mw-arrow-stage2" data-scene-reveal data-reveal-at="3.3">
+              <line x1="998" y1="58" x2="1026" y2="58" stroke="#aeb8c8" stroke-width="4.5" marker-end="url(#mw-arrow-gray)" />
+            </g>
+
+            <g class="mw-header-stage3" data-scene-reveal data-reveal-at="3.7">
+              <rect x="1031" y="32" width="538" height="54" rx="7" fill="#061711" fill-opacity="0.96" stroke="url(#mw-stage3-glow)" stroke-width="2.2" />
+              <text x="1300" y="67" text-anchor="middle" font-size="20" font-weight="800" fill="#baf7d0">Stage3: Teacher Rollout DMD (Sec. 4.3)</text>
+            </g>
+
+            <g class="mw-stage1" data-scene-reveal data-reveal-at="1.2">
               <rect x="16" y="134" width="138" height="33" fill="#071827" fill-opacity="0.82" stroke="url(#mw-stage1-glow)" stroke-width="2.4" />
               <rect x="16" y="197" width="138" height="33" fill="#071827" fill-opacity="0.82" stroke="url(#mw-stage1-glow)" stroke-width="2.4" />
               <rect x="16" y="262" width="138" height="33" fill="#071827" fill-opacity="0.82" stroke="url(#mw-stage1-glow)" stroke-width="2.4" />
@@ -271,7 +303,7 @@
               <text x="136" y="473" font-size="24" fill="#48d5ee">Base Model</text>
             </g>
 
-            <g class="mw-stage2">
+            <g class="mw-stage2" data-scene-reveal data-reveal-at="2.5">
               <rect x="488" y="109" width="178" height="35" fill="#1b1008" fill-opacity="0.86" stroke="url(#mw-stage2-glow)" stroke-width="2" />
               <text x="577" y="133" text-anchor="middle" font-size="19" fill="#ffd8a6">Data Preparation</text>
               <text x="806" y="133" font-size="22" font-weight="800" fill="#fff">Rollout</text>
@@ -313,7 +345,7 @@
               <text x="590" y="470" font-size="24" fill="#f2a24b">Rollout-capable Base Model</text>
             </g>
 
-            <g class="mw-stage3">
+            <g class="mw-stage3" data-scene-reveal data-reveal-at="3.7">
               <text x="1028" y="153" font-size="24" fill="#baf7d0">Rollout</text>
               <text x="1028" y="186" font-size="24" fill="#baf7d0">Teacher</text>
               <text x="1042" y="290" font-size="19" fill="#9ce6c4">Teacher rollout DMD</text>
@@ -378,12 +410,6 @@
             </g>
           </svg>
             </figure>
-            <p class="method-overview-caption">
-              Overview of HorizonDrive framework. We first train a conditional driving world model,
-              then improve its autoregressive stability through scheduled rollout recovery,
-              and finally distill long-horizon teacher rollouts into a few-step, short-chunk student
-              via teacher-rollout DMD.
-            </p>
           </div>
         </section>
 
@@ -407,6 +433,7 @@
               <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/35_c28c950afda14f7b93ff956799873dff.mp4" type="video/mp4"></video>
             </div>
           </div>
+          <p class="results-rollout-footnote">Each model rollout generates 1&nbsp;s of future&nbsp;video.</p>
         </section>
 
         <section class="film-scene scene-scale" data-scene data-duration="15" data-label="30 seconds" data-playback-rate="2">
@@ -429,6 +456,7 @@
               <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_30s_scale_v2/e2e_case_v3_hud_crop76_crf24/3583_hrn_GA20230001_clip_DZ878__20240810_210322_350-20240810_210421_048.mp4" type="video/mp4"></video>
             </div>
           </div>
+          <p class="results-rollout-footnote">Each model rollout generates 1&nbsp;s of future&nbsp;video.</p>
         </section>
 
         <section class="film-scene scene-minute" data-scene data-duration="20" data-label="Minute level" data-playback-rate="3">
@@ -451,6 +479,7 @@
               <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/29_hrn_GA20230001_clip_DZ878__20240714_113910_848-20240714_114027_049.mp4" type="video/mp4"></video>
             </div>
           </div>
+          <p class="results-rollout-footnote">Each model rollout generates 1&nbsp;s of future&nbsp;video.</p>
         </section>
 
         <section class="film-scene scene-closed-loop" data-scene data-duration="6" data-label="Closed loop">
@@ -466,6 +495,7 @@
               <video data-scene-video muted playsinline preload="metadata"><source src="../paper_videos_final/e2e_close_loop/hrn_GA20230001_clip_DZ878__20240706_235008_449-20240706_235107_049_pred_v3.mp4" type="video/mp4"></video>
             </div>
           </div>
+          <p class="results-rollout-footnote">Each model rollout generates 1&nbsp;s of future&nbsp;video.</p>
         </section>
 
         <section class="film-scene scene-thanks" data-scene data-duration="8" data-label="Thank you">
