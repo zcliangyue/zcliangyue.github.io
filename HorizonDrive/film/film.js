@@ -47,9 +47,12 @@
   const renderVideoMaxFrame = new Map();
   const renderImageLoadGeneration = new WeakMap();
   const RENDER_FRAME_FPS = 30;
+  const FILM_SOUNDTRACK_FADE_OUT_S = 5;
   const landscapeGate = document.querySelector("[data-landscape-gate]");
   const landscapeEnterButton = document.querySelector("[data-landscape-enter]");
   const filmPlayer = document.querySelector(".film-player");
+  const filmSoundtrack = document.querySelector("[data-film-soundtrack]");
+  const filmSoundtrackEnabled = !renderMode && !recordMode && filmSoundtrack instanceof HTMLAudioElement;
   const landscapeGateEnabled = !renderMode && !recordMode;
   const mobileFilmQuery = window.matchMedia("(max-width: 900px)");
   const landscapeOrientationQuery = window.matchMedia("(orientation: landscape)");
@@ -443,6 +446,73 @@
     scenes.forEach((scene) => {
       scene.querySelectorAll("[data-scene-video]").forEach((video) => video.pause());
     });
+    if (filmSoundtrackEnabled) {
+      filmSoundtrack.pause();
+    }
+  };
+
+  const getFilmSoundtrackVolume = (seconds) => {
+    const fadeStart = totalDuration - FILM_SOUNDTRACK_FADE_OUT_S;
+    if (seconds <= fadeStart) {
+      return 1;
+    }
+
+    if (seconds >= totalDuration) {
+      return 0;
+    }
+
+    return Math.max(0, (totalDuration - seconds) / FILM_SOUNDTRACK_FADE_OUT_S);
+  };
+
+  const syncFilmSoundtrack = ({ forceTime = false } = {}) => {
+    if (!filmSoundtrackEnabled) {
+      return;
+    }
+
+    filmSoundtrack.volume = getFilmSoundtrackVolume(position);
+
+    if (!playing || !canPlayFilm()) {
+      filmSoundtrack.pause();
+      if (forceTime || Math.abs(filmSoundtrack.currentTime - position) > 0.04) {
+        filmSoundtrack.currentTime = position;
+      }
+      return;
+    }
+
+    if (forceTime || Math.abs(filmSoundtrack.currentTime - position) > 0.35) {
+      filmSoundtrack.currentTime = position;
+    }
+
+    if (filmSoundtrack.paused) {
+      filmSoundtrack.play().catch(() => {});
+    }
+  };
+
+  const preloadFilmSoundtrack = () => {
+    if (!filmSoundtrackEnabled) {
+      return Promise.resolve();
+    }
+
+    filmSoundtrack.preload = "auto";
+    filmSoundtrack.load();
+
+    return new Promise((resolve) => {
+      let settled = false;
+      const settle = () => {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        resolve();
+      };
+
+      filmSoundtrack.addEventListener("canplaythrough", settle, { once: true });
+      filmSoundtrack.addEventListener("error", settle, { once: true });
+
+      if (filmSoundtrack.readyState >= HTMLMediaElement.HAVE_ENOUGH_DATA) {
+        settle();
+      }
+    });
   };
 
   const syncFilmStageFit = () => {
@@ -689,6 +759,7 @@
     syncSceneReveals();
     syncVideos(sceneIndex);
     syncContinuousHeroVideoTime();
+    syncFilmSoundtrack({ forceTime: !playing });
     preloadUpcomingSceneVideos();
     renderControls();
   };
@@ -926,6 +997,7 @@
   const pause = () => {
     playing = false;
     syncVideos(sceneIndex);
+    syncFilmSoundtrack({ forceTime: true });
     renderControls();
   };
 
@@ -948,6 +1020,7 @@
     playing = true;
     lastFrame = performance.now();
     syncVideos(sceneIndex);
+    syncFilmSoundtrack({ forceTime: true });
     renderControls();
   };
 
@@ -959,6 +1032,7 @@
         pause();
       }
       seek(position);
+      syncFilmSoundtrack();
       preloadUpcomingSceneVideos();
     }
 
@@ -1145,9 +1219,7 @@
   window.addEventListener("pagehide", () => {
     window.cancelAnimationFrame(animationFrame);
     clearSceneTransitions();
-    scenes.forEach((scene) => {
-      scene.querySelectorAll("video").forEach((video) => video.pause());
-    });
+    pauseAllSceneVideos();
   });
 
   renderControls();
@@ -1166,7 +1238,7 @@
     syncFilmStageFit();
   }
 
-  const filmReady = preloadFilmVideos().then(async () => {
+  const filmReady = Promise.all([preloadFilmVideos(), preloadFilmSoundtrack()]).then(async () => {
     loader?.classList.add("is-ready");
     if (renderMode && renderVideoFrames) {
       cacheRenderVideoMaxFrames();
