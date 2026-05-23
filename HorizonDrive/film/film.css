@@ -1618,10 +1618,10 @@ h2 {
     padding: 24px;
   }
 
-  .feature-rails,
-  .film-grid--nusc,
-  .film-grid--scale,
-  .thanks-links {
+  html:not(.film-mobile-fit) .feature-rails,
+  html:not(.film-mobile-fit) .film-grid--nusc,
+  html:not(.film-mobile-fit) .film-grid--scale,
+  html:not(.film-mobile-fit) .thanks-links {
     grid-template-columns: 1fr;
     grid-template-rows: auto;
   }
@@ -1852,10 +1852,34 @@ html.film-mobile-fit .method-drawing-frame {
 
 html.film-mobile-fit .abstract-frame .feature-rails--six {
   width: 100%;
+  max-width: none;
   grid-column: 1;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 8px;
+  gap: 6px;
   align-self: stretch;
+  justify-self: stretch;
+}
+
+html.film-mobile-fit .abstract-frame .feature-rail--compact {
+  min-height: 0;
+  padding: 8px 5px;
+  gap: 5px;
+}
+
+html.film-mobile-fit .abstract-frame .feature-icon {
+  width: 28px;
+  border-radius: 8px;
+}
+
+html.film-mobile-fit .abstract-frame .feature-rail strong {
+  font-size: 10px;
+  line-height: 1.05;
+}
+
+html.film-mobile-fit .abstract-frame .feature-rail > span:last-child {
+  font-size: 9px;
+  line-height: 1.16;
+  text-wrap: balance;
 }
 
 html.film-mobile-fit .feature-rails,
@@ -1988,4 +2012,51 @@ html.film-mobile-fit .film-player:fullscreen,
 html.film-mobile-fit .film-player:-webkit-full-screen {
   width: 1700px;
   max-width: 1700px;
+}
+
+html.film-mobile-fit .thanks-layout {
+  place-content: start center;
+  gap: 14px;
+  padding: 28px 56px 24px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+html.film-mobile-fit .thanks-copy {
+  max-width: none;
+  width: 100%;
+}
+
+html.film-mobile-fit .thanks-copy h2 {
+  margin-bottom: 6px;
+  font-size: 26px;
+  line-height: 1.08;
+}
+
+html.film-mobile-fit .thanks-copy p:last-child {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+html.film-mobile-fit .thanks-links {
+  width: min(100%, 360px);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+html.film-mobile-fit .thanks-qrcode {
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 16px;
+}
+
+html.film-mobile-fit .thanks-qrcode span {
+  font-size: 10px;
+}
+
+html.film-mobile-fit .thanks-qrcode img {
+  width: min(100%, 88px);
+  max-width: 88px;
+  padding: 5px;
+  border-radius: 10px;
 }
