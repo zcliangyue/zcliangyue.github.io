@@ -30,7 +30,7 @@
   const renderHeroFrameBase = params.get("heroFrameBase") || "../static/render/hero-frames";
   const renderVideoFrameBase = params.get("videoFrameBase") || "../static/render/video-frames";
   const FILM_DESIGN_STAGE_WIDTH = Number(params.get("designWidth")) || 1700;
-  const FILM_DESIGN_STAGE_HEIGHT = Number(params.get("designHeight")) || 940;
+  const FILM_DESIGN_STAGE_HEIGHT = Number(params.get("designHeight")) || 968;
   const SCENE_CROSSFADE_MS = 2000;
   const SCENE_PRELOAD_SECONDS = 2;
   const REVEAL_DURATION_S = 0.56;
@@ -990,17 +990,18 @@
       seek(nextPosition);
     };
 
-    const endTouchScrub = () => {
+    const endTouchScrub = (resumePlayback = true) => {
       if (!touchScrubbing) {
         return;
       }
 
+      const shouldResume = resumePlayback && touchWasPlaying;
       touchScrubbing = false;
       touchAxisResolved = false;
       touchIsHorizontal = false;
       filmStage.classList.remove("is-touch-scrubbing");
 
-      if (touchWasPlaying) {
+      if (shouldResume) {
         play();
       }
     };
@@ -1055,8 +1056,28 @@
       event.preventDefault();
     }, { passive: false });
 
-    filmStage.addEventListener("touchend", endTouchScrub);
-    filmStage.addEventListener("touchcancel", endTouchScrub);
+    filmStage.addEventListener("touchend", (event) => {
+      if (!touchScrubbing) {
+        return;
+      }
+
+      const touch = event.changedTouches[0];
+      const deltaX = Math.abs(touch.clientX - touchStartX);
+      const deltaY = Math.abs(touch.clientY - touchStartY);
+      const isTap = !touchAxisResolved && deltaX < 12 && deltaY < 12;
+
+      if (touchIsHorizontal) {
+        endTouchScrub();
+        return;
+      }
+
+      if (isTap) {
+        toggleButton.click();
+      }
+
+      endTouchScrub(false);
+    }, { passive: true });
+    filmStage.addEventListener("touchcancel", () => endTouchScrub());
   };
 
   bindMobileTimelineSwipe();
