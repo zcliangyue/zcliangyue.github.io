@@ -2835,7 +2835,8 @@ pre code {
 
 #sec-closed-loop .video-stack .video-custom-control-host {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: auto;
+  aspect-ratio: 44 / 9;
   overflow: hidden;
   border-radius: 18px;
   clip-path: inset(0 round 18px);
@@ -2845,7 +2846,8 @@ pre code {
 #sec-closed-loop .video-stack .video-custom-control-host video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   border-radius: 0 !important;
   background: #02050a;
 }
