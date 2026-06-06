@@ -28,7 +28,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://zcliangyue.github.io/2026/06/07/horizondrive-long-horizon-world-model/cover.png">
 <meta property="article:published_time" content="2026-06-06T19:37:39.000Z">
-<meta property="article:modified_time" content="2026-06-06T20:27:19.870Z">
+<meta property="article:modified_time" content="2026-06-06T20:28:49.953Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="自动驾驶">
 <meta property="article:tag" content="世界模型">
@@ -325,7 +325,7 @@ teacher
 <figcaption aria-hidden="true">HorizonDrive
 的三阶段训练范式</figcaption>
 </figure>
-<p>在最后一步蒸馏中，我们发现增强的教师模型能够带来超出预期的增益。一方面，学生的初始化更好，给DMD提供了良好的起点；另一方面，教师的监督信号更可靠，不会因为学生rollout超出教师长度就失效，而是能够在远超教师长度时依然保持可靠。</p>
+<p>在最后一步蒸馏中，我们发现增强的教师模型能够带来超出预期的增益。一方面，学生的初始化更好，给DMD提供了良好的起点；另一方面，教师的监督信号不会因为学生rollout超出教师长度就失效，而是能够在远超教师长度时依然保持可靠。</p>
 <p>我们将这一阶段直白地命名为Teacher Rollout
 DMD：学生和教师一起rollout，学生窗口短，教师窗口长。有界显存下，能够近乎无限放大教师监督的长度，提升最终学生的长时序能力。</p>
 <h2 id="方法效果">方法效果</h2>
