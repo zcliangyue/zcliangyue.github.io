@@ -19,16 +19,16 @@
   <meta name="author" content="SGGZCL">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在地平线的这段时间，我参与研发一个自驾世界模型：它能够接受动静态控制，实时地生成视频，并在与 planner 持续交互下生成稳定的高质量画面。 最近的阶段性实验在内部数据上证明了方法的有效性。我们将其在学术数据集上完成评估后，整理成一篇论文 HorizonDrive。HorizonDrive 不依赖 3D 或 Memory 模块，仅通过在 Self-Forcing 训练之前增强教师自身的">
+    <meta name="description" content="在地平线的这段时间，我参与研发一个自驾世界模型：它能够接受动静态控制，实时地生成视频，并在与 planner 持续交互下生成稳定的高质量画面。 最近的阶段性实验在内部数据上证明了方法的有效性。我们将其在学术数据集上完成评估后，整理成一篇论文 HorizonDrive。HorizonDrive 不依赖 3D 或 Memory 模块，其核心是通过增强教师自身的抗误差能力，真正意义上为学生模型">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HorizonDrive：长时序自动驾驶世界模型">
 <meta property="og:url" content="http://zcliangyue.github.io/2026/06/07/horizondrive-long-horizon-world-model/index.html">
 <meta property="og:site_name" content="ZCL&#39;s Blog">
-<meta property="og:description" content="在地平线的这段时间，我参与研发一个自驾世界模型：它能够接受动静态控制，实时地生成视频，并在与 planner 持续交互下生成稳定的高质量画面。 最近的阶段性实验在内部数据上证明了方法的有效性。我们将其在学术数据集上完成评估后，整理成一篇论文 HorizonDrive。HorizonDrive 不依赖 3D 或 Memory 模块，仅通过在 Self-Forcing 训练之前增强教师自身的">
+<meta property="og:description" content="在地平线的这段时间，我参与研发一个自驾世界模型：它能够接受动静态控制，实时地生成视频，并在与 planner 持续交互下生成稳定的高质量画面。 最近的阶段性实验在内部数据上证明了方法的有效性。我们将其在学术数据集上完成评估后，整理成一篇论文 HorizonDrive。HorizonDrive 不依赖 3D 或 Memory 模块，其核心是通过增强教师自身的抗误差能力，真正意义上为学生模型">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://zcliangyue.github.io/2026/06/07/horizondrive-long-horizon-world-model/cover.png">
 <meta property="article:published_time" content="2026-06-06T19:37:39.000Z">
-<meta property="article:modified_time" content="2026-06-06T20:15:29.759Z">
+<meta property="article:modified_time" content="2026-06-06T20:18:07.561Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="自动驾驶">
 <meta property="article:tag" content="世界模型">
@@ -283,8 +283,8 @@
 planner 持续交互下生成稳定的高质量画面。</p>
 <p>最近的阶段性实验在内部数据上证明了方法的有效性。我们将其在学术数据集上完成评估后，整理成一篇论文
 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2605.11596">HorizonDrive</a>。HorizonDrive
-不依赖 3D 或 Memory 模块，仅通过在 Self-Forcing
-训练之前增强教师自身的抗误差能力，真正意义上为学生模型提供了长程、可靠的监督，能够实现分钟级的自回归生成、支持鲁棒的闭环仿真。</p>
+不依赖 3D 或 Memory
+模块，其核心是<strong>通过增强教师自身的抗误差能力，真正意义上为学生模型提供长程、可靠的监督</strong>，从而实现分钟级的自回归生成、支持鲁棒的闭环仿真。</p>
 <video src="demo_with_music.mp4" controls style="width: 100%; max-width: 100%; border-radius: 8px;">
 </video>
 <span id="more"></span>
