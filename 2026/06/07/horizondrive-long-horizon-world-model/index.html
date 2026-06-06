@@ -19,21 +19,20 @@
   <meta name="author" content="SGGZCL">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在地平线的这段时间，我们致力于开发可交互的自驾世界模型：一个能够接受动静态控制、能够接近实时生成、能够和planner持续交互的视频生成模型。 最近的一些阶段性实验证明了方法在内部数据上的有效性。我们将方法在学术数据集上进行了评估，发表成一篇论文HorizonDrive。HorizonDrive不依赖3D或Memory模块，通过在Self-Forcing训练之前先增强教师自身的抗误差能力，真正意">
+    <meta name="description" content="在地平线的这段时间，我们一直致力于开发可交互的自驾世界模型：它能够接受动静态控制，接近实时地生成视频，并与 planner 持续交互。 最近的一些阶段性实验证明了该方法在内部数据上的有效性。随后，我们将它进一步放到学术数据集上进行评估，并整理成论文 HorizonDrive。HorizonDrive 不依赖 3D 或 Memory 模块，而是在 Self-Forcing 训练之前，先增强">
 <meta property="og:type" content="article">
 <meta property="og:title" content="HorizonDrive：长时序自动驾驶世界模型">
 <meta property="og:url" content="http://zcliangyue.github.io/2026/06/07/horizondrive-long-horizon-world-model/index.html">
 <meta property="og:site_name" content="ZCL&#39;s Blog">
-<meta property="og:description" content="在地平线的这段时间，我们致力于开发可交互的自驾世界模型：一个能够接受动静态控制、能够接近实时生成、能够和planner持续交互的视频生成模型。 最近的一些阶段性实验证明了方法在内部数据上的有效性。我们将方法在学术数据集上进行了评估，发表成一篇论文HorizonDrive。HorizonDrive不依赖3D或Memory模块，通过在Self-Forcing训练之前先增强教师自身的抗误差能力，真正意">
+<meta property="og:description" content="在地平线的这段时间，我们一直致力于开发可交互的自驾世界模型：它能够接受动静态控制，接近实时地生成视频，并与 planner 持续交互。 最近的一些阶段性实验证明了该方法在内部数据上的有效性。随后，我们将它进一步放到学术数据集上进行评估，并整理成论文 HorizonDrive。HorizonDrive 不依赖 3D 或 Memory 模块，而是在 Self-Forcing 训练之前，先增强">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="http://zcliangyue.github.io/2026/06/07/horizondrive-long-horizon-world-model/cover.png">
 <meta property="article:published_time" content="2026-06-06T19:37:39.000Z">
-<meta property="article:modified_time" content="2026-06-06T19:38:56.251Z">
+<meta property="article:modified_time" content="2026-06-06T20:00:33.640Z">
 <meta property="article:author" content="SGGZCL">
 <meta property="article:tag" content="自动驾驶">
 <meta property="article:tag" content="世界模型">
 <meta property="article:tag" content="视频生成">
-<meta property="article:tag" content="HorizonDrive">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://zcliangyue.github.io/2026/06/07/horizondrive-long-horizon-world-model/cover.png">
   
@@ -280,8 +279,12 @@
             
               <div class="markdown-body">
                 
-                <p>在地平线的这段时间，我们致力于开发可交互的自驾世界模型：一个能够接受动静态控制、能够接近实时生成、能够和planner持续交互的视频生成模型。</p>
-<p>最近的一些阶段性实验证明了方法在内部数据上的有效性。我们将方法在学术数据集上进行了评估，发表成一篇论文<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2605.11596">HorizonDrive</a>。HorizonDrive不依赖3D或Memory模块，通过在Self-Forcing训练之前先增强教师自身的抗误差能力，真正意义上为学生模型提供长程、可靠的监督，实现了分钟级的自回归生成，从而支持鲁棒的闭环仿真。</p>
+                <p>在地平线的这段时间，我们一直致力于开发可交互的自驾世界模型：它能够接受动静态控制，接近实时地生成视频，并与
+planner 持续交互。</p>
+<p>最近的一些阶段性实验证明了该方法在内部数据上的有效性。随后，我们将它进一步放到学术数据集上进行评估，并整理成论文
+<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2605.11596">HorizonDrive</a>。HorizonDrive
+不依赖 3D 或 Memory 模块，而是在 Self-Forcing
+训练之前，先增强教师模型自身的抗误差能力，从而真正为学生模型提供长程、可靠的监督，实现分钟级的自回归生成，并进一步支持鲁棒的闭环仿真。</p>
 <video src="demo_with_music.mp4" controls style="width: 100%; max-width: 100%; border-radius: 8px;">
 </video>
 <span id="more"></span>
@@ -362,8 +365,6 @@ scaling 的路线。</p>
         <a href="/tags/%E4%B8%96%E7%95%8C%E6%A8%A1%E5%9E%8B/" class="print-no-link">#世界模型</a>
       
         <a href="/tags/%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90/" class="print-no-link">#视频生成</a>
-      
-        <a href="/tags/HorizonDrive/" class="print-no-link">#HorizonDrive</a>
       
     </div>
   
