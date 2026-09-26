@@ -2838,6 +2838,21 @@ pre code {
   margin-bottom: clamp(1.75rem, 3vw, 3rem) !important;
 }
 
+#sec-closed-loop .video-carousel {
+  max-width: none;
+  width: 100%;
+}
+
+#sec-closed-loop .video-carousel .video-custom-control-host {
+  aspect-ratio: 16 / 9;
+}
+
+#sec-closed-loop .video-carousel video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+}
+
 #sec-closed-loop .video-stack {
   display: flex;
   flex-direction: column;

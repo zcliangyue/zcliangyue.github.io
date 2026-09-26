@@ -443,6 +443,17 @@ function setupVideoCarousels() {
             if (counterEl) counterEl.textContent = (currentIndex + 1) + ' / ' + total;
         }
 
+        if (carousel.dataset.autoAdvance === 'true') {
+            slides.forEach((slide, index) => {
+                slide.querySelectorAll('video').forEach(video => {
+                    video.loop = false;
+                    video.addEventListener('ended', () => {
+                        if (index === currentIndex) goTo(currentIndex + 1);
+                    });
+                });
+            });
+        }
+
         async function goTo(idx) {
             const nextIndex = ((idx % total) + total) % total;
             if (transitioning || (nextIndex === currentIndex && slidesEl.style.transform)) {
@@ -468,6 +479,14 @@ function setupVideoCarousels() {
                     s.querySelectorAll('video').forEach((v) => {
                         if (i === currentIndex) {
                             primeVideoSource(v);
+                            if (carousel.dataset.autoAdvance === 'true') {
+                                const rect = carousel.getBoundingClientRect();
+                                if (document.hidden || rect.bottom <= 0 || rect.top >= window.innerHeight) {
+                                    v.pause();
+                                    return;
+                                }
+                                if (v.ended) v.currentTime = 0;
+                            }
                             v.play().catch(() => {});
                         } else {
                             v.pause();

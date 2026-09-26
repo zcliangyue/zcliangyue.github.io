@@ -11,7 +11,7 @@
 
   <!-- Critical CSS -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/index.css?v=hd20260926-order-subtitles">
+  <link rel="stylesheet" href="static/css/index.css?v=hd20260926-closed-carousel">
 
   <!-- Non-critical CSS - load asynchronously -->
   <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -26,7 +26,7 @@
 
   <!-- Defer non-critical JavaScript -->
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script defer src="static/js/index.js?v=hd20260523-carousel-ready"></script>
+  <script defer src="static/js/index.js?v=hd20260926-closed-carousel"></script>
 </head>
 
 <body>
@@ -510,19 +510,33 @@
           Closed-Loop Driving Simulation
         </h2>
         <p class="section-subtitle">
-          Planner control is fed back into HorizonDrive to test interactive, long-horizon stability.
+          We scale up HorizonDrive to seven views (7V) and use it as a simulator for multi-round interaction with a vision-language-action (VLA) model.
         </p>
 
-        <div class="video-stack video-stack--tight" data-video-sync="closed-loop" role="region" aria-label="Closed-loop driving simulation, three scenes stacked">
-          <video class="video-sync-master" controls muted loop playsinline preload="metadata">
+        <div class="video-carousel" data-carousel="closed-loop" data-auto-advance="true" role="region" aria-label="Closed-loop driving simulation, three scenarios">
+          <div class="video-carousel-track">
+            <div class="video-carousel-slides">
+              <div class="video-carousel-slide">
+          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 90">
             <source src="paper_videos_final/e2e_close_loop/90_hrn_GA20230001_clip_DZ970__20240907_144312_950-20240907_144411_049_temporal.mp4" type="video/mp4">
           </video>
-          <video muted loop playsinline preload="metadata">
+              </div>
+              <div class="video-carousel-slide">
+          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 91">
             <source src="paper_videos_final/e2e_close_loop/91_hrn_GA20230001_clip_DZ002__20240914_095817_550-20240914_095916_050_temporal.mp4" type="video/mp4">
           </video>
-          <video muted loop playsinline preload="metadata">
+              </div>
+              <div class="video-carousel-slide">
+          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 156">
             <source src="paper_videos_final/e2e_close_loop/156_hrn_GA20230001_clip_DZ136__20240927_162118_350-20240927_162217_050_temporal.mp4" type="video/mp4">
           </video>
+              </div>
+            </div>
+            <button class="video-carousel-arrow prev" aria-label="Previous scenario"><i class="fas fa-chevron-left"></i></button>
+            <button class="video-carousel-arrow next" aria-label="Next scenario"><i class="fas fa-chevron-right"></i></button>
+          </div>
+          <div class="video-carousel-dots" role="tablist"></div>
+          <div class="video-carousel-counter" aria-live="polite"></div>
         </div>
 
       </div>
@@ -771,7 +785,6 @@
             <span class="copy-text">Copy</span>
           </button>
         </div>
-        <p class="section-subtitle citation-subtitle">Please cite HorizonDrive when using our method or results.</p>
         <p class="content has-text-grey mb-4">
           If you find our work useful, please cite it as:
         </p>
