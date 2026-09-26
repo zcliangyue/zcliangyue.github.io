@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="张从朗的自动驾驶世界模型三分钟面试演示">
+  <title>Driving World Models | 3 分钟技术演示</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+    <header class="topbar">
+      <a class="brand" href="../" aria-label="返回个人主页">
+        <span>张从朗</span>
+        <small>Driving World Models</small>
+      </a>
+
+      <nav class="chapter-nav" aria-label="演示章节">
+        <button class="chapter-button is-active" type="button" data-slide-target="0">技术路线</button>
+        <button class="chapter-button" type="button" data-slide-target="1">共同表征</button>
+        <button class="chapter-button" type="button" data-slide-target="2">HorizonDrive</button>
+        <button class="chapter-button" type="button" data-slide-target="3">记忆锚定</button>
+      </nav>
+
+      <div class="utility-actions">
+        <button class="utility-button timer" id="timerButton" type="button" aria-label="开始或暂停三分钟倒计时">03:00</button>
+        <button class="utility-button" id="themeButton" type="button">深色</button>
+        <button class="utility-button" id="fullscreenButton" type="button">全屏</button>
+      </div>
+    </header>
+
+    <section class="slides" aria-label="技术演示内容">
+      <article class="slide slide-overview is-active" data-slide="0" data-note="15 秒：三项工作围绕闭环仿真的三个核心问题展开。先让 CG 画面进入真实域，再让世界模型稳定 rollout，最后用历史记忆同时支持复现与开放生成。">
+        <div class="overview-copy">
+          <p class="eyebrow">3 分钟技术演示</p>
+          <h1>从真实化，到可交互，再到可记忆</h1>
+          <p class="lede">三项工作，逐步解决闭环仿真的真实感、长时序稳定性与空间一致性。</p>
+          <button class="primary-button" type="button" data-next>开始演示</button>
+        </div>
+
+        <div class="overview-visual" aria-label="三项工作的视觉预览">
+          <figure class="overview-media overview-media-main">
+            <video autoplay muted loop playsinline preload="metadata" poster="assets/simtoreal-poster.png">
+              <source src="assets/simtoreal.mp4" type="video/mp4">
+            </video>
+            <figcaption>
+              <strong>共同表征</strong>
+              <span>CG 与 Real 在结构空间对齐</span>
+            </figcaption>
+          </figure>
+
+          <figure class="overview-media overview-media-secondary">
+            <video autoplay muted loop playsinline preload="metadata" poster="assets/horizon-poster.jpg">
+              <source src="assets/horizon-result.mp4" type="video/mp4">
+            </video>
+            <figcaption>
+              <strong>Teacher Rollout</strong>
+              <span>从短窗口走向长时序</span>
+            </figcaption>
+          </figure>
+
+          <div class="overview-memory" aria-label="记忆锚定示意">
+            <canvas id="overviewBev" width="520" height="210"></canvas>
+            <div>
+              <strong>双模式统一</strong>
+              <span>历史复现与开放生成</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="slide slide-sim" data-slide="1" data-note="45 秒：像素层面的 CG 与 Real 差异很大，但 DINO 共同表征主要保留结构语义。我们进一步去除源域风格信息并增强空间分辨率，使同一场景在共同表征中高度重合，再以它控制视频生成。">
+        <header class="slide-heading">
+          <h2>共同表征，让 CG 与 Real 对齐</h2>
+          <p>像素风格不同，结构语义一致。DINO 表征成为无配对 Sim-to-Real 的控制接口。</p>
+        </header>
+
+        <div class="sim-layout">
+          <figure class="media-stage">
+            <video autoplay muted loop playsinline preload="metadata" poster="assets/simtoreal-poster.png">
+              <source src="assets/simtoreal.mp4" type="video/mp4">
+            </video>
+            <figcaption>同一结构从 CG 域连续过渡到真实域</figcaption>
+          </figure>
+
+          <section class="representation-panel" aria-labelledby="representationTitle">
+            <div class="panel-heading">
+              <div>
+                <h3 id="representationTitle">域间距离</h3>
+                <p id="representationCopy">输入图像的风格差异显著</p>
+              </div>
+              <div class="segmented-control" role="group" aria-label="表征模式">
+                <button type="button" class="is-active" data-representation="pixel">像素空间</button>
+                <button type="button" data-representation="shared">共同表征</button>
+              </div>
+            </div>
+
+            <canvas id="featureCanvas" width="760" height="380" aria-label="CG 与 Real 的特征分布"></canvas>
+
+            <div class="feature-legend" aria-label="图例">
+              <span><i class="legend-cg"></i>CG</span>
+              <span><i class="legend-real"></i>Real</span>
+              <strong id="featureSummary">域间分离</strong>
+            </div>
+          </section>
+        </div>
+
+        <div class="evidence-strip" aria-label="Sim-to-Real 结果">
+          <div><strong>仅真实数据</strong><span>训练生成模型</span></div>
+          <div><strong>无需配对</strong><span>CG 与 Real 标注</span></div>
+          <div><strong>sKID -56%</strong><span>sFID -34%</span></div>
+        </div>
+      </article>
+
+      <article class="slide slide-horizon" data-slide="2" data-note="75 秒：核心不是直接蒸馏短窗口模型，而是先收集 Teacher 自身 rollout 中出现的真实误差，通过平滑注入训练其恢复能力。随后用具备长时序 rollout 能力的 Teacher 做 DMD，将能力蒸馏到少步 Student。最后展示分钟级生成效果。">
+        <header class="slide-heading">
+          <h2>先增强 Teacher Rollout，再做 DMD</h2>
+          <p>把长时序自纠错能力变成少步学生模型可学习的监督。</p>
+        </header>
+
+        <div class="horizon-layout">
+          <section class="method-stage" aria-label="HorizonDrive 方法步骤">
+            <div class="method-tabs" role="group" aria-label="HorizonDrive 演示阶段">
+              <button type="button" class="is-active" data-method-stage="recovery">Teacher Rollout 增强</button>
+              <button type="button" data-method-stage="dmd">Teacher Rollout DMD</button>
+              <button type="button" data-method-stage="result">最终效果</button>
+            </div>
+
+            <div class="method-visual" id="methodVisual">
+              <div class="method-crop method-crop-recovery" id="methodCrop" role="img" aria-label="HorizonDrive 三阶段方法图">
+                <div class="method-diagram" id="methodDiagram">
+                  <div class="flow-node"><small>Base Model</small><strong>Teacher Rollout</strong></div>
+                  <div class="flow-link"><span>真实误差</span><b>→</b></div>
+                  <div class="flow-node"><small>Error Replay</small><strong>平滑注入</strong></div>
+                  <div class="flow-link"><span>恢复训练</span><b>→</b></div>
+                  <div class="flow-node is-accent"><small>Enhanced Teacher</small><strong>Recovery Teacher</strong></div>
+                </div>
+              </div>
+              <video id="horizonVideo" muted loop playsinline preload="metadata" poster="assets/horizon-poster.jpg" hidden>
+                <source src="assets/horizon-result.mp4" type="video/mp4">
+              </video>
+            </div>
+
+            <div class="method-explanation" id="methodExplanation">
+              <strong>真实误差收集 + 平滑注入</strong>
+              <span>让 Teacher 从自己的 rollout 误差中恢复，缓解曝光偏差。</span>
+            </div>
+          </section>
+
+          <aside class="horizon-evidence" aria-label="HorizonDrive 关键结果">
+            <div class="metric-block">
+              <span>长时序质量</span>
+              <strong>FID -52%</strong>
+            </div>
+            <div class="metric-block">
+              <span>时序一致性</span>
+              <strong>FVD -37%</strong>
+            </div>
+            <div class="horizon-thesis">
+              <strong>关键结论</strong>
+              <p>具备 rollout 能力的 Teacher，才能有效提升长时序蒸馏结果。</p>
+            </div>
+          </aside>
+        </div>
+      </article>
+
+      <article class="slide slide-memory" data-slide="3" data-note="45 秒：推理时先判断目标区域是否有历史观测。已观测区域通过深度与几何对应关系检索历史信息，实现高保真复现；未观测区域继续开放生成。训练时使用双分支 Teacher，通过 DMD 蒸馏到同一个 Student，推理时按区域统一工作。">
+        <header class="slide-heading">
+          <h2>两种生成模式，一个学生模型</h2>
+          <p>历史区域高保真复现，视野外区域保持开放生成能力。</p>
+        </header>
+
+        <div class="memory-layout">
+          <section class="bev-stage" aria-label="记忆锚定 BEV 交互地图">
+            <div class="segmented-control memory-control" role="group" aria-label="生成模式">
+              <button type="button" class="is-active" data-memory-mode="anchor">历史锚定</button>
+              <button type="button" data-memory-mode="open">开放生成</button>
+              <button type="button" data-memory-mode="unified">统一推理</button>
+            </div>
+            <canvas id="bevCanvas" width="900" height="560"></canvas>
+            <div class="bev-caption" id="bevCaption">从历史观测中检索几何对应区域，保证空间一致性。</div>
+          </section>
+
+          <section class="distill-stage" aria-label="双分支蒸馏流程">
+            <div class="teacher-branch teacher-anchor">
+              <span>历史区域</span>
+              <strong>Anchor Teacher</strong>
+              <small>几何检索与对应注入</small>
+            </div>
+            <div class="teacher-branch teacher-open">
+              <span>未知区域</span>
+              <strong>Open Teacher</strong>
+              <small>保持开放生成能力</small>
+            </div>
+            <div class="distill-lines" aria-hidden="true">
+              <i></i><i></i>
+            </div>
+            <div class="student-model">
+              <span>双分支 DMD</span>
+              <strong>Unified Student</strong>
+              <small>按区域选择生成模式</small>
+            </div>
+          </section>
+        </div>
+
+        <div class="closing-line">同一个学生模型，同时获得空间一致性与生成灵活性。</div>
+      </article>
+    </section>
+
+    <aside class="speaker-notes" id="speakerNotes" hidden>
+      <div>
+        <strong>讲解提示</strong>
+        <button type="button" id="closeNotes">关闭</button>
+      </div>
+      <p id="noteText"></p>
+    </aside>
+
+    <footer class="presenter-controls">
+      <div class="keyboard-help">← → 切换　N 讲稿　F 全屏</div>
+      <div class="slide-count"><span id="slideCurrent">1</span> / 4</div>
+      <div class="pager">
+        <button type="button" id="previousButton">上一页</button>
+        <button type="button" id="nextButton">下一页</button>
+      </div>
+    </footer>
+  </main>
+
+  <script type="module" src="app.mjs"></script>
+</body>
+</html>

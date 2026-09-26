@@ -2836,7 +2836,7 @@ pre code {
 #sec-closed-loop .video-stack .video-custom-control-host {
   width: 100%;
   height: auto;
-  aspect-ratio: 44 / 9;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 18px;
   clip-path: inset(0 round 18px);
