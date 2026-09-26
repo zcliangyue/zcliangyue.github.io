@@ -11,7 +11,7 @@
 
   <!-- Critical CSS -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/index.css?v=hd20260926-closed-loop-temporal">
+  <link rel="stylesheet" href="static/css/index.css?v=hd20260926-order-subtitles">
 
   <!-- Non-critical CSS - load asynchronously -->
   <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -178,6 +178,7 @@
       <div class="container is-max-fullhd">
         <div class="content has-text-justified hero-abstract-block supp-abstract-inner">
           <h2 id="abstract-heading" class="title is-3 has-text-centered publication-abstract-heading">Abstract</h2>
+          <p class="section-subtitle">Reliable autoregressive driving simulation with stable, minute-scale rollouts.</p>
           <p class="hero-abstract-text mb-0">
             Closed-loop driving simulation requires real-time interaction beyond short offline clips, pushing current driving world models toward autoregressive (AR) rollout. Existing AR distillation approaches typically rely on frame sinks or student-side degradation training. The former transfers poorly to driving due to fast ego-motion and rapid scene changes, while the latter remains bounded by the teacher's single-pass output length and thus provides only a limited supervision horizon. A natural question is: can the teacher itself be extended via AR rollout to provide unbounded-horizon supervision at bounded memory cost? The key difficulty is that a standard teacher drifts under its own predictions, contaminating the supervision it provides. <strong>Our key insight is to make the teacher rollout-capable, ensuring reliable supervision from its own AR rollouts.</strong> This is instantiated as HorizonDrive, an anti-drifting training-and-distillation framework for AR driving simulation. First, scheduled rollout recovery (SRR) trains the base model to reconstruct ground-truth future clips from prediction-corrupted histories, yielding a teacher that remains stable across long AR rollouts. Second, the rollout-capable teacher is extended via AR rollout, providing long-horizon distribution-matching supervision under bounded memory, while a short-window student aligns to it with teacher rollout DMD (TRD) for efficient real-time deployment. HorizonDrive natively supports minute-scale AR rollout under bounded memory; on nuScenes, HorizonDrive reduces FID by 52% and FVD by 37%, and lowers ARE and DTW by 21% and 9% relative to the strongest long-horizon streaming baselines, while remaining competitive with single-pass driving video generators.
           </p>
@@ -272,6 +273,7 @@
     <div class="hero-body">
       <div class="container is-max-widescreen">
         <h2 id="method-overview-heading" class="title is-3 has-text-centered">Method Overview</h2>
+        <p class="section-subtitle">A rollout-capable teacher stabilizes long-horizon generation and distills it into an efficient student.</p>
         <div class="method-overview-figure-wrap">
           <svg class="method-wireframe-svg"
                viewBox="0 0 1579 512"
@@ -500,13 +502,43 @@
 
 <div id="video-sections-wrapper">
 
-  <!-- ============ Section A: 20-second results on Nuscenes ============ -->
+  <!-- ============ Section A: Closed-loop driving simulation ============ -->
+  <section class="hero is-small" id="sec-closed-loop">
+    <div class="hero-body">
+      <div class="container">
+        <h2 class="title is-3 has-text-centered">
+          Closed-Loop Driving Simulation
+        </h2>
+        <p class="section-subtitle">
+          Planner control is fed back into HorizonDrive to test interactive, long-horizon stability.
+        </p>
+
+        <div class="video-stack video-stack--tight" data-video-sync="closed-loop" role="region" aria-label="Closed-loop driving simulation, three scenes stacked">
+          <video class="video-sync-master" controls muted loop playsinline preload="metadata">
+            <source src="paper_videos_final/e2e_close_loop/90_hrn_GA20230001_clip_DZ970__20240907_144312_950-20240907_144411_049_temporal.mp4" type="video/mp4">
+          </video>
+          <video muted loop playsinline preload="metadata">
+            <source src="paper_videos_final/e2e_close_loop/91_hrn_GA20230001_clip_DZ002__20240914_095817_550-20240914_095916_050_temporal.mp4" type="video/mp4">
+          </video>
+          <video muted loop playsinline preload="metadata">
+            <source src="paper_videos_final/e2e_close_loop/156_hrn_GA20230001_clip_DZ136__20240927_162118_350-20240927_162217_050_temporal.mp4" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Section B: 20-second results on Nuscenes ============ -->
   <section class="hero is-small" id="sec-streaming-nusc">
     <div class="hero-body">
       <div class="container">
         <h2 class="title is-3 has-text-centered">
           20-Second AR Results on Nuscenes
         </h2>
+        <p class="section-subtitle">
+          Nine nuScenes scenes compare HorizonDrive with long-horizon streaming baselines.
+        </p>
 
         <div class="video-grid video-grid--nusc" aria-label="Nuscenes results, 9 videos">
           <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/106_43da50265dfa4876bdf1efed38e7a261.mp4" type="video/mp4"></video></div>
@@ -524,13 +556,16 @@
     </div>
   </section>
 
-  <!-- ============ Section D: e2e scaling / generalization (diverse scenes in China) ============ -->
+  <!-- ============ Section C: e2e scaling / generalization (diverse scenes in China) ============ -->
   <section class="hero is-small" id="sec-more-e2e">
     <div class="hero-body">
       <div class="container">
         <h2 class="title is-3 has-text-centered">
           30-Second AR Results on Self-Collected Dataset
         </h2>
+        <p class="section-subtitle">
+          Diverse self-collected scenes test scaling and generalization beyond nuScenes.
+        </p>
 
         <div class="video-carousel video-carousel--scale-pages" data-carousel="scale-pages" aria-label="Scaling examples, 9 videos per page">
           <div class="video-carousel-track">
@@ -605,13 +640,16 @@
   </section>
 
 
-  <!-- ============ Section E: Minute-level video generation ============ -->
+  <!-- ============ Section D: Minute-level video generation ============ -->
   <section class="hero is-small is-light" id="sec-minute-level-video">
     <div class="hero-body">
       <div class="container">
         <h2 class="title is-3 has-text-centered">
           Minute-Level AR Video Generation
         </h2>
+        <p class="section-subtitle">
+          Minute-scale autoregressive rollouts sustain visual and motion consistency over long horizons.
+        </p>
 
         <div class="video-grid video-grid--minute" aria-label="Minute-level examples, 9 videos">
           <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/2_hrn_GA20230001_clip_DZ878__20240709_163237_350-20240709_163412_049.mp4" type="video/mp4"></video></div>
@@ -635,30 +673,6 @@
   </section>
 
 
-  <!-- ============ Section F: Closed-loop driving simulation ============ -->
-  <section class="hero is-small" id="sec-closed-loop">
-    <div class="hero-body">
-      <div class="container">
-        <h2 class="title is-3 has-text-centered">
-          Closed-Loop Driving Simulation
-        </h2>
-
-        <div class="video-stack video-stack--tight" data-video-sync="closed-loop" role="region" aria-label="Closed-loop driving simulation, three scenes stacked">
-          <video class="video-sync-master" controls muted loop playsinline preload="metadata">
-            <source src="paper_videos_final/e2e_close_loop/90_hrn_GA20230001_clip_DZ970__20240907_144312_950-20240907_144411_049_temporal.mp4" type="video/mp4">
-          </video>
-          <video muted loop playsinline preload="metadata">
-            <source src="paper_videos_final/e2e_close_loop/91_hrn_GA20230001_clip_DZ002__20240914_095817_550-20240914_095916_050_temporal.mp4" type="video/mp4">
-          </video>
-          <video muted loop playsinline preload="metadata">
-            <source src="paper_videos_final/e2e_close_loop/156_hrn_GA20230001_clip_DZ136__20240927_162118_350-20240927_162217_050_temporal.mp4" type="video/mp4">
-          </video>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
 </div><!-- End video-sections-wrapper -->
 
   <!-- ============ Quantitative results (main + e2e) ============ -->
@@ -666,6 +680,7 @@
     <div class="hero-body">
       <div class="container is-max-widescreen">
         <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
+        <p class="section-subtitle">Metrics across both datasets summarize fidelity, motion quality, and long-horizon stability.</p>
 
         <h3 class="title is-4 mt-5">nuScenes val</h3>
         <div class="table-container metric-table-wrap">
@@ -756,6 +771,7 @@
             <span class="copy-text">Copy</span>
           </button>
         </div>
+        <p class="section-subtitle citation-subtitle">Please cite HorizonDrive when using our method or results.</p>
         <p class="content has-text-grey mb-4">
           If you find our work useful, please cite it as:
         </p>

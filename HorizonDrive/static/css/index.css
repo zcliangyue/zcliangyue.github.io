@@ -2103,6 +2103,23 @@ main#main-content .hero.publication-hero .publication-resource-links > a.supp-fi
   color: var(--text-primary);
 }
 
+/* Short descriptive line beneath major section headings. */
+.section-subtitle {
+  max-width: 900px;
+  margin: -0.55rem auto 1.4rem;
+  padding: 0 1rem;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: clamp(0.95rem, 1vw, 1.08rem);
+  line-height: 1.5;
+}
+
+.citation-subtitle {
+  margin-left: 0;
+  padding-left: 0;
+  text-align: left;
+}
+
 /* ==== Custom Video Carousel ==== */
 #sec-streaming-nusc .video-carousel.video-carousel--nuscenes-pairs {
   position: relative;
