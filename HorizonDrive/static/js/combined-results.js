@@ -18,24 +18,46 @@ document.addEventListener('DOMContentLoaded', function () {
     ['30s · Group 3', 'Thirty-second rollouts on self-collected scenes, group 3.'],
     ['30s · Group 4', 'Thirty-second rollouts on self-collected scenes, group 4.']
   ];
+  const groupPlayback = [];
   groups.forEach(function (sources, groupIndex) {
     const group = document.createElement('div');
     group.className = 'combined-results-group' + (groupIndex === 0 ? ' is-active' : '');
     group.setAttribute('role', 'tabpanel');
     const grid = document.createElement('div');
     grid.className = 'video-grid';
+    const playback = { ended: 0, seen: new WeakSet() };
+    groupPlayback[groupIndex] = playback;
     sources.forEach(function (src) {
       const item = document.createElement('div'); item.className = 'video-grid-item';
       const video = document.createElement('video');
-      video.controls = false; video.muted = true; video.loop = true; video.playsInline = true; video.preload = 'metadata'; video.autoplay = false;
+      video.controls = false; video.muted = true; video.loop = false; video.playsInline = true; video.preload = 'metadata'; video.autoplay = false;
+      function markEnded() {
+        if (playback.seen.has(video)) return;
+        playback.seen.add(video);
+        playback.ended += 1;
+        if (playback.ended >= sources.length && group.classList.contains('is-active')) {
+          const nextTab = tabs.querySelectorAll('.combined-results-tab')[(groupIndex + 1) % groups.length];
+          if (nextTab) nextTab.click();
+        }
+      }
+      video.addEventListener('ended', markEnded);
+      video.addEventListener('error', markEnded);
       const source = document.createElement('source'); source.src = src; source.type = 'video/mp4'; video.appendChild(source); item.appendChild(video); grid.appendChild(item);
     });
     group.appendChild(grid); stage.appendChild(group);
     const tab = document.createElement('button');
     tab.className = 'combined-results-tab' + (groupIndex === 0 ? ' is-active' : ''); tab.type = 'button'; tab.setAttribute('role', 'tab'); tab.setAttribute('aria-selected', String(groupIndex === 0)); tab.textContent = copy[groupIndex][0];
     tab.addEventListener('click', function () {
+      playback.ended = 0;
+      playback.seen = new WeakSet();
       document.querySelectorAll('.combined-results-tab').forEach(function (button, index) { button.classList.toggle('is-active', index === groupIndex); button.setAttribute('aria-selected', String(index === groupIndex)); });
-      document.querySelectorAll('.combined-results-group').forEach(function (panel, index) { panel.classList.toggle('is-active', index === groupIndex); panel.querySelectorAll('video').forEach(function (video) { if (index !== groupIndex) video.pause(); }); });
+      document.querySelectorAll('.combined-results-group').forEach(function (panel, index) {
+        panel.classList.toggle('is-active', index === groupIndex);
+        panel.querySelectorAll('video').forEach(function (video) {
+          if (index !== groupIndex) video.pause();
+          else { video.pause(); video.currentTime = 0; video.play().catch(function () {}); }
+        });
+      });
       description.textContent = copy[groupIndex][1];
     });
     tabs.appendChild(tab);

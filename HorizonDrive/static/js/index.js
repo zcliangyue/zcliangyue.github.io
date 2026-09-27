@@ -462,15 +462,16 @@ function setupVideoCarousels() {
                 slide.querySelectorAll('video').forEach(video => {
                     video.loop = false;
                     video.addEventListener('ended', () => {
-                        if (index === currentIndex) goTo(currentIndex + 1);
+                        if (index === currentIndex) goTo(currentIndex + 1, false);
                     });
                 });
             });
         }
 
-        async function goTo(idx) {
+        async function goTo(idx, restart) {
+            if (typeof restart === 'undefined') restart = true;
             const nextIndex = ((idx % total) + total) % total;
-            if (transitioning || (nextIndex === currentIndex && slidesEl.style.transform)) {
+            if (transitioning || (!restart && nextIndex === currentIndex && slidesEl.style.transform)) {
                 return;
             }
 
@@ -500,7 +501,7 @@ function setupVideoCarousels() {
                                     v.pause();
                                     return;
                                 }
-                                if (v.ended) v.currentTime = 0;
+                                if (restart || v.ended) v.currentTime = 0;
                             }
                             v.play().catch(() => {});
                         } else {
