@@ -11,7 +11,7 @@
 
   <!-- Critical CSS -->
   <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/index.css?v=hd20260926-closed-carousel">
+  <link rel="stylesheet" href="static/css/index.css?v=hd20260927-preview">
 
   <!-- Non-critical CSS - load asynchronously -->
   <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -26,7 +26,9 @@
 
   <!-- Defer non-critical JavaScript -->
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script defer src="static/js/index.js?v=hd20260926-closed-carousel"></script>
+  <script defer src="static/js/index.js?v=hd20260927-preview"></script>
+  <link rel="stylesheet" href="static/css/editorial-preview.css">
+  <script defer src="static/js/combined-results.js"></script>
 </head>
 
 <body>
@@ -170,6 +172,76 @@
         </div>
       </div>
     </div>
+  </section>
+
+
+
+  <!-- Featured demo: seven-view closed-loop simulation -->
+  <section class="hero is-small demo-split" id="sec-closed-loop">
+    <div class="hero-body">
+      <div class="container">
+        <div class="demo-copy"><h2 class="title is-3 has-text-centered">
+          HorizonDrive as a Closed-Loop Driving Simulator
+        </h2>
+        <p class="section-subtitle">
+          We scale up HorizonDrive to seven views (7V) and use it as a simulator for multi-round interaction with a vision-language-action (VLA) model.
+        </p></div><div class="demo-media">
+
+        <div class="video-carousel" data-carousel="closed-loop" data-selector="thumbnails" role="region" aria-label="Closed-loop driving simulation, six scenarios">
+          <div class="video-carousel-track">
+            <div class="video-carousel-slides">
+              <div class="video-carousel-slide" data-thumbnail="static/images/closed-scenes/scene-1.jpg">
+          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 91">
+            <source src="paper_videos_final/e2e_close_loop/91_hrn_GA20230001_clip_DZ002__20240914_095817_550-20240914_095916_050_temporal.mp4" type="video/mp4">
+          </video>
+              </div>
+              <div class="video-carousel-slide" data-thumbnail="static/images/closed-scenes/scene-2.jpg">
+          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 90">
+            <source src="paper_videos_final/e2e_close_loop/90_hrn_GA20230001_clip_DZ970__20240907_144312_950-20240907_144411_049_temporal.mp4" type="video/mp4">
+          </video>
+              </div>
+              <div class="video-carousel-slide" data-thumbnail="static/images/closed-scenes/scene-3.jpg">
+          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 156">
+            <source src="paper_videos_final/e2e_close_loop/156_hrn_GA20230001_clip_DZ136__20240927_162118_350-20240927_162217_050_temporal.mp4" type="video/mp4">
+          </video>
+              </div>
+              <div class="video-carousel-slide" data-thumbnail="static/images/closed-scenes/scene-4.jpg">
+          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 79">
+            <source src="paper_videos_final/e2e_close_loop/79_hrn_GA20230001_clip_DZ699__20250703_070650_050-20250703_070749_050_temporal.mp4" type="video/mp4">
+          </video>
+              </div>
+              <div class="video-carousel-slide" data-thumbnail="static/images/closed-scenes/scene-5.jpg">
+          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 170">
+            <source src="paper_videos_final/e2e_close_loop/170_hrn_GA20230001_clip_DZ253__20240809_112107_850-20240809_112206_050_temporal.mp4" type="video/mp4">
+          </video>
+              </div>
+              <div class="video-carousel-slide" data-thumbnail="static/images/closed-scenes/scene-6.jpg">
+          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 310">
+            <source src="paper_videos_final/e2e_close_loop/310_hrn_GA20230001_clip_DZ002__20240921_063741_250-20240921_063840_050_temporal.mp4" type="video/mp4">
+          </video>
+              </div>
+            </div>
+            <button class="video-carousel-arrow prev" aria-label="Previous scenario"><i class="fas fa-chevron-left"></i></button>
+            <button class="video-carousel-arrow next" aria-label="Next scenario"><i class="fas fa-chevron-right"></i></button>
+          </div>
+          <div class="video-carousel-dots" role="group" aria-label="Select video group or scene"></div>
+          <div class="video-carousel-counter" aria-live="polite"></div>
+        </div>
+
+      </div>
+    </div></div>
+  </section>
+
+  <section class="hero is-small combined-results" id="sec-combined-results" aria-labelledby="combined-results-heading">
+    <div class="hero-body"><div class="container">
+      <div class="combined-results-copy">
+        <p class="combined-results-kicker">Long-horizon rollouts</p>
+        <h2 class="title is-3" id="combined-results-heading">Driving beyond short clips</h2>
+        <p class="combined-results-description" id="combined-results-description">Nine nuScenes scenes compare HorizonDrive with long-horizon streaming baselines.</p>
+        <div class="combined-results-tabs" role="tablist" aria-label="Driving rollout groups"></div>
+      </div>
+      <div class="combined-results-stage" id="combined-results-stage"></div>
+    </div></div>
   </section>
 
   <!-- ============ Abstract ============ -->
@@ -501,57 +573,19 @@
 
 <div id="video-sections-wrapper">
 
-  <!-- ============ Section A: Closed-loop driving simulation ============ -->
-  <section class="hero is-small" id="sec-closed-loop">
-    <div class="hero-body">
-      <div class="container">
-        <h2 class="title is-3 has-text-centered">
-          Closed-Loop Driving Simulation
-        </h2>
-        <p class="section-subtitle">
-          We scale up HorizonDrive to seven views (7V) and use it as a simulator for multi-round interaction with a vision-language-action (VLA) model.
-        </p>
 
-        <div class="video-carousel" data-carousel="closed-loop" data-auto-advance="true" role="region" aria-label="Closed-loop driving simulation, three scenarios">
-          <div class="video-carousel-track">
-            <div class="video-carousel-slides">
-              <div class="video-carousel-slide">
-          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 90">
-            <source src="paper_videos_final/e2e_close_loop/90_hrn_GA20230001_clip_DZ970__20240907_144312_950-20240907_144411_049_temporal.mp4" type="video/mp4">
-          </video>
-              </div>
-              <div class="video-carousel-slide">
-          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 91">
-            <source src="paper_videos_final/e2e_close_loop/91_hrn_GA20230001_clip_DZ002__20240914_095817_550-20240914_095916_050_temporal.mp4" type="video/mp4">
-          </video>
-              </div>
-              <div class="video-carousel-slide">
-          <video controls muted playsinline preload="metadata" aria-label="Closed-loop scenario 156">
-            <source src="paper_videos_final/e2e_close_loop/156_hrn_GA20230001_clip_DZ136__20240927_162118_350-20240927_162217_050_temporal.mp4" type="video/mp4">
-          </video>
-              </div>
-            </div>
-            <button class="video-carousel-arrow prev" aria-label="Previous scenario"><i class="fas fa-chevron-left"></i></button>
-            <button class="video-carousel-arrow next" aria-label="Next scenario"><i class="fas fa-chevron-right"></i></button>
-          </div>
-          <div class="video-carousel-dots" role="tablist"></div>
-          <div class="video-carousel-counter" aria-live="polite"></div>
-        </div>
 
-      </div>
-    </div>
-  </section>
 
   <!-- ============ Section B: 20-second results on Nuscenes ============ -->
-  <section class="hero is-small" id="sec-streaming-nusc">
+  <section class="hero is-small demo-split" id="sec-streaming-nusc">
     <div class="hero-body">
       <div class="container">
-        <h2 class="title is-3 has-text-centered">
+        <div class="demo-copy"><h2 class="title is-3 has-text-centered">
           20-Second AR Results on Nuscenes
         </h2>
         <p class="section-subtitle">
           Nine nuScenes scenes compare HorizonDrive with long-horizon streaming baselines.
-        </p>
+        </p></div><div class="demo-media">
 
         <div class="video-grid video-grid--nusc" aria-label="Nuscenes results, 9 videos">
           <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_nusc_hires_200ckpt_hud/nusc_hires_200ckpt_hud/106_43da50265dfa4876bdf1efed38e7a261.mp4" type="video/mp4"></video></div>
@@ -566,21 +600,21 @@
         </div>
 
       </div>
-    </div>
+    </div></div>
   </section>
 
   <!-- ============ Section C: e2e scaling / generalization (diverse scenes in China) ============ -->
-  <section class="hero is-small" id="sec-more-e2e">
+  <section class="hero is-small demo-split" id="sec-more-e2e">
     <div class="hero-body">
       <div class="container">
-        <h2 class="title is-3 has-text-centered">
+        <div class="demo-copy"><h2 class="title is-3 has-text-centered">
           30-Second AR Results on Self-Collected Dataset
         </h2>
         <p class="section-subtitle">
           Diverse self-collected scenes test scaling and generalization beyond nuScenes.
-        </p>
+        </p></div><div class="demo-media">
 
-        <div class="video-carousel video-carousel--scale-pages" data-carousel="scale-pages" aria-label="Scaling examples, 9 videos per page">
+        <div class="video-carousel video-carousel--scale-pages" data-carousel="scale-pages" data-selector="groups" aria-label="Scaling examples, 9 videos per page">
           <div class="video-carousel-track">
             <div class="video-carousel-slides">
               <div class="video-carousel-slide">
@@ -644,47 +678,27 @@
               <i class="fas fa-chevron-right"></i>
             </button>
           </div>
-          <div class="video-carousel-dots" role="tablist"></div>
+          <div class="video-carousel-dots" role="group" aria-label="Select video group or scene"></div>
           <div class="video-carousel-counter"></div>
         </div>
 
       </div>
-    </div>
+    </div></div>
   </section>
 
 
-  <!-- ============ Section D: Minute-level video generation ============ -->
-  <section class="hero is-small is-light" id="sec-minute-level-video">
-    <div class="hero-body">
-      <div class="container">
-        <h2 class="title is-3 has-text-centered">
-          Minute-Level AR Video Generation
-        </h2>
-        <p class="section-subtitle">
-          Minute-scale autoregressive rollouts sustain visual and motion consistency over long horizons.
-        </p>
 
-        <div class="video-grid video-grid--minute" aria-label="Minute-level examples, 9 videos">
-          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/2_hrn_GA20230001_clip_DZ878__20240709_163237_350-20240709_163412_049.mp4" type="video/mp4"></video></div>
-          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/6_hrn_GA20230001_clip_DZ878__20240711_230909_648-20240711_231030_048.mp4" type="video/mp4"></video></div>
-          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/16_hrn_GA20230001_clip_DZ878__20240717_115056_750-20240717_115227_048.mp4" type="video/mp4"></video></div>
-          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/18_hrn_GA20230001_clip_DZ878__20240707_141742_750-20240707_141857_049.mp4" type="video/mp4"></video></div>
-          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/21_hrn_GA20230001_clip_DZ878__20240709_150802_849-20240709_150936_048.mp4" type="video/mp4"></video></div>
-          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/24_hrn_GA20230001_clip_DZ878__20240711_104932_750-20240711_105118_049.mp4" type="video/mp4"></video></div>
-          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/25_hrn_GA20230001_clip_DZ878__20240717_170213_849-20240717_170339_049.mp4" type="video/mp4"></video></div>
-          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/28_hrn_GA20230001_clip_DZ878__20240714_102147_048-20240714_102303_049.mp4" type="video/mp4"></video></div>
-          <div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/29_hrn_GA20230001_clip_DZ878__20240714_113910_848-20240714_114027_049.mp4" type="video/mp4"></video></div>
-        </div>
 
-        <div class="video-single" role="region" aria-label="Minute-level video, 3x3 scene grid">
-          <video controls muted loop playsinline preload="metadata">
-          </video>
-        </div>
 
-      </div>
-    </div>
-  </section>
-
+  <section class="hero is-small demo-split" id="sec-minute-level-video"><div class="hero-body"><div class="container"><div class="demo-copy"><h2 class="title is-3">Minute-Level AR Video Generation</h2><p class="section-subtitle">Minute-scale autoregressive rollouts sustain visual and motion consistency over long horizons.</p></div><div class="demo-media"><div class="video-grid video-grid--minute" aria-label="Minute-level examples, 9 videos"><div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/2_hrn_GA20230001_clip_DZ878__20240709_163237_350-20240709_163412_049.mp4" type="video/mp4"></video></div>
+<div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/6_hrn_GA20230001_clip_DZ878__20240711_230909_648-20240711_231030_048.mp4" type="video/mp4"></video></div>
+<div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/16_hrn_GA20230001_clip_DZ878__20240717_115056_750-20240717_115227_048.mp4" type="video/mp4"></video></div>
+<div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/18_hrn_GA20230001_clip_DZ878__20240707_141742_750-20240707_141857_049.mp4" type="video/mp4"></video></div>
+<div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/21_hrn_GA20230001_clip_DZ878__20240709_150802_849-20240709_150936_048.mp4" type="video/mp4"></video></div>
+<div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/24_hrn_GA20230001_clip_DZ878__20240711_104932_750-20240711_105118_049.mp4" type="video/mp4"></video></div>
+<div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/25_hrn_GA20230001_clip_DZ878__20240717_170213_849-20240717_170339_049.mp4" type="video/mp4"></video></div>
+<div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/28_hrn_GA20230001_clip_DZ878__20240714_102147_048-20240714_102303_049.mp4" type="video/mp4"></video></div>
+<div class="video-grid-item"><video controls muted loop playsinline preload="metadata"><source src="paper_videos_final/imported_minute_level_hud_crop76_crf24/minute_level_v2_hud_crop76_crf24/29_hrn_GA20230001_clip_DZ878__20240714_113910_848-20240714_114027_049.mp4" type="video/mp4"></video></div></div></div></div></div></section>
 
 </div><!-- End video-sections-wrapper -->
 

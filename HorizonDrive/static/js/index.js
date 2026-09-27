@@ -329,7 +329,7 @@ function setupCustomVideoControls() {
     var videos = Array.prototype.slice.call(document.querySelectorAll('main#main-content video'));
 
     videos.forEach(function (video) {
-        if (video.closest('.publication-hero-bg')) return;
+        if (video.closest('.publication-hero-bg, .rollout-stage')) return;
         if (video.dataset.customVideoControls === 'true') return;
 
         var parent = video.parentElement;
@@ -434,6 +434,20 @@ function setupVideoCarousels() {
                 const dot = document.createElement('button');
                 dot.className = 'video-carousel-dot' + (i === 0 ? ' active' : '');
                 dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+                dot.type = 'button';
+                dot.setAttribute('aria-pressed', String(i === 0));
+                if (carousel.dataset.selector === 'groups') {
+                    dot.textContent = 'Group ' + (i + 1);
+                    dot.setAttribute('aria-label', 'Show group ' + (i + 1));
+                } else if (carousel.dataset.selector === 'thumbnails') {
+                    const image = document.createElement('img');
+                    image.src = slides[i].dataset.thumbnail;
+                    image.alt = '';
+                    const label = document.createElement('span');
+                    label.textContent = 'Scene ' + String(i + 1).padStart(2, '0');
+                    dot.append(image, label);
+                    dot.setAttribute('aria-label', 'Show closed-loop scene ' + (i + 1));
+                }
                 dot.addEventListener('click', () => goTo(i));
                 dotsContainer.appendChild(dot);
             });
@@ -473,6 +487,7 @@ function setupVideoCarousels() {
                 if (dotsContainer) {
                     dotsContainer.querySelectorAll('.video-carousel-dot').forEach((d, i) => {
                         d.classList.toggle('active', i === currentIndex);
+                        d.setAttribute('aria-pressed', String(i === currentIndex));
                     });
                 }
                 slides.forEach((s, i) => {
