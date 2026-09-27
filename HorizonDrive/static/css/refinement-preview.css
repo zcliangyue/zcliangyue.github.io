@@ -85,7 +85,7 @@ main#main-content .demo-media .video-grid .video-custom-control-host,
 
 /* Relative positioning makes each tile's layout coordinates local to its grid. */
 .hd-scroll-grid { position: relative; isolation: isolate; }
-.hd-scroll-grid > .video-grid-item { transform-origin: center; }
+.hd-scroll-grid > .video-grid-item { transform-origin: center; will-change: transform; backface-visibility: hidden; contain: layout paint; }
 .hd-scroll-grid > .video-grid-item:focus-within { z-index: 2; }
 .hd-motion-sr {
   position: absolute; width: 1px; height: 1px; padding: 0;

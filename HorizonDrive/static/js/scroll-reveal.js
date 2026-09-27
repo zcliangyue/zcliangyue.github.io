@@ -32,13 +32,14 @@ document.addEventListener('DOMContentLoaded', function () {
   let geometryDirty = true;
   let inputDirty = true;
   let lastTime = 0;
+  let copyTick = 0;
   let frame = 0;
   function draw(time) {
     frame = 0;
     const dt = lastTime ? Math.min(time - lastTime, 50) : 16.67;
     lastTime = time;
     // Time-based damping behaves consistently on 60 Hz and high-refresh screens.
-    const blend = 1 - Math.exp(-dt / 85);
+    const blend = 1 - Math.exp(-dt / 125);
     const vh = window.innerHeight;
     const disabled = reduced.matches;
     const compact = window.innerWidth < 700;
@@ -55,8 +56,13 @@ document.addEventListener('DOMContentLoaded', function () {
       }
       return { rect: rect, state: state };
     }) : [];
-    const titleData = inputDirty ? titles.map(function (title) { return { title: title, rect: title.el.getBoundingClientRect() }; }) : [];
-    const revealData = inputDirty ? reveals.map(function (el) { return { el: el, rect: el.getBoundingClientRect() }; }) : [];
+    // Copy fades are lower priority than the tile transforms. Sample their
+    // geometry every fourth frame so wheel input does not force a full-page
+    // layout read on every animation frame.
+    copyTick = (copyTick + 1) % 4;
+    const copyDue = inputDirty && copyTick === 0;
+    const titleData = copyDue ? titles.map(function (title) { return { title: title, rect: title.el.getBoundingClientRect() }; }) : [];
+    const revealData = copyDue ? reveals.map(function (el) { return { el: el, rect: el.getBoundingClientRect() }; }) : [];
     geometryDirty = false;
     inputDirty = false;
     gridData.forEach(function (data) {
@@ -76,9 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!unsettled) state.current = target;
       moving = moving || (unsettled && state.visible);
       state.items.forEach(function (item, i) {
-        // Promote only moving, visible tiles; release layers once settled.
-        const hint = unsettled && state.visible ? 'transform' : '';
-        if (item.el.style.willChange !== hint) item.el.style.willChange = hint;
         if (previous === state.current && !disabled && !state.needsRender) return;
         const fold = state.current;
         const x = item.dx * fold;
