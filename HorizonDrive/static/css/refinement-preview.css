@@ -1,0 +1,96 @@
+/* Preserve the editorial layout. Refine hierarchy and selection feedback only.
+   Design variance 5 / motion 4 / density 4; existing blue brand and dark theme. */
+:root {
+  --hd-refine-accent: #9bb8f5;
+  --hd-refine-muted: #b1bac8;
+  --hd-refine-surface: #090c12;
+}
+
+main#main-content .demo-copy .title.is-3,
+main#main-content .combined-results-copy .title.is-3 {
+  text-wrap: balance;
+  line-height: 1.22;
+  letter-spacing: -0.025em;
+}
+
+main#main-content .demo-copy .section-subtitle,
+.combined-results-description {
+  padding: 0;
+  color: var(--hd-refine-muted);
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+/* A restrained surface shift groups the interactive result selector. */
+main#main-content #sec-combined-results {
+  background: var(--hd-refine-surface) !important;
+}
+
+.combined-results-kicker {
+  color: var(--hd-refine-accent);
+  letter-spacing: 0.12em;
+}
+
+.combined-results-tab {
+  min-height: 44px;
+  border-color: #29313d;
+  color: var(--hd-refine-muted);
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.combined-results-tab.is-active {
+  color: #edf2ff;
+  border-color: #51668c;
+  background: #172235;
+  box-shadow: inset 3px 0 var(--hd-refine-accent);
+}
+
+.combined-results-tab:hover {
+  border-color: #7185a9;
+  background: #141c29;
+}
+
+main#main-content [data-selector="thumbnails"] .video-carousel-dot {
+  border-color: #29313d;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+main#main-content [data-selector="thumbnails"] .video-carousel-dot.active {
+  border-color: var(--hd-refine-accent);
+  background: #172235;
+  box-shadow: inset 0 -2px var(--hd-refine-accent);
+}
+
+main#main-content .demo-media .video-grid video,
+main#main-content .demo-media .video-grid-item,
+main#main-content .demo-media .video-grid .video-custom-control-host,
+.combined-results-stage .video-grid video,
+.combined-results-stage .video-grid-item,
+.combined-results-stage .video-custom-control-host {
+  border-radius: 10px !important;
+  clip-path: inset(0 round 10px);
+}
+
+@media (max-width: 900px) {
+  .combined-results > .hero-body { padding-block: 3rem; }
+  .combined-results-tab { min-height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .combined-results-tab,
+  main#main-content [data-selector="thumbnails"] .video-carousel-dot {
+    transition: none;
+  }
+}
+
+/* Relative positioning makes each tile's layout coordinates local to its grid. */
+.hd-scroll-grid { position: relative; isolation: isolate; }
+.hd-scroll-grid > .video-grid-item { transform-origin: center; }
+.hd-scroll-grid > .video-grid-item:focus-within { z-index: 2; }
+.hd-motion-sr {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hd-scroll-grid > .video-grid-item { transform: none !important; }
+}
